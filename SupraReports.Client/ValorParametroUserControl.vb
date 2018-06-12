@@ -1,6 +1,7 @@
 ﻿Public Class ValorParametroUserControl
   Public Event CambiarValor As EventHandler(Of ValorParametroEventArgs)
   Public Event Seleccionar As EventHandler(Of ValorParametroEventArgs)
+  Public Event Deseleccionar As EventHandler(Of ValorParametroEventArgs)
 
   Private Sub TbValor_TextChanged(sender As Object, e As EventArgs) Handles TbValor.TextChanged
     RaiseEvent CambiarValor(Me, New ValorParametroEventArgs(TbParametro.Text, TbValor.Text))
@@ -8,6 +9,10 @@
 
   Private Sub TbValor_Enter(sender As Object, e As EventArgs) Handles TbValor.Enter, TbParametro.Enter
     RaiseEvent Seleccionar(Me, New ValorParametroEventArgs(TbParametro.Text, TbValor.Text))
+  End Sub
+
+  Private Sub TbValor_Leave(sender As Object, e As EventArgs) Handles TbValor.Leave, TbParametro.Leave
+    RaiseEvent Deseleccionar(Me, New ValorParametroEventArgs(TbParametro.Text, TbValor.Text))
   End Sub
 
   Public Class ValorParametroEventArgs

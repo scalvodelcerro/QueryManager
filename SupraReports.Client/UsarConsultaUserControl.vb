@@ -1,8 +1,8 @@
-﻿Imports System.Text.RegularExpressions
-Imports SupraReports.Model
+﻿Imports SupraReports.Model
 
 Public Class UsarConsultaUserControl
-  Private Const PatternParametro = "#(\w+)#"
+  Private colorResaltarTexto As Color = Color.PaleGreen
+
   Public WriteOnly Property Consulta As Consulta
     Set(value As Consulta)
       _consulta = value
@@ -15,6 +15,7 @@ Public Class UsarConsultaUserControl
         control.TbValor.Text = p.Valor
         AddHandler control.CambiarValor, AddressOf OnCambiarValor
         AddHandler control.Seleccionar, AddressOf OnSeleccionar
+        AddHandler control.Deseleccionar, AddressOf OnDeseleccionar
         PnlParametros.Controls.Add(control)
       Next
     End Set
@@ -33,12 +34,17 @@ Public Class UsarConsultaUserControl
       repo.Save()
     End Using
     ComponerSqlResultado()
-    ResaltarParametro(e.Parametro, e.Valor)
+    ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
   End Sub
 
   Private Sub OnSeleccionar(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
     ComponerSqlResultado()
-    ResaltarParametro(e.Parametro, e.Valor)
+    ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
+  End Sub
+
+  Private Sub OnDeseleccionar(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
+    ComponerSqlResultado()
+    ResaltarParametro(e.Parametro, e.Valor, SystemColors.Window)
   End Sub
 
   Private Sub ComponerSqlResultado()
@@ -49,12 +55,12 @@ Public Class UsarConsultaUserControl
     TbSqlResult.Text = textResult
   End Sub
 
-  Private Sub ResaltarParametro(nombreParametro As String, valor As String)
-    ResaltarPalabra(TbSql, String.Format("#{0}#", nombreParametro))
-    ResaltarPalabra(TbSqlResult, valor)
+  Private Sub ResaltarParametro(nombreParametro As String, valor As String, color As Color)
+    ResaltarPalabra(TbSql, String.Format("#{0}#", nombreParametro), color)
+    ResaltarPalabra(TbSqlResult, valor, color)
   End Sub
 
-  Private Sub ResaltarPalabra(rtb As RichTextBox, palabra As String)
+  Private Sub ResaltarPalabra(rtb As RichTextBox, palabra As String, color As Color)
     rtb.SelectAll()
     rtb.SelectionBackColor = SystemColors.Window
 
@@ -62,7 +68,7 @@ Public Class UsarConsultaUserControl
       Dim index As Integer = rtb.Text.ToUpper().IndexOf(palabra.ToUpper(), index + 1)
       While index <> -1
         rtb.Select(index, palabra.Length)
-        rtb.SelectionBackColor = Color.PaleGreen
+        rtb.SelectionBackColor = color
         index = rtb.Text.ToUpper().IndexOf(palabra.ToUpper(), index + 1)
       End While
     End If
