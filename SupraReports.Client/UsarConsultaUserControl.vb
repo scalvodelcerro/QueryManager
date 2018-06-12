@@ -8,11 +8,11 @@ Public Class UsarConsultaUserControl
       _consulta = value
       TbNombre.Text = _consulta.Nombre
       TbSql.Text = _consulta.TextoSql
-      Dim parametros = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
       PnlParametros.Controls.Clear()
-      For Each p In parametros
+      For Each p In _consulta.Parametros
         Dim control As ValorParametroUserControl = New ValorParametroUserControl()
-        control.TbParametro.Text = p
+        control.TbParametro.Text = p.Nombre
+        control.TbValor.Text = p.Valor
         AddHandler control.CambiarValor, AddressOf OnCambiarValor
         PnlParametros.Controls.Add(control)
       Next
@@ -23,9 +23,9 @@ Public Class UsarConsultaUserControl
   Private Sub OnCambiarValor(sender As Object, e As ValorParametroUserControl.CambiarValorEventArgs)
     Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = e.Parametro)
     parametro.Valor = e.Valor
-    'Using repo = New InformeRepository(New SupraReportsContext())
-    '  repo.Update(parametro)
-    'End Using
+    Using repo = New InformeRepository(New SupraReportsContext())
+      repo.Update(parametro)
+    End Using
 
     Dim textResult As String = _consulta.TextoSql.ToUpper()
     For Each p In _consulta.Parametros
