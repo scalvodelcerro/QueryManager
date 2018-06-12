@@ -28,6 +28,7 @@ Public Class EditarConsultaUserControl
   Private Sub BtnCancelar_Click(sender As Object, e As EventArgs) Handles BtnCancelar.Click
     Using repo = New InformeRepository(New SupraReportsContext())
       repo.Delete(_consulta)
+      repo.Save()
     End Using
     Dispose()
   End Sub

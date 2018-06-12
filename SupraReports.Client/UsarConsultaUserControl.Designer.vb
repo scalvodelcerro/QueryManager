@@ -43,10 +43,10 @@ Partial Class UsarConsultaUserControl
     'TbNombre
     '
     Me.TbNombre.BackColor = System.Drawing.SystemColors.Window
-    Me.TbNombre.Location = New System.Drawing.Point(62, 3)
+    Me.TbNombre.Location = New System.Drawing.Point(65, 3)
     Me.TbNombre.Name = "TbNombre"
     Me.TbNombre.ReadOnly = True
-    Me.TbNombre.Size = New System.Drawing.Size(357, 20)
+    Me.TbNombre.Size = New System.Drawing.Size(376, 20)
     Me.TbNombre.TabIndex = 4
     '
     'TbSql
@@ -56,14 +56,14 @@ Partial Class UsarConsultaUserControl
     Me.TbSql.Location = New System.Drawing.Point(62, 29)
     Me.TbSql.Name = "TbSql"
     Me.TbSql.ReadOnly = True
-    Me.TbSql.Size = New System.Drawing.Size(357, 134)
+    Me.TbSql.Size = New System.Drawing.Size(379, 134)
     Me.TbSql.TabIndex = 8
     Me.TbSql.Text = ""
     '
     'LblParametros
     '
     Me.LblParametros.AutoSize = True
-    Me.LblParametros.Location = New System.Drawing.Point(422, 6)
+    Me.LblParametros.Location = New System.Drawing.Point(444, 6)
     Me.LblParametros.Name = "LblParametros"
     Me.LblParametros.Size = New System.Drawing.Size(60, 13)
     Me.LblParametros.TabIndex = 9
@@ -72,28 +72,28 @@ Partial Class UsarConsultaUserControl
     'PnlParametros
     '
     Me.PnlParametros.AutoSize = True
-    Me.PnlParametros.Location = New System.Drawing.Point(425, 29)
-    Me.PnlParametros.MaximumSize = New System.Drawing.Size(307, 0)
-    Me.PnlParametros.MinimumSize = New System.Drawing.Size(307, 134)
+    Me.PnlParametros.Location = New System.Drawing.Point(447, 29)
+    Me.PnlParametros.MaximumSize = New System.Drawing.Size(250, 0)
+    Me.PnlParametros.MinimumSize = New System.Drawing.Size(250, 134)
     Me.PnlParametros.Name = "PnlParametros"
-    Me.PnlParametros.Size = New System.Drawing.Size(307, 134)
+    Me.PnlParametros.Size = New System.Drawing.Size(250, 134)
     Me.PnlParametros.TabIndex = 10
     '
     'TbSqlResult
     '
     Me.TbSqlResult.BackColor = System.Drawing.SystemColors.Window
     Me.TbSqlResult.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.TbSqlResult.Location = New System.Drawing.Point(738, 29)
+    Me.TbSqlResult.Location = New System.Drawing.Point(703, 29)
     Me.TbSqlResult.Name = "TbSqlResult"
     Me.TbSqlResult.ReadOnly = True
-    Me.TbSqlResult.Size = New System.Drawing.Size(357, 134)
+    Me.TbSqlResult.Size = New System.Drawing.Size(379, 134)
     Me.TbSqlResult.TabIndex = 11
     Me.TbSqlResult.Text = ""
     '
     'LblResult
     '
     Me.LblResult.AutoSize = True
-    Me.LblResult.Location = New System.Drawing.Point(735, 6)
+    Me.LblResult.Location = New System.Drawing.Point(700, 6)
     Me.LblResult.Name = "LblResult"
     Me.LblResult.Size = New System.Drawing.Size(71, 13)
     Me.LblResult.TabIndex = 12

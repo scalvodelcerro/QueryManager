@@ -37,6 +37,7 @@ Partial Class FormPrincipal
     Me.PnlUsar = New System.Windows.Forms.FlowLayoutPanel()
     Me.Label1 = New System.Windows.Forms.Label()
     Me.CbInformeUsar = New System.Windows.Forms.ComboBox()
+    Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
     Me.Tabs.SuspendLayout()
     Me.TabCrear.SuspendLayout()
     Me.ToolStrip1.SuspendLayout()
@@ -74,10 +75,10 @@ Partial Class FormPrincipal
     '
     Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
     Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-    Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BtnNuevo, Me.BtnGuardar, Me.toolStripSeparator1, Me.BtnAnadirConsulta})
+    Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BtnNuevo, Me.BtnGuardar, Me.ToolStripSeparator2, Me.toolStripSeparator1, Me.BtnAnadirConsulta})
     Me.ToolStrip1.Location = New System.Drawing.Point(409, 6)
     Me.ToolStrip1.Name = "ToolStrip1"
-    Me.ToolStrip1.Size = New System.Drawing.Size(78, 25)
+    Me.ToolStrip1.Size = New System.Drawing.Size(84, 25)
     Me.ToolStrip1.TabIndex = 0
     '
     'BtnNuevo
@@ -87,7 +88,7 @@ Partial Class FormPrincipal
     Me.BtnNuevo.ImageTransparentColor = System.Drawing.Color.Magenta
     Me.BtnNuevo.Name = "BtnNuevo"
     Me.BtnNuevo.Size = New System.Drawing.Size(23, 22)
-    Me.BtnNuevo.Text = "&Nuevo"
+    Me.BtnNuevo.Text = "&Nuevo informe"
     '
     'BtnGuardar
     '
@@ -96,7 +97,7 @@ Partial Class FormPrincipal
     Me.BtnGuardar.ImageTransparentColor = System.Drawing.Color.Magenta
     Me.BtnGuardar.Name = "BtnGuardar"
     Me.BtnGuardar.Size = New System.Drawing.Size(23, 22)
-    Me.BtnGuardar.Text = "&Guardar"
+    Me.BtnGuardar.Text = "&Guardar informe"
     '
     'toolStripSeparator1
     '
@@ -176,6 +177,11 @@ Partial Class FormPrincipal
     Me.CbInformeUsar.Size = New System.Drawing.Size(346, 21)
     Me.CbInformeUsar.TabIndex = 3
     '
+    'ToolStripSeparator2
+    '
+    Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+    Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -208,4 +214,5 @@ Partial Class FormPrincipal
   Friend WithEvents Label1 As Label
   Friend WithEvents CbInformeUsar As ComboBox
   Friend WithEvents PnlUsar As FlowLayoutPanel
+  Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class

@@ -77,7 +77,7 @@ Public Class Parametro
   Public Property Nombre As String
   <StringLength(1000)>
   Public Property Valor As String
-  <Column("Id_Consulta"), ForeignKey("Consulta")>
+  <Column("Id_Consulta"), ForeignKey("Consulta"), Required>
   Public Property IdConsulta As Integer
   Public Property Consulta As Consulta
 End Class

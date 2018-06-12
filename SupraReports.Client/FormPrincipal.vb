@@ -23,6 +23,7 @@ Public Class FormPrincipal
     informe.Consultas.Add(consulta)
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
       repo.Create(informe)
+      repo.Save()
     End Using
     CbInforme.Items.Add(informe)
     CbInforme.SelectedItem = informe
@@ -40,15 +41,18 @@ Public Class FormPrincipal
         Next
         For Each nombreParametro In nombresParametros.Except(c.Parametros.Select(Function(x) x.Nombre))
           repo.Create(New Parametro(nombreParametro, String.Empty, c))
+          repo.Save()
         Next
       Next
       repo.Update(informe)
+      repo.Save()
     End Using
   End Sub
 
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
       repo.Create(New Consulta(String.Empty, String.Empty, informe))
+      repo.Save()
     End Using
     CargarConsultas()
   End Sub
