@@ -16,14 +16,14 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
-    CbInforme.SelectedItem = Nothing
     informe = New Informe(Environment.UserName)
-    Dim consulta = New Consulta(String.Empty, String.Empty, informe)
+    Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
     informe.Consultas.Add(consulta)
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
       repo.Create(informe)
     End Using
-    CargarInformes()
+    CbInforme.Items.Add(informe)
+    CbInforme.SelectedItem = informe
     CargarConsultas()
   End Sub
 
@@ -44,8 +44,8 @@ Public Class FormPrincipal
   Private Sub CargarInformes()
     CbInforme.DisplayMember = "Id"
     CbInforme.Items.Clear()
-    Using informeRepo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      Dim informes As IEnumerable(Of Informe) = informeRepo.FindAll()
+    Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
+      Dim informes As IEnumerable(Of Informe) = repo.FindAll()
       For Each i In informes
         CbInforme.Items.Add(i)
       Next

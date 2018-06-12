@@ -18,7 +18,6 @@ Public Class InformeRepository
     db.Informes.Attach(consulta.Informe)
     consulta.Informe = Nothing
     db.Consultas.Add(consulta)
-    'Dim d = db.Consultas.Find(consulta.Id)
     db.SaveChanges()
   End Sub
 
@@ -69,7 +68,6 @@ Public Class InformeRepository
 
   Public Sub Dispose() Implements IDisposable.Dispose
     Dispose(True)
-    ' GC.SuppressFinalize(Me)
   End Sub
 #End Region
 End Class
