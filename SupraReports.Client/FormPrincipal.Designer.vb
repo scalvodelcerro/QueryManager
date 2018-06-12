@@ -34,9 +34,9 @@ Partial Class FormPrincipal
     Me.CbInforme = New System.Windows.Forms.ComboBox()
     Me.PnlEditar = New System.Windows.Forms.FlowLayoutPanel()
     Me.TabUsar = New System.Windows.Forms.TabPage()
+    Me.PnlUsar = New System.Windows.Forms.FlowLayoutPanel()
     Me.Label1 = New System.Windows.Forms.Label()
     Me.CbInformeUsar = New System.Windows.Forms.ComboBox()
-    Me.PnlUsar = New System.Windows.Forms.FlowLayoutPanel()
     Me.Tabs.SuspendLayout()
     Me.TabCrear.SuspendLayout()
     Me.ToolStrip1.SuspendLayout()
@@ -53,7 +53,7 @@ Partial Class FormPrincipal
     Me.Tabs.Location = New System.Drawing.Point(12, 12)
     Me.Tabs.Name = "Tabs"
     Me.Tabs.SelectedIndex = 0
-    Me.Tabs.Size = New System.Drawing.Size(1122, 494)
+    Me.Tabs.Size = New System.Drawing.Size(1160, 494)
     Me.Tabs.TabIndex = 2
     '
     'TabCrear
@@ -65,7 +65,7 @@ Partial Class FormPrincipal
     Me.TabCrear.Location = New System.Drawing.Point(4, 22)
     Me.TabCrear.Name = "TabCrear"
     Me.TabCrear.Padding = New System.Windows.Forms.Padding(3)
-    Me.TabCrear.Size = New System.Drawing.Size(1114, 468)
+    Me.TabCrear.Size = New System.Drawing.Size(1152, 468)
     Me.TabCrear.TabIndex = 0
     Me.TabCrear.Text = "Crear Informe"
     Me.TabCrear.UseVisualStyleBackColor = True
@@ -135,7 +135,7 @@ Partial Class FormPrincipal
     Me.PnlEditar.AutoScroll = True
     Me.PnlEditar.Location = New System.Drawing.Point(0, 34)
     Me.PnlEditar.Name = "PnlEditar"
-    Me.PnlEditar.Size = New System.Drawing.Size(1114, 434)
+    Me.PnlEditar.Size = New System.Drawing.Size(1152, 434)
     Me.PnlEditar.TabIndex = 0
     '
     'TabUsar
@@ -146,10 +146,18 @@ Partial Class FormPrincipal
     Me.TabUsar.Location = New System.Drawing.Point(4, 22)
     Me.TabUsar.Name = "TabUsar"
     Me.TabUsar.Padding = New System.Windows.Forms.Padding(3)
-    Me.TabUsar.Size = New System.Drawing.Size(1114, 468)
+    Me.TabUsar.Size = New System.Drawing.Size(1152, 468)
     Me.TabUsar.TabIndex = 1
     Me.TabUsar.Text = "Usar informe"
     Me.TabUsar.UseVisualStyleBackColor = True
+    '
+    'PnlUsar
+    '
+    Me.PnlUsar.AutoScroll = True
+    Me.PnlUsar.Location = New System.Drawing.Point(0, 35)
+    Me.PnlUsar.Name = "PnlUsar"
+    Me.PnlUsar.Size = New System.Drawing.Size(1152, 434)
+    Me.PnlUsar.TabIndex = 5
     '
     'Label1
     '
@@ -168,19 +176,11 @@ Partial Class FormPrincipal
     Me.CbInformeUsar.Size = New System.Drawing.Size(346, 21)
     Me.CbInformeUsar.TabIndex = 3
     '
-    'PnlUsar
-    '
-    Me.PnlUsar.AutoScroll = True
-    Me.PnlUsar.Location = New System.Drawing.Point(0, 35)
-    Me.PnlUsar.Name = "PnlUsar"
-    Me.PnlUsar.Size = New System.Drawing.Size(1114, 434)
-    Me.PnlUsar.TabIndex = 5
-    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(1146, 514)
+    Me.ClientSize = New System.Drawing.Size(1184, 514)
     Me.Controls.Add(Me.Tabs)
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"

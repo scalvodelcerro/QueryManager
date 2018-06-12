@@ -82,4 +82,14 @@ Public Class FormPrincipal
     Next
   End Sub
 
+  Private Sub Tabs_Selected(sender As Object, e As TabControlEventArgs) Handles Tabs.Selected
+    If informe IsNot Nothing Then
+      Select Case e.TabPageIndex
+        Case TabCrear.TabIndex
+          CargarConsultas()
+        Case TabUsar.TabIndex
+          CargarConsultasUsar()
+      End Select
+    End If
+  End Sub
 End Class

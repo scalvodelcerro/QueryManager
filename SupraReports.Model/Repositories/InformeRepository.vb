@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Entity
+Imports SupraReports.Model
 
 Public Class InformeRepository
   Implements IDisposable
@@ -18,6 +19,13 @@ Public Class InformeRepository
     db.Informes.Attach(consulta.Informe)
     consulta.Informe = Nothing
     db.Consultas.Add(consulta)
+    db.SaveChanges()
+  End Sub
+
+  Public Sub Create(parametro As Parametro)
+    db.Consultas.Attach(parametro.Consulta)
+    parametro.Consulta = Nothing
+    db.Parametros.Add(parametro)
     db.SaveChanges()
   End Sub
 
