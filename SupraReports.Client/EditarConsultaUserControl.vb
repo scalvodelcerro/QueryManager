@@ -18,8 +18,11 @@ Public Class EditarConsultaUserControl
 
   Private Sub TbSql_TextChanged(sender As Object, e As EventArgs) Handles TbSql.TextChanged
     _consulta.TextoSql = TbSql.Text
-    Dim parametros = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value)
-    '_consulta.Parametros.
+    Dim parametros = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
+    LbParametros.Items.Clear()
+    For Each p In parametros
+      LbParametros.Items.Add(p)
+    Next
   End Sub
 
   Private Sub BtnCancelar_Click(sender As Object, e As EventArgs) Handles BtnCancelar.Click

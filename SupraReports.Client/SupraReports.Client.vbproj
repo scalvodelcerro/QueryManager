@@ -100,6 +100,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UsarConsultaUserControl.Designer.vb">
+      <DependentUpon>UsarConsultaUserControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UsarConsultaUserControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ValorParametroUserControl.Designer.vb">
+      <DependentUpon>ValorParametroUserControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ValorParametroUserControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditarConsultaUserControl.resx">
@@ -113,6 +125,12 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsarConsultaUserControl.resx">
+      <DependentUpon>UsarConsultaUserControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ValorParametroUserControl.resx">
+      <DependentUpon>ValorParametroUserControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

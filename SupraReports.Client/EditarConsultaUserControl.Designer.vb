@@ -28,13 +28,15 @@ Partial Class EditarConsultaUserControl
     Me.TbSql = New System.Windows.Forms.TextBox()
     Me.LblSql = New System.Windows.Forms.Label()
     Me.BtnCancelar = New System.Windows.Forms.Button()
+    Me.LbParametros = New System.Windows.Forms.ListBox()
+    Me.Label1 = New System.Windows.Forms.Label()
     Me.SuspendLayout()
     '
     'TbNombre
     '
     Me.TbNombre.Location = New System.Drawing.Point(100, 3)
     Me.TbNombre.Name = "TbNombre"
-    Me.TbNombre.Size = New System.Drawing.Size(453, 20)
+    Me.TbNombre.Size = New System.Drawing.Size(430, 20)
     Me.TbNombre.TabIndex = 0
     '
     'LblNombre
@@ -48,10 +50,11 @@ Partial Class EditarConsultaUserControl
     '
     'TbSql
     '
+    Me.TbSql.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.TbSql.Location = New System.Drawing.Point(100, 29)
     Me.TbSql.Multiline = True
     Me.TbSql.Name = "TbSql"
-    Me.TbSql.Size = New System.Drawing.Size(656, 126)
+    Me.TbSql.Size = New System.Drawing.Size(430, 134)
     Me.TbSql.TabIndex = 2
     '
     'LblSql
@@ -73,18 +76,37 @@ Partial Class EditarConsultaUserControl
     Me.BtnCancelar.TabIndex = 4
     Me.BtnCancelar.UseVisualStyleBackColor = True
     '
+    'LbParametros
+    '
+    Me.LbParametros.FormattingEnabled = True
+    Me.LbParametros.Location = New System.Drawing.Point(605, 29)
+    Me.LbParametros.Name = "LbParametros"
+    Me.LbParametros.Size = New System.Drawing.Size(151, 134)
+    Me.LbParametros.TabIndex = 5
+    '
+    'Label1
+    '
+    Me.Label1.AutoSize = True
+    Me.Label1.Location = New System.Drawing.Point(536, 32)
+    Me.Label1.Name = "Label1"
+    Me.Label1.Size = New System.Drawing.Size(63, 13)
+    Me.Label1.TabIndex = 6
+    Me.Label1.Text = "Parámetros:"
+    '
     'EditarConsultaUserControl
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.AutoSize = True
+    Me.Controls.Add(Me.Label1)
+    Me.Controls.Add(Me.LbParametros)
     Me.Controls.Add(Me.BtnCancelar)
     Me.Controls.Add(Me.LblSql)
     Me.Controls.Add(Me.TbSql)
     Me.Controls.Add(Me.LblNombre)
     Me.Controls.Add(Me.TbNombre)
     Me.Name = "EditarConsultaUserControl"
-    Me.Size = New System.Drawing.Size(759, 158)
+    Me.Size = New System.Drawing.Size(759, 166)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -95,4 +117,6 @@ Partial Class EditarConsultaUserControl
   Friend WithEvents TbSql As TextBox
   Friend WithEvents LblSql As Label
   Friend WithEvents BtnCancelar As Button
+  Friend WithEvents LbParametros As ListBox
+  Friend WithEvents Label1 As Label
 End Class
