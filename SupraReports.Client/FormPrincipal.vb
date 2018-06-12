@@ -1,7 +1,9 @@
-﻿Imports SupraReports.Model
+﻿Imports System.Text.RegularExpressions
+Imports SupraReports.Model
 
 Public Class FormPrincipal
   Private informe As Informe
+  Private Const PatternParametro = "#(\w+)#"
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     CargarInformes()
@@ -30,14 +32,23 @@ Public Class FormPrincipal
 
   Private Sub BtnGuardar_Click(sender As Object, e As EventArgs) Handles BtnGuardar.Click
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
+      For Each c In informe.Consultas
+        Dim nombresParametros = Regex.Matches(c.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
+        Dim eliminados = c.Parametros.Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
+        For Each p In eliminados
+          repo.Delete(p)
+        Next
+        For Each nombreParametro In nombresParametros.Except(c.Parametros.Select(Function(x) x.Nombre))
+          repo.Create(New Parametro(nombreParametro, String.Empty, c))
+        Next
+      Next
       repo.Update(informe)
     End Using
   End Sub
 
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
-    Dim consulta = New Consulta(String.Empty, String.Empty, informe)
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      repo.Create(consulta)
+      repo.Create(New Consulta(String.Empty, String.Empty, informe))
     End Using
     CargarConsultas()
   End Sub

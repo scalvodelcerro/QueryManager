@@ -62,6 +62,12 @@ Public Class InformeRepository
     db.SaveChanges()
   End Sub
 
+  Public Sub Delete(parametro As Parametro)
+    db.Consultas.Attach(parametro.Consulta)
+    db.Entry(parametro).State = EntityState.Deleted
+    db.SaveChanges()
+  End Sub
+
 #Region "IDisposable Support"
   Private disposedValue As Boolean
 

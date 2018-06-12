@@ -22,17 +22,10 @@ Public Class UsarConsultaUserControl
 
   Private Sub OnCambiarValor(sender As Object, e As ValorParametroUserControl.CambiarValorEventArgs)
     Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = e.Parametro)
-    If parametro Is Nothing Then
-      parametro = New Parametro(e.Parametro, e.Valor, _consulta)
-      Using repo = New InformeRepository(New SupraReportsContext())
-        repo.Create(parametro)
-      End Using
-    Else
-      parametro.Valor = e.Valor
-      Using repo = New InformeRepository(New SupraReportsContext())
-        repo.Update(parametro)
-      End Using
-    End If
+    parametro.Valor = e.Valor
+    'Using repo = New InformeRepository(New SupraReportsContext())
+    '  repo.Update(parametro)
+    'End Using
 
     Dim textResult As String = _consulta.TextoSql.ToUpper()
     For Each p In _consulta.Parametros
