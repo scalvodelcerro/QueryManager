@@ -1,5 +1,4 @@
 ﻿Imports System.Data.Entity
-Imports SupraReports.Model
 
 Public Class InformeRepository
   Implements IDisposable
@@ -15,7 +14,7 @@ Public Class InformeRepository
   End Sub
 
   Public Sub Create(informe As Informe)
-    informe = db.Informes.Add(informe)
+    db.Informes.Add(informe)
   End Sub
 
   Public Sub Create(consulta As Consulta)
@@ -37,31 +36,57 @@ Public Class InformeRepository
   End Function
 
   Public Sub Update(informe As Informe)
-    db.Entry(informe).State = EntityState.Modified
-    For Each c In informe.Consultas
+    For Each c In informe.Consultas.Where(Function(x) x.Id = 0)
+      db.Entry(c).State = EntityState.Added
+    Next
+    For Each c In informe.Consultas.Where(Function(x) x.Id <> 0)
       Update(c)
     Next
+    db.Informes.Attach(informe)
+    db.Entry(informe).State = EntityState.Modified
   End Sub
 
   Public Sub Update(consulta As Consulta)
-    db.Entry(consulta).State = EntityState.Modified
-    For Each p In consulta.Parametros
+    For Each p In consulta.Parametros.Where(Function(x) x.Id = 0)
+      db.Entry(p).State = EntityState.Added
+    Next
+    For Each p In consulta.Parametros.Where(Function(x) x.Id <> 0)
       Update(p)
     Next
+    db.Consultas.Attach(consulta)
+    db.Entry(consulta).State = EntityState.Modified
   End Sub
 
   Public Sub Update(parametro As Parametro)
     db.Entry(parametro).State = EntityState.Modified
   End Sub
 
+  Public Sub Delete(informe As Informe)
+    For Each c In informe.Consultas
+      If c.Id = 0 Then
+        db.Entry(c).State = EntityState.Added
+      End If
+    Next
+    db.Informes.Attach(informe)
+    db.Informes.Remove(informe)
+  End Sub
+
   Public Sub Delete(consulta As Consulta)
-    db.Informes.Attach(consulta.Informe)
-    db.Consultas.Remove(consulta)
+    If consulta.Id = 0 Then
+      consulta.Informe.Consultas.Remove(consulta)
+    Else
+      db.Informes.Attach(consulta.Informe)
+      db.Consultas.Remove(consulta)
+    End If
   End Sub
 
   Public Sub Delete(parametro As Parametro)
-    db.Consultas.Attach(parametro.Consulta)
-    db.Parametros.Remove(parametro)
+    If parametro.Id = 0 Then
+      parametro.Consulta.Parametros.Remove(parametro)
+    Else
+      db.Consultas.Attach(parametro.Consulta)
+      db.Parametros.Remove(parametro)
+    End If
   End Sub
 
 #Region "IDisposable Support"

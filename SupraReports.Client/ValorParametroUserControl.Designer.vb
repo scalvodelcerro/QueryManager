@@ -22,19 +22,9 @@ Partial Class ValorParametroUserControl
   'No lo modifique con el editor de código.
   <System.Diagnostics.DebuggerStepThrough()> _
   Private Sub InitializeComponent()
-    Me.TbParametro = New System.Windows.Forms.TextBox()
     Me.TbValor = New System.Windows.Forms.TextBox()
-    Me.Label1 = New System.Windows.Forms.Label()
+    Me.LblNombre = New System.Windows.Forms.Label()
     Me.SuspendLayout()
-    '
-    'TbParametro
-    '
-    Me.TbParametro.BackColor = System.Drawing.SystemColors.Window
-    Me.TbParametro.Location = New System.Drawing.Point(3, 3)
-    Me.TbParametro.Name = "TbParametro"
-    Me.TbParametro.ReadOnly = True
-    Me.TbParametro.Size = New System.Drawing.Size(100, 20)
-    Me.TbParametro.TabIndex = 0
     '
     'TbValor
     '
@@ -43,30 +33,27 @@ Partial Class ValorParametroUserControl
     Me.TbValor.Size = New System.Drawing.Size(100, 20)
     Me.TbValor.TabIndex = 1
     '
-    'Label1
+    'LblNombre
     '
-    Me.Label1.AutoSize = True
-    Me.Label1.Location = New System.Drawing.Point(109, 6)
-    Me.Label1.Name = "Label1"
-    Me.Label1.Size = New System.Drawing.Size(16, 13)
-    Me.Label1.TabIndex = 2
-    Me.Label1.Text = "->"
+    Me.LblNombre.Location = New System.Drawing.Point(3, 3)
+    Me.LblNombre.Name = "LblNombre"
+    Me.LblNombre.Size = New System.Drawing.Size(122, 20)
+    Me.LblNombre.TabIndex = 2
+    Me.LblNombre.Text = "Nombre parámetro"
+    Me.LblNombre.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
     'ValorParametroUserControl
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.Controls.Add(Me.Label1)
+    Me.Controls.Add(Me.LblNombre)
     Me.Controls.Add(Me.TbValor)
-    Me.Controls.Add(Me.TbParametro)
     Me.Name = "ValorParametroUserControl"
     Me.Size = New System.Drawing.Size(234, 26)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
   End Sub
-
-  Friend WithEvents TbParametro As TextBox
   Friend WithEvents TbValor As TextBox
-  Friend WithEvents Label1 As Label
+  Friend WithEvents LblNombre As Label
 End Class

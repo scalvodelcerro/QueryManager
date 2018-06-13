@@ -19,17 +19,30 @@ End Class
 
 <Table("Informe")>
 Public Class Informe
-  Public Sub New(usuario As String)
+  Public Sub New(nombre As String, usuario As String)
+    Me.Nombre = nombre
     Me.Usuario = usuario
-    Me.Consultas = New List(Of Consulta)()
+    Consultas = New List(Of Consulta)()
   End Sub
 
-  Friend Sub New()
+  Public Sub New(informe As Informe)
+    Me.New(informe.Nombre, informe.Usuario)
+    For Each c In informe.Consultas
+      Dim newC = New Consulta(c) With {
+        .Informe = Me,
+        .IdInforme = Id
+      }
+      Consultas.Add(newC)
+    Next
+  End Sub
+
+  Protected Sub New()
   End Sub
 
   <Key, Column("Id_Informe")>
   Public Property Id As Integer
   <Required>
+  Public Property Nombre As String
   Public Property Usuario As String
   Public Overridable Property Consultas As ICollection(Of Consulta)
 End Class
@@ -40,11 +53,22 @@ Public Class Consulta
     Me.Nombre = nombre
     Me.TextoSql = textoSql
     Me.Informe = informe
-    Me.IdInforme = informe.Id
-    Me.Parametros = New List(Of Parametro)()
+    IdInforme = informe.Id
+    Parametros = New List(Of Parametro)()
   End Sub
 
-  Friend Sub New()
+  Public Sub New(consulta As Consulta)
+    Me.New(consulta.Nombre, consulta.TextoSql, consulta.Informe)
+    For Each p In consulta.Parametros
+      Dim newP = New Parametro(p) With {
+        .Consulta = Me,
+        .IdConsulta = Id
+      }
+      Parametros.Add(newP)
+    Next
+  End Sub
+
+  Protected Sub New()
   End Sub
 
   <Key, Column("Id_Consulta")>
@@ -65,10 +89,14 @@ Public Class Parametro
     Me.Nombre = nombre
     Me.Valor = valor
     Me.Consulta = consulta
-    Me.IdConsulta = consulta.Id
+    IdConsulta = consulta.Id
   End Sub
 
-  Friend Sub New()
+  Public Sub New(parametro As Parametro)
+    Me.New(parametro.Nombre, parametro.Valor, parametro.Consulta)
+  End Sub
+
+  Protected Sub New()
   End Sub
 
   <Key, Column("Id_Parametro")>

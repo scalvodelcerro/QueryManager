@@ -1,5 +1,4 @@
-﻿Imports System.Text.RegularExpressions
-Imports SupraReports.Model
+﻿Imports SupraReports.Model
 
 Public Class FormPrincipal
   Private informe As Informe
@@ -18,93 +17,90 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
-    informe = New Informe(Environment.UserName)
-    Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
-    informe.Consultas.Add(consulta)
-    Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      repo.Create(informe)
-      repo.Save()
-    End Using
-    CbInforme.Items.Add(informe)
-    CbInforme.SelectedItem = informe
-    CbInformeUsar.Items.Add(informe)
-    CargarConsultas()
+    Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
+
+    If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+      informe = New Informe(nombreInformeDialog.TbNombre.Text, Environment.UserName)
+      Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
+      informe.Consultas.Add(consulta)
+      Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
+        repo.Create(informe)
+        repo.Save()
+      End Using
+      CbInforme.Items.Add(informe)
+      CbInforme.SelectedItem = informe
+      CargarConsultas()
+    End If
   End Sub
 
   Private Sub BtnGuardar_Click(sender As Object, e As EventArgs) Handles BtnGuardar.Click
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      For Each c In informe.Consultas
-        Dim nombresParametros = Regex.Matches(c.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
-        Dim eliminados = c.Parametros.Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
-        For Each p In eliminados
-          repo.Delete(p)
-        Next
-        For Each nombreParametro In nombresParametros.Except(c.Parametros.Select(Function(x) x.Nombre))
-          repo.Create(New Parametro(nombreParametro, String.Empty, c))
-          repo.Save()
-        Next
-      Next
       repo.Update(informe)
       repo.Save()
     End Using
   End Sub
 
-  Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
-    Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      repo.Create(New Consulta(String.Empty, String.Empty, informe))
-      repo.Save()
-    End Using
-    CargarConsultas()
-  End Sub
+  Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
+    Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
 
-  Private Sub CbInformeUsar_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbInformeUsar.SelectedIndexChanged
-    PnlUsar.Controls.Clear()
-    If CbInformeUsar.SelectedItem IsNot Nothing Then
-      informe = CType(CbInformeUsar.SelectedItem, Informe)
-      CargarConsultasUsar()
+    If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+      Dim nuevoInforme = New Informe(informe)
+      nuevoInforme.Nombre = nombreInformeDialog.TbNombre.Text
+      Using repo = New InformeRepository(New SupraReportsContext())
+        repo.Create(nuevoInforme)
+        repo.Save()
+      End Using
+      CbInforme.Items.Add(nuevoInforme)
+      CbInforme.SelectedItem = nuevoInforme
+      informe = nuevoInforme
+      CargarConsultas()
     End If
   End Sub
 
+  Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
+    Using repo = New InformeRepository(New SupraReportsContext())
+      repo.Delete(informe)
+      repo.Save()
+    End Using
+    CargarInformes()
+    CargarConsultas()
+  End Sub
+
+  Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
+    Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
+    informe.Consultas.Add(consulta)
+    Dim control As EditarConsultaUserControl = New EditarConsultaUserControl()
+    control.Consulta = consulta
+    PnlEditar.Controls.Add(control)
+    PnlEditar.ScrollControlIntoView(control)
+  End Sub
+
+  Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
+    BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
+  End Sub
+
   Private Sub CargarInformes()
-    CbInforme.DisplayMember = "Id"
+    CbInforme.DisplayMember = "Nombre"
     CbInforme.Items.Clear()
-    CbInformeUsar.DisplayMember = "Id"
-    CbInformeUsar.Items.Clear()
     Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
       Dim informes As IEnumerable(Of Informe) = repo.FindAll()
       For Each i In informes
         CbInforme.Items.Add(i)
-        CbInformeUsar.Items.Add(i)
       Next
     End Using
+    CbInforme.SelectedItem = Nothing
+    CbInforme.Text = String.Empty
   End Sub
 
   Private Sub CargarConsultas()
     PnlEditar.Controls.Clear()
-    For Each consulta In informe.Consultas.Reverse()
-      Dim control As EditarConsultaUserControl = New EditarConsultaUserControl()
-      control.Consulta = consulta
-      PnlEditar.Controls.Add(control)
-    Next
-  End Sub
-
-  Private Sub CargarConsultasUsar()
-    PnlUsar.Controls.Clear()
-    For Each consulta In informe.Consultas.Reverse()
-      Dim control As UsarConsultaUserControl = New UsarConsultaUserControl()
-      control.Consulta = consulta
-      PnlUsar.Controls.Add(control)
-    Next
-  End Sub
-
-  Private Sub Tabs_Selected(sender As Object, e As TabControlEventArgs) Handles Tabs.Selected
     If informe IsNot Nothing Then
-      Select Case e.TabPageIndex
-        Case TabCrear.TabIndex
-          CargarConsultas()
-        Case TabUsar.TabIndex
-          CargarConsultasUsar()
-      End Select
+      For Each consulta In informe.Consultas
+        Dim control As EditarConsultaUserControl = New EditarConsultaUserControl()
+        control.Consulta = consulta
+        PnlEditar.Controls.Add(control)
+      Next
     End If
   End Sub
+
 End Class

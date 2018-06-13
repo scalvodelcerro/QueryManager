@@ -22,197 +22,150 @@ Partial Class FormPrincipal
   'No lo modifique con el editor de código.
   <System.Diagnostics.DebuggerStepThrough()> _
   Private Sub InitializeComponent()
+    Me.components = New System.ComponentModel.Container()
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPrincipal))
-    Me.Tabs = New System.Windows.Forms.TabControl()
-    Me.TabCrear = New System.Windows.Forms.TabPage()
-    Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-    Me.BtnNuevo = New System.Windows.Forms.ToolStripButton()
-    Me.BtnGuardar = New System.Windows.Forms.ToolStripButton()
-    Me.toolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-    Me.BtnAnadirConsulta = New System.Windows.Forms.ToolStripButton()
+    Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+    Me.PnlEditar = New System.Windows.Forms.FlowLayoutPanel()
+    Me.BtnEliminarInforme = New System.Windows.Forms.Button()
+    Me.BtnGuardarComo = New System.Windows.Forms.Button()
+    Me.BtnGuardar = New System.Windows.Forms.Button()
+    Me.BtnNuevo = New System.Windows.Forms.Button()
     Me.LblInforme = New System.Windows.Forms.Label()
     Me.CbInforme = New System.Windows.Forms.ComboBox()
-    Me.PnlEditar = New System.Windows.Forms.FlowLayoutPanel()
-    Me.TabUsar = New System.Windows.Forms.TabPage()
-    Me.PnlUsar = New System.Windows.Forms.FlowLayoutPanel()
-    Me.Label1 = New System.Windows.Forms.Label()
-    Me.CbInformeUsar = New System.Windows.Forms.ComboBox()
-    Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-    Me.Tabs.SuspendLayout()
-    Me.TabCrear.SuspendLayout()
-    Me.ToolStrip1.SuspendLayout()
-    Me.TabUsar.SuspendLayout()
+    Me.BtnAnadirConsulta = New System.Windows.Forms.Button()
     Me.SuspendLayout()
     '
-    'Tabs
+    'ImageList1
     '
-    Me.Tabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Tabs.Controls.Add(Me.TabCrear)
-    Me.Tabs.Controls.Add(Me.TabUsar)
-    Me.Tabs.Location = New System.Drawing.Point(12, 12)
-    Me.Tabs.Name = "Tabs"
-    Me.Tabs.SelectedIndex = 0
-    Me.Tabs.Size = New System.Drawing.Size(1160, 494)
-    Me.Tabs.TabIndex = 2
+    Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+    Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+    Me.ImageList1.Images.SetKeyName(0, "if_window_new_1880.png")
+    Me.ImageList1.Images.SetKeyName(1, "if_filesave_1743.png")
+    Me.ImageList1.Images.SetKeyName(2, "if_filesaveas_1744.png")
+    Me.ImageList1.Images.SetKeyName(3, "if_button_cancel_1709.png")
     '
-    'TabCrear
+    'PnlEditar
     '
-    Me.TabCrear.Controls.Add(Me.ToolStrip1)
-    Me.TabCrear.Controls.Add(Me.LblInforme)
-    Me.TabCrear.Controls.Add(Me.CbInforme)
-    Me.TabCrear.Controls.Add(Me.PnlEditar)
-    Me.TabCrear.Location = New System.Drawing.Point(4, 22)
-    Me.TabCrear.Name = "TabCrear"
-    Me.TabCrear.Padding = New System.Windows.Forms.Padding(3)
-    Me.TabCrear.Size = New System.Drawing.Size(1152, 468)
-    Me.TabCrear.TabIndex = 0
-    Me.TabCrear.Text = "Crear Informe"
-    Me.TabCrear.UseVisualStyleBackColor = True
+    Me.PnlEditar.AutoScroll = True
+    Me.PnlEditar.AutoSize = True
+    Me.PnlEditar.Location = New System.Drawing.Point(12, 39)
+    Me.PnlEditar.MaximumSize = New System.Drawing.Size(1152, 399)
+    Me.PnlEditar.Name = "PnlEditar"
+    Me.PnlEditar.Size = New System.Drawing.Size(1152, 10)
+    Me.PnlEditar.TabIndex = 0
     '
-    'ToolStrip1
+    'BtnEliminarInforme
     '
-    Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.None
-    Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-    Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BtnNuevo, Me.BtnGuardar, Me.ToolStripSeparator2, Me.toolStripSeparator1, Me.BtnAnadirConsulta})
-    Me.ToolStrip1.Location = New System.Drawing.Point(409, 6)
-    Me.ToolStrip1.Name = "ToolStrip1"
-    Me.ToolStrip1.Size = New System.Drawing.Size(84, 25)
-    Me.ToolStrip1.TabIndex = 0
+    Me.BtnEliminarInforme.FlatAppearance.BorderSize = 0
+    Me.BtnEliminarInforme.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnEliminarInforme.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnEliminarInforme.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnEliminarInforme.ImageIndex = 3
+    Me.BtnEliminarInforme.ImageList = Me.ImageList1
+    Me.BtnEliminarInforme.Location = New System.Drawing.Point(476, 10)
+    Me.BtnEliminarInforme.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnEliminarInforme.Name = "BtnEliminarInforme"
+    Me.BtnEliminarInforme.Size = New System.Drawing.Size(20, 22)
+    Me.BtnEliminarInforme.TabIndex = 12
+    Me.BtnEliminarInforme.UseVisualStyleBackColor = True
     '
-    'BtnNuevo
+    'BtnGuardarComo
     '
-    Me.BtnNuevo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-    Me.BtnNuevo.Image = CType(resources.GetObject("BtnNuevo.Image"), System.Drawing.Image)
-    Me.BtnNuevo.ImageTransparentColor = System.Drawing.Color.Magenta
-    Me.BtnNuevo.Name = "BtnNuevo"
-    Me.BtnNuevo.Size = New System.Drawing.Size(23, 22)
-    Me.BtnNuevo.Text = "&Nuevo informe"
+    Me.BtnGuardarComo.FlatAppearance.BorderSize = 0
+    Me.BtnGuardarComo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnGuardarComo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnGuardarComo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnGuardarComo.ImageIndex = 2
+    Me.BtnGuardarComo.ImageList = Me.ImageList1
+    Me.BtnGuardarComo.Location = New System.Drawing.Point(454, 10)
+    Me.BtnGuardarComo.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnGuardarComo.Name = "BtnGuardarComo"
+    Me.BtnGuardarComo.Size = New System.Drawing.Size(20, 22)
+    Me.BtnGuardarComo.TabIndex = 11
+    Me.BtnGuardarComo.UseVisualStyleBackColor = True
     '
     'BtnGuardar
     '
-    Me.BtnGuardar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-    Me.BtnGuardar.Image = CType(resources.GetObject("BtnGuardar.Image"), System.Drawing.Image)
-    Me.BtnGuardar.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.BtnGuardar.FlatAppearance.BorderSize = 0
+    Me.BtnGuardar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnGuardar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnGuardar.ImageIndex = 1
+    Me.BtnGuardar.ImageList = Me.ImageList1
+    Me.BtnGuardar.Location = New System.Drawing.Point(432, 10)
+    Me.BtnGuardar.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardar.Name = "BtnGuardar"
-    Me.BtnGuardar.Size = New System.Drawing.Size(23, 22)
-    Me.BtnGuardar.Text = "&Guardar informe"
+    Me.BtnGuardar.Size = New System.Drawing.Size(20, 22)
+    Me.BtnGuardar.TabIndex = 10
+    Me.BtnGuardar.UseVisualStyleBackColor = True
     '
-    'toolStripSeparator1
+    'BtnNuevo
     '
-    Me.toolStripSeparator1.Name = "toolStripSeparator1"
-    Me.toolStripSeparator1.Size = New System.Drawing.Size(6, 25)
-    '
-    'BtnAnadirConsulta
-    '
-    Me.BtnAnadirConsulta.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-    Me.BtnAnadirConsulta.Image = CType(resources.GetObject("BtnAnadirConsulta.Image"), System.Drawing.Image)
-    Me.BtnAnadirConsulta.ImageTransparentColor = System.Drawing.Color.Magenta
-    Me.BtnAnadirConsulta.Name = "BtnAnadirConsulta"
-    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(23, 22)
-    Me.BtnAnadirConsulta.Text = "Añadir Consulta"
-    Me.BtnAnadirConsulta.ToolTipText = "Añadir Consulta"
+    Me.BtnNuevo.FlatAppearance.BorderSize = 0
+    Me.BtnNuevo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnNuevo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnNuevo.ImageIndex = 0
+    Me.BtnNuevo.ImageList = Me.ImageList1
+    Me.BtnNuevo.Location = New System.Drawing.Point(410, 10)
+    Me.BtnNuevo.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnNuevo.Name = "BtnNuevo"
+    Me.BtnNuevo.Size = New System.Drawing.Size(20, 22)
+    Me.BtnNuevo.TabIndex = 9
+    Me.BtnNuevo.UseVisualStyleBackColor = True
     '
     'LblInforme
     '
     Me.LblInforme.AutoSize = True
-    Me.LblInforme.Location = New System.Drawing.Point(9, 12)
+    Me.LblInforme.Location = New System.Drawing.Point(12, 15)
     Me.LblInforme.Name = "LblInforme"
     Me.LblInforme.Size = New System.Drawing.Size(45, 13)
-    Me.LblInforme.TabIndex = 2
+    Me.LblInforme.TabIndex = 8
     Me.LblInforme.Text = "Informe:"
     '
     'CbInforme
     '
     Me.CbInforme.FormattingEnabled = True
-    Me.CbInforme.Location = New System.Drawing.Point(60, 8)
+    Me.CbInforme.Location = New System.Drawing.Point(63, 12)
     Me.CbInforme.Name = "CbInforme"
-    Me.CbInforme.Size = New System.Drawing.Size(346, 21)
-    Me.CbInforme.TabIndex = 1
+    Me.CbInforme.Size = New System.Drawing.Size(344, 21)
+    Me.CbInforme.TabIndex = 7
     '
-    'PnlEditar
+    'BtnAnadirConsulta
     '
-    Me.PnlEditar.AutoScroll = True
-    Me.PnlEditar.Location = New System.Drawing.Point(0, 34)
-    Me.PnlEditar.Name = "PnlEditar"
-    Me.PnlEditar.Size = New System.Drawing.Size(1152, 434)
-    Me.PnlEditar.TabIndex = 0
-    '
-    'TabUsar
-    '
-    Me.TabUsar.Controls.Add(Me.PnlUsar)
-    Me.TabUsar.Controls.Add(Me.Label1)
-    Me.TabUsar.Controls.Add(Me.CbInformeUsar)
-    Me.TabUsar.Location = New System.Drawing.Point(4, 22)
-    Me.TabUsar.Name = "TabUsar"
-    Me.TabUsar.Padding = New System.Windows.Forms.Padding(3)
-    Me.TabUsar.Size = New System.Drawing.Size(1152, 468)
-    Me.TabUsar.TabIndex = 1
-    Me.TabUsar.Text = "Usar informe"
-    Me.TabUsar.UseVisualStyleBackColor = True
-    '
-    'PnlUsar
-    '
-    Me.PnlUsar.AutoScroll = True
-    Me.PnlUsar.Location = New System.Drawing.Point(0, 35)
-    Me.PnlUsar.Name = "PnlUsar"
-    Me.PnlUsar.Size = New System.Drawing.Size(1152, 434)
-    Me.PnlUsar.TabIndex = 5
-    '
-    'Label1
-    '
-    Me.Label1.AutoSize = True
-    Me.Label1.Location = New System.Drawing.Point(9, 12)
-    Me.Label1.Name = "Label1"
-    Me.Label1.Size = New System.Drawing.Size(45, 13)
-    Me.Label1.TabIndex = 4
-    Me.Label1.Text = "Informe:"
-    '
-    'CbInformeUsar
-    '
-    Me.CbInformeUsar.FormattingEnabled = True
-    Me.CbInformeUsar.Location = New System.Drawing.Point(60, 8)
-    Me.CbInformeUsar.Name = "CbInformeUsar"
-    Me.CbInformeUsar.Size = New System.Drawing.Size(346, 21)
-    Me.CbInformeUsar.TabIndex = 3
-    '
-    'ToolStripSeparator2
-    '
-    Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-    Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+    Me.BtnAnadirConsulta.Location = New System.Drawing.Point(12, 55)
+    Me.BtnAnadirConsulta.Name = "BtnAnadirConsulta"
+    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(90, 23)
+    Me.BtnAnadirConsulta.TabIndex = 13
+    Me.BtnAnadirConsulta.Text = "Añadir consulta"
+    Me.BtnAnadirConsulta.UseVisualStyleBackColor = True
     '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 514)
-    Me.Controls.Add(Me.Tabs)
+    Me.Controls.Add(Me.BtnAnadirConsulta)
+    Me.Controls.Add(Me.BtnEliminarInforme)
+    Me.Controls.Add(Me.PnlEditar)
+    Me.Controls.Add(Me.BtnGuardarComo)
+    Me.Controls.Add(Me.BtnGuardar)
+    Me.Controls.Add(Me.BtnNuevo)
+    Me.Controls.Add(Me.LblInforme)
+    Me.Controls.Add(Me.CbInforme)
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"
-    Me.Tabs.ResumeLayout(False)
-    Me.TabCrear.ResumeLayout(False)
-    Me.TabCrear.PerformLayout()
-    Me.ToolStrip1.ResumeLayout(False)
-    Me.ToolStrip1.PerformLayout()
-    Me.TabUsar.ResumeLayout(False)
-    Me.TabUsar.PerformLayout()
     Me.ResumeLayout(False)
+    Me.PerformLayout()
 
   End Sub
-  Friend WithEvents Tabs As TabControl
-  Friend WithEvents TabCrear As TabPage
-  Friend WithEvents TabUsar As TabPage
   Friend WithEvents PnlEditar As FlowLayoutPanel
+  Friend WithEvents ImageList1 As ImageList
+  Friend WithEvents BtnEliminarInforme As Button
+  Friend WithEvents BtnGuardarComo As Button
+  Friend WithEvents BtnGuardar As Button
+  Friend WithEvents BtnNuevo As Button
   Friend WithEvents LblInforme As Label
   Friend WithEvents CbInforme As ComboBox
-  Friend WithEvents ToolStrip1 As ToolStrip
-  Friend WithEvents BtnNuevo As ToolStripButton
-  Friend WithEvents BtnGuardar As ToolStripButton
-  Friend WithEvents toolStripSeparator1 As ToolStripSeparator
-  Friend WithEvents BtnAnadirConsulta As ToolStripButton
-  Friend WithEvents Label1 As Label
-  Friend WithEvents CbInformeUsar As ComboBox
-  Friend WithEvents PnlUsar As FlowLayoutPanel
-  Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+  Friend WithEvents BtnAnadirConsulta As Button
 End Class
