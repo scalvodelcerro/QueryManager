@@ -22,7 +22,8 @@ Partial Class EditarConsultaUserControl
   'No lo modifique con el editor de código.
   <System.Diagnostics.DebuggerStepThrough()>
   Private Sub InitializeComponent()
-    Me.BtnEliminarConsulta = New System.Windows.Forms.Button()
+    Me.components = New System.ComponentModel.Container()
+    Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EditarConsultaUserControl))
     Me.LblResult = New System.Windows.Forms.Label()
     Me.TbSqlResult = New System.Windows.Forms.RichTextBox()
     Me.PnlParametros = New System.Windows.Forms.FlowLayoutPanel()
@@ -30,17 +31,10 @@ Partial Class EditarConsultaUserControl
     Me.TbSql = New System.Windows.Forms.RichTextBox()
     Me.LblNombre = New System.Windows.Forms.Label()
     Me.TbNombre = New System.Windows.Forms.TextBox()
+    Me.BtnEliminarConsulta = New System.Windows.Forms.Button()
+    Me.IconosBotones = New System.Windows.Forms.ImageList(Me.components)
+    Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.SuspendLayout()
-    '
-    'BtnEliminarConsulta
-    '
-    Me.BtnEliminarConsulta.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(1003, 3)
-    Me.BtnEliminarConsulta.Name = "BtnEliminarConsulta"
-    Me.BtnEliminarConsulta.Size = New System.Drawing.Size(100, 23)
-    Me.BtnEliminarConsulta.TabIndex = 4
-    Me.BtnEliminarConsulta.Text = "Eliminar consulta"
-    Me.BtnEliminarConsulta.UseVisualStyleBackColor = True
     '
     'LblResult
     '
@@ -55,7 +49,7 @@ Partial Class EditarConsultaUserControl
     '
     Me.TbSqlResult.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.TbSqlResult.HideSelection = False
-    Me.TbSqlResult.Location = New System.Drawing.Point(702, 29)
+    Me.TbSqlResult.Location = New System.Drawing.Point(648, 29)
     Me.TbSqlResult.Name = "TbSqlResult"
     Me.TbSqlResult.ReadOnly = True
     Me.TbSqlResult.Size = New System.Drawing.Size(379, 134)
@@ -65,17 +59,17 @@ Partial Class EditarConsultaUserControl
     'PnlParametros
     '
     Me.PnlParametros.AutoSize = True
-    Me.PnlParametros.Location = New System.Drawing.Point(446, 29)
+    Me.PnlParametros.Location = New System.Drawing.Point(392, 48)
     Me.PnlParametros.MaximumSize = New System.Drawing.Size(250, 0)
-    Me.PnlParametros.MinimumSize = New System.Drawing.Size(250, 134)
+    Me.PnlParametros.MinimumSize = New System.Drawing.Size(250, 115)
     Me.PnlParametros.Name = "PnlParametros"
-    Me.PnlParametros.Size = New System.Drawing.Size(250, 134)
+    Me.PnlParametros.Size = New System.Drawing.Size(250, 115)
     Me.PnlParametros.TabIndex = 17
     '
     'LblParametros
     '
     Me.LblParametros.AutoSize = True
-    Me.LblParametros.Location = New System.Drawing.Point(443, 6)
+    Me.LblParametros.Location = New System.Drawing.Point(392, 32)
     Me.LblParametros.Name = "LblParametros"
     Me.LblParametros.Size = New System.Drawing.Size(60, 13)
     Me.LblParametros.TabIndex = 16
@@ -84,7 +78,7 @@ Partial Class EditarConsultaUserControl
     'TbSql
     '
     Me.TbSql.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.TbSql.Location = New System.Drawing.Point(61, 29)
+    Me.TbSql.Location = New System.Drawing.Point(7, 29)
     Me.TbSql.Name = "TbSql"
     Me.TbSql.Size = New System.Drawing.Size(379, 134)
     Me.TbSql.TabIndex = 15
@@ -103,14 +97,37 @@ Partial Class EditarConsultaUserControl
     '
     Me.TbNombre.Location = New System.Drawing.Point(61, 3)
     Me.TbNombre.Name = "TbNombre"
-    Me.TbNombre.Size = New System.Drawing.Size(379, 20)
+    Me.TbNombre.Size = New System.Drawing.Size(325, 20)
     Me.TbNombre.TabIndex = 13
+    '
+    'BtnEliminarConsulta
+    '
+    Me.BtnEliminarConsulta.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnEliminarConsulta.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnEliminarConsulta.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnEliminarConsulta.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnEliminarConsulta.ImageIndex = 0
+    Me.BtnEliminarConsulta.ImageList = Me.IconosBotones
+    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(389, 2)
+    Me.BtnEliminarConsulta.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnEliminarConsulta.Name = "BtnEliminarConsulta"
+    Me.BtnEliminarConsulta.Size = New System.Drawing.Size(20, 20)
+    Me.BtnEliminarConsulta.TabIndex = 20
+    Me.ToolTips.SetToolTip(Me.BtnEliminarConsulta, "Eliminar consulta")
+    Me.BtnEliminarConsulta.UseVisualStyleBackColor = True
+    '
+    'IconosBotones
+    '
+    Me.IconosBotones.ImageStream = CType(resources.GetObject("IconosBotones.ImageStream"), System.Windows.Forms.ImageListStreamer)
+    Me.IconosBotones.TransparentColor = System.Drawing.Color.Transparent
+    Me.IconosBotones.Images.SetKeyName(0, "if_button_cancel_1709.png")
     '
     'EditarConsultaUserControl
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.AutoSize = True
+    Me.Controls.Add(Me.BtnEliminarConsulta)
     Me.Controls.Add(Me.LblResult)
     Me.Controls.Add(Me.TbSqlResult)
     Me.Controls.Add(Me.PnlParametros)
@@ -118,16 +135,14 @@ Partial Class EditarConsultaUserControl
     Me.Controls.Add(Me.TbSql)
     Me.Controls.Add(Me.LblNombre)
     Me.Controls.Add(Me.TbNombre)
-    Me.Controls.Add(Me.BtnEliminarConsulta)
-    Me.MaximumSize = New System.Drawing.Size(1106, 0)
-    Me.MinimumSize = New System.Drawing.Size(1106, 166)
+    Me.MaximumSize = New System.Drawing.Size(1030, 0)
+    Me.MinimumSize = New System.Drawing.Size(1030, 166)
     Me.Name = "EditarConsultaUserControl"
-    Me.Size = New System.Drawing.Size(1106, 166)
+    Me.Size = New System.Drawing.Size(1030, 166)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
   End Sub
-  Friend WithEvents BtnEliminarConsulta As Button
   Friend WithEvents LblResult As Label
   Friend WithEvents TbSqlResult As RichTextBox
   Friend WithEvents PnlParametros As FlowLayoutPanel
@@ -135,4 +150,7 @@ Partial Class EditarConsultaUserControl
   Friend WithEvents TbSql As RichTextBox
   Friend WithEvents LblNombre As Label
   Friend WithEvents TbNombre As TextBox
+  Friend WithEvents BtnEliminarConsulta As Button
+  Friend WithEvents IconosBotones As ImageList
+  Friend WithEvents ToolTips As ToolTip
 End Class

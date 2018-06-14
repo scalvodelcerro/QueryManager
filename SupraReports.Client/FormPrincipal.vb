@@ -14,6 +14,7 @@ Public Class FormPrincipal
       informe = CType(CbInforme.SelectedItem, Informe)
       CargarConsultas()
     End If
+    EstablecerEstadoBotones()
   End Sub
 
   Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
@@ -21,23 +22,21 @@ Public Class FormPrincipal
 
     If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
       informe = New Informe(nombreInformeDialog.TbNombre.Text, Environment.UserName)
-      Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
-      informe.Consultas.Add(consulta)
-      Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-        repo.Create(informe)
-        repo.Save()
-      End Using
+      informe.AnadirConsulta(New Consulta(String.Empty, String.Empty, informe))
+
+      InformeRepository.Instance.Create(informe)
+      InformeRepository.Instance.Save()
+
       CbInforme.Items.Add(informe)
       CbInforme.SelectedItem = informe
       CargarConsultas()
+      EstablecerEstadoBotones()
     End If
   End Sub
 
   Private Sub BtnGuardar_Click(sender As Object, e As EventArgs) Handles BtnGuardar.Click
-    Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      repo.Update(informe)
-      repo.Save()
-    End Using
+    InformeRepository.Instance.Update(informe)
+    InformeRepository.Instance.Save()
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
@@ -45,11 +44,10 @@ Public Class FormPrincipal
 
     If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
       Dim nuevoInforme = New Informe(informe)
-      nuevoInforme.Nombre = nombreInformeDialog.TbNombre.Text
-      Using repo = New InformeRepository(New SupraReportsContext())
-        repo.Create(nuevoInforme)
-        repo.Save()
-      End Using
+
+      InformeRepository.Instance.Create(nuevoInforme)
+      InformeRepository.Instance.Save()
+
       CbInforme.Items.Add(nuevoInforme)
       CbInforme.SelectedItem = nuevoInforme
       informe = nuevoInforme
@@ -58,19 +56,19 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
-    Using repo = New InformeRepository(New SupraReportsContext())
-      repo.Delete(informe)
-      repo.Save()
-    End Using
+    InformeRepository.Instance.Delete(informe)
+    InformeRepository.Instance.Save()
+
+    informe = Nothing
     CargarInformes()
     CargarConsultas()
+    EstablecerEstadoBotones()
   End Sub
 
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
     Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
-    informe.Consultas.Add(consulta)
-    Dim control As EditarConsultaUserControl = New EditarConsultaUserControl()
-    control.Consulta = consulta
+    informe.AnadirConsulta(consulta)
+    Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
     PnlEditar.Controls.Add(control)
     PnlEditar.ScrollControlIntoView(control)
   End Sub
@@ -82,12 +80,12 @@ Public Class FormPrincipal
   Private Sub CargarInformes()
     CbInforme.DisplayMember = "Nombre"
     CbInforme.Items.Clear()
-    Using repo As InformeRepository = New InformeRepository(New SupraReportsContext())
-      Dim informes As IEnumerable(Of Informe) = repo.FindAll()
-      For Each i In informes
-        CbInforme.Items.Add(i)
-      Next
-    End Using
+
+    Dim informes As IEnumerable(Of Informe) = InformeRepository.Instance.FindAll()
+    For Each i In informes
+      CbInforme.Items.Add(i)
+    Next
+
     CbInforme.SelectedItem = Nothing
     CbInforme.Text = String.Empty
   End Sub
@@ -95,12 +93,22 @@ Public Class FormPrincipal
   Private Sub CargarConsultas()
     PnlEditar.Controls.Clear()
     If informe IsNot Nothing Then
-      For Each consulta In informe.Consultas
-        Dim control As EditarConsultaUserControl = New EditarConsultaUserControl()
-        control.Consulta = consulta
+      For Each consulta In informe.ObtenerConsultasSinEliminar()
+        Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
         PnlEditar.Controls.Add(control)
       Next
     End If
   End Sub
 
+  Private Sub EstablecerEstadoBotones()
+    Dim habilitado As Boolean = informe IsNot Nothing
+    BtnGuardar.Enabled = habilitado
+    BtnGuardarComo.Enabled = habilitado
+    BtnEliminarInforme.Enabled = habilitado
+    BtnAnadirConsulta.Enabled = habilitado
+  End Sub
+
+  Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    InformeRepository.Instance.Dispose()
+  End Sub
 End Class

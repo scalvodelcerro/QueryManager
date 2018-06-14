@@ -5,6 +5,11 @@ Public Class EditarConsultaUserControl
   Private Const PatternParametro As String = "#(\w+)#"
   Private colorResaltarTexto As Color = Color.PaleGreen
 
+  Public Sub New(consulta As Consulta)
+    InitializeComponent()
+    Me.Consulta = consulta
+  End Sub
+
   Public WriteOnly Property Consulta As Consulta
     Set(value As Consulta)
       _consulta = value
@@ -20,22 +25,19 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
-    _consulta.Nombre = TbNombre.Text
+    _consulta.ModificarNombre(TbNombre.Text)
   End Sub
 
   Private Sub TbSql_TextChanged(sender As Object, e As EventArgs) Handles TbSql.TextChanged
     If TbSql.Focused Then
-      _consulta.TextoSql = TbSql.Text
+      _consulta.ModificarTextoSql(TbSql.Text)
       Dim nombresParametros As IEnumerable(Of String) = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
-      Dim eliminados As IEnumerable(Of Parametro) = _consulta.Parametros.Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
+      Dim eliminados As IEnumerable(Of Parametro) = _consulta.ObtenerParametrosSinEliminar().Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
       For Each p In eliminados
-        Using repo = New InformeRepository(New SupraReportsContext())
-          repo.Delete(p)
-          repo.Save()
-        End Using
+        p.Consulta.EliminarParametro(p)
       Next
-      For Each nombreParametro In nombresParametros.Except(_consulta.Parametros.Select(Function(x) x.Nombre))
-        _consulta.Parametros.Add(New Parametro(nombreParametro, String.Empty, _consulta))
+      For Each nombreParametro In nombresParametros.Except(_consulta.ObtenerParametrosSinEliminar().Select(Function(x) x.Nombre))
+        _consulta.AnadirParametro(New Parametro(nombreParametro, String.Empty, _consulta))
       Next
       CargarParametros()
       ComponerSqlResultado()
@@ -43,16 +45,13 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
-    Using repo = New InformeRepository(New SupraReportsContext())
-      repo.Delete(_consulta)
-      repo.Save()
-    End Using
+    _consulta.Informe.EliminarConsulta(_consulta)
     Dispose()
   End Sub
 
   Private Sub OnCambiarValorParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
-    Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = e.Parametro)
-    parametro.Valor = e.Valor
+    Dim parametro As Parametro = _consulta.ObtenerParametrosSinEliminar().FirstOrDefault(Function(x) x.Nombre = e.Parametro)
+    parametro.ModificarValor(e.Valor)
     ComponerSqlResultado()
     ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
   End Sub
@@ -68,11 +67,8 @@ Public Class EditarConsultaUserControl
 
   Private Sub CargarParametros()
     PnlParametros.Controls.Clear()
-    For Each p In _consulta.Parametros.OrderBy(Function(x) x.Nombre)
-      Dim control As ValorParametroUserControl = New ValorParametroUserControl With {
-        .Parametro = p.Nombre,
-        .Valor = p.Valor
-      }
+    For Each p In _consulta.ObtenerParametrosSinEliminar().OrderBy(Function(x) x.Nombre)
+      Dim control As ValorParametroUserControl = New ValorParametroUserControl(p.Nombre, p.Valor)
       AddHandler control.CambiarValor, AddressOf OnCambiarValorParametro
       AddHandler control.Seleccionar, AddressOf OnSeleccionarParametro
       AddHandler control.Deseleccionar, AddressOf OnDeseleccionarParametro
@@ -82,7 +78,7 @@ Public Class EditarConsultaUserControl
 
   Private Sub ComponerSqlResultado()
     Dim textResult As String = _consulta.TextoSql.ToUpper()
-    For Each p In _consulta.Parametros
+    For Each p In _consulta.ObtenerParametrosSinEliminar()
       textResult = textResult.Replace(String.Format("#{0}#", p.Nombre), p.Valor)
     Next
     TbSqlResult.Text = String.Empty
@@ -111,4 +107,5 @@ Public Class EditarConsultaUserControl
       rtb.Select(0, 0)
     End If
   End Sub
+
 End Class

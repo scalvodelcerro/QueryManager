@@ -1,5 +1,11 @@
 ﻿Public Class ValorParametroUserControl
-  Public Property Parametro As String
+
+  Public Sub New(nombreParametro As String, valor As String)
+    InitializeComponent()
+    Me.NombreParametro = nombreParametro
+    Me.Valor = valor
+  End Sub
+  Public Property NombreParametro As String
     Get
       Return _nombreParametro
     End Get
@@ -27,15 +33,15 @@
 
   Private Sub TbValor_TextChanged(sender As Object, e As EventArgs) Handles TbValor.TextChanged
     _valor = TbValor.Text
-    RaiseEvent CambiarValor(Me, New ValorParametroEventArgs(Parametro, Valor))
+    RaiseEvent CambiarValor(Me, New ValorParametroEventArgs(NombreParametro, Valor))
   End Sub
 
   Private Sub TbValor_Enter(sender As Object, e As EventArgs) Handles TbValor.Enter
-    RaiseEvent Seleccionar(Me, New ValorParametroEventArgs(Parametro, Valor))
+    RaiseEvent Seleccionar(Me, New ValorParametroEventArgs(NombreParametro, Valor))
   End Sub
 
   Private Sub TbValor_Leave(sender As Object, e As EventArgs) Handles TbValor.Leave
-    RaiseEvent Deseleccionar(Me, New ValorParametroEventArgs(Parametro, Valor))
+    RaiseEvent Deseleccionar(Me, New ValorParametroEventArgs(NombreParametro, Valor))
   End Sub
 
   Public Class ValorParametroEventArgs
