@@ -33,6 +33,7 @@ Partial Class FormPrincipal
     Me.LblInforme = New System.Windows.Forms.Label()
     Me.CbInforme = New System.Windows.Forms.ComboBox()
     Me.BtnAnadirConsulta = New System.Windows.Forms.Button()
+    Me.ToolTipNuevo = New System.Windows.Forms.ToolTip(Me.components)
     Me.SuspendLayout()
     '
     'ImageList1
@@ -67,6 +68,7 @@ Partial Class FormPrincipal
     Me.BtnEliminarInforme.Name = "BtnEliminarInforme"
     Me.BtnEliminarInforme.Size = New System.Drawing.Size(20, 22)
     Me.BtnEliminarInforme.TabIndex = 12
+    Me.ToolTipNuevo.SetToolTip(Me.BtnEliminarInforme, "Eliminar informe")
     Me.BtnEliminarInforme.UseVisualStyleBackColor = True
     '
     'BtnGuardarComo
@@ -82,6 +84,7 @@ Partial Class FormPrincipal
     Me.BtnGuardarComo.Name = "BtnGuardarComo"
     Me.BtnGuardarComo.Size = New System.Drawing.Size(20, 22)
     Me.BtnGuardarComo.TabIndex = 11
+    Me.ToolTipNuevo.SetToolTip(Me.BtnGuardarComo, "Guardar informe como...")
     Me.BtnGuardarComo.UseVisualStyleBackColor = True
     '
     'BtnGuardar
@@ -97,6 +100,7 @@ Partial Class FormPrincipal
     Me.BtnGuardar.Name = "BtnGuardar"
     Me.BtnGuardar.Size = New System.Drawing.Size(20, 22)
     Me.BtnGuardar.TabIndex = 10
+    Me.ToolTipNuevo.SetToolTip(Me.BtnGuardar, "Guardar informe")
     Me.BtnGuardar.UseVisualStyleBackColor = True
     '
     'BtnNuevo
@@ -112,6 +116,7 @@ Partial Class FormPrincipal
     Me.BtnNuevo.Name = "BtnNuevo"
     Me.BtnNuevo.Size = New System.Drawing.Size(20, 22)
     Me.BtnNuevo.TabIndex = 9
+    Me.ToolTipNuevo.SetToolTip(Me.BtnNuevo, "Nuevo informe...")
     Me.BtnNuevo.UseVisualStyleBackColor = True
     '
     'LblInforme
@@ -168,4 +173,5 @@ Partial Class FormPrincipal
   Friend WithEvents LblInforme As Label
   Friend WithEvents CbInforme As ComboBox
   Friend WithEvents BtnAnadirConsulta As Button
+  Friend WithEvents ToolTipNuevo As ToolTip
 End Class
