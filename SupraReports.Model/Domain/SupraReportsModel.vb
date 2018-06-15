@@ -7,8 +7,6 @@ Public Class SupraReportsContext
   Inherits DbContext
 
   Public Property Informes As DbSet(Of Informe)
-  Public Property Consultas As DbSet(Of Consulta)
-  Public Property Parametros As DbSet(Of Parametro)
 
   Public Sub New()
     MyBase.New("name=SupraReports")

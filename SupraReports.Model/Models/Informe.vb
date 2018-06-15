@@ -3,26 +3,29 @@
 Public Class Informe
   Inherits EntidadConEstado
 
+  Public Shared Function Crear(nombre As String, usuario As String) As Informe
+    Dim informe As Informe = New Informe(nombre, usuario)
+    informe.MarcarComoNuevo()
+    Return informe
+  End Function
+
+  Public Shared Function Copiar(informe As Informe) As Informe
+    Dim copiaInforme As Informe = Crear(informe.Nombre, informe.Usuario)
+    For Each c In informe.ObtenerConsultasSinEliminar()
+      Dim copiaConsulta As Consulta = Consulta.Copiar(c)
+      copiaInforme.AnadirConsulta(copiaConsulta)
+    Next
+    copiaInforme.MarcarComoNuevo()
+    Return copiaInforme
+  End Function
+
   Protected Sub New()
   End Sub
 
-  Public Sub New(nombre As String, usuario As String)
+  Private Sub New(nombre As String, usuario As String)
     Me.Nombre = nombre
     Me.Usuario = usuario
-    _consultas = New List(Of Consulta)()
-    MarcarComoNuevo()
-  End Sub
-
-  Public Sub New(informe As Informe)
-    Me.New(informe.Nombre, informe.Usuario)
-    For Each c In informe.ObtenerConsultasSinEliminar()
-      Dim newC = New Consulta(c)
-      AnadirConsulta(newC)
-      'Dim newC = New Consulta(c) With {
-      '  .Informe = Me,
-      '  .IdInforme = Id
-      '}
-    Next
+    _Consultas = New List(Of Consulta)()
   End Sub
 
   Public Property Id As Integer
@@ -62,7 +65,13 @@ Public Class Informe
     Return Consultas.Any(Function(x) x.TieneCambios())
   End Function
 
+  Public Sub ModificarNombre(nombre As String)
+    Me.Nombre = nombre
+    MarcarModificadoSiNoNuevo()
+  End Sub
+
   Public Sub AnadirConsulta(consulta As Consulta)
+    consulta.AsignarInforme(Me)
     Consultas.Add(consulta)
   End Sub
 

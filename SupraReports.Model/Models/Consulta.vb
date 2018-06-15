@@ -3,28 +3,29 @@
 Public Class Consulta
   Inherits EntidadConEstado
 
+  Public Shared Function Crear(nombre As String, textoSql As String) As Consulta
+    Dim consulta As Consulta = New Consulta(nombre, textoSql)
+    consulta.MarcarComoNuevo()
+    Return consulta
+  End Function
+
+
+  Public Shared Function Copiar(consulta As Consulta) As Consulta
+    Dim copiaConsulta As Consulta = Crear(consulta.Nombre, consulta.TextoSql)
+    For Each p In consulta.ObtenerParametrosSinEliminar()
+      copiaConsulta.AnadirParametro(p.Nombre, p.Valor)
+    Next
+    copiaConsulta.MarcarComoNuevo()
+    Return copiaConsulta
+  End Function
+
   Protected Sub New()
   End Sub
 
-  Public Sub New(nombre As String, textoSql As String, informe As Informe)
+  Private Sub New(nombre As String, textoSql As String)
     Me.Nombre = nombre
     Me.TextoSql = textoSql
-    Me.Informe = informe
-    IdInforme = informe.Id
     Parametros = New List(Of Parametro)()
-    MarcarComoNuevo()
-  End Sub
-
-  Public Sub New(consulta As Consulta)
-    Me.New(consulta.Nombre, consulta.TextoSql, consulta.Informe)
-    For Each p In consulta.Parametros
-      Dim newP = New Parametro(p)
-      'Dim newP = New Parametro(p) With {
-      '  .Consulta = Me,
-      '  .IdConsulta = Id
-      '}
-      Parametros.Add(newP)
-    Next
   End Sub
 
   Public Property Id As Integer
@@ -75,6 +76,7 @@ Public Class Consulta
       _informe = value
     End Set
   End Property
+
   Private _informe As Informe
 
   Protected Overridable Property Parametros As ICollection(Of Parametro)
@@ -83,6 +85,11 @@ Public Class Consulta
     If Estado <> EstadoEntidad.SinCambios Then Return True
     Return Parametros.Any(Function(x) x.Estado <> EstadoEntidad.SinCambios)
   End Function
+
+  Public Sub AsignarInforme(informe As Informe)
+    Me.Informe = informe
+    IdInforme = informe.Id
+  End Sub
 
   Public Sub ModificarNombre(nombre As String)
     Me.Nombre = nombre
@@ -94,8 +101,8 @@ Public Class Consulta
     MarcarModificadoSiNoNuevo()
   End Sub
 
-  Public Sub AnadirParametro(parametro As Parametro)
-    Parametros.Add(parametro)
+  Public Sub AnadirParametro(nombreParametro As String, valorParametro As String)
+    Parametros.Add(Parametro.Crear(nombreParametro, valorParametro, Me))
   End Sub
 
   Public Sub EliminarParametro(parametro As Parametro)

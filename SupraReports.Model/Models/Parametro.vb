@@ -1,19 +1,26 @@
 ﻿Public Class Parametro
   Inherits EntidadConEstado
 
+  Public Shared Function Crear(nombre As String, valor As String, consulta As Consulta) As Parametro
+    Dim parametro = New Parametro(nombre, valor, consulta)
+    parametro.MarcarComoNuevo()
+    Return parametro
+  End Function
+
+  Public Shared Function Copiar(parametro As Parametro) As Parametro
+    Dim copiaParametro As Parametro = Crear(parametro.Nombre, parametro.Valor, Nothing)
+    copiaParametro.MarcarComoNuevo()
+    Return copiaParametro
+  End Function
+
   Protected Sub New()
   End Sub
 
-  Public Sub New(nombre As String, valor As String, consulta As Consulta)
+  Private Sub New(nombre As String, valor As String, consulta As Consulta)
     Me.Nombre = nombre
     Me.Valor = valor
     Me.Consulta = consulta
     IdConsulta = consulta.Id
-    MarcarComoNuevo()
-  End Sub
-
-  Public Sub New(parametro As Parametro)
-    Me.New(parametro.Nombre, parametro.Valor, parametro.Consulta)
   End Sub
 
   Public Property Id As Integer

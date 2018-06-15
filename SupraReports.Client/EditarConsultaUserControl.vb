@@ -37,7 +37,7 @@ Public Class EditarConsultaUserControl
         p.Consulta.EliminarParametro(p)
       Next
       For Each nombreParametro In nombresParametros.Except(_consulta.ObtenerParametrosSinEliminar().Select(Function(x) x.Nombre))
-        _consulta.AnadirParametro(New Parametro(nombreParametro, String.Empty, _consulta))
+        _consulta.AnadirParametro(nombreParametro, String.Empty)
       Next
       CargarParametros()
       ComponerSqlResultado()

@@ -23,8 +23,8 @@ Public Class FormPrincipal
     If ValidarCambioInforme() Then
       Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
       If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-        informe = New Informe(nombreInformeDialog.TbNombre.Text, Environment.UserName)
-        informe.AnadirConsulta(New Consulta(String.Empty, String.Empty, informe))
+        informe = Informe.Crear(nombreInformeDialog.TbNombre.Text, Environment.UserName)
+        informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
         InformeRepository.Instance.Create(informe)
         'InformeRepository.Instance.Save()
@@ -43,18 +43,21 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
-    Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
+    If ValidarCambioInforme() Then
+      Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
 
-    If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-      Dim nuevoInforme = New Informe(informe)
+      If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+        Dim nuevoInforme = Informe.Copiar(informe)
+        nuevoInforme.ModificarNombre(nombreInformeDialog.TbNombre.Text)
 
-      InformeRepository.Instance.Create(nuevoInforme)
-      InformeRepository.Instance.Save()
+        InformeRepository.Instance.Create(nuevoInforme)
+        InformeRepository.Instance.Save()
 
-      CbInforme.Items.Add(nuevoInforme)
-      CbInforme.SelectedItem = nuevoInforme
-      informe = nuevoInforme
-      CargarConsultas()
+        CbInforme.Items.Add(nuevoInforme)
+        CbInforme.SelectedItem = nuevoInforme
+        informe = nuevoInforme
+        CargarConsultas()
+      End If
     End If
   End Sub
 
@@ -69,7 +72,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
-    Dim consulta As Consulta = New Consulta(String.Empty, String.Empty, informe)
+    Dim consulta As Consulta = Consulta.Crear(String.Empty, String.Empty)
     informe.AnadirConsulta(consulta)
     Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
     PnlEditar.Controls.Add(control)
@@ -121,7 +124,7 @@ Public Class FormPrincipal
 
   Private Function ValidarCambioInforme() As Boolean
     If informe IsNot Nothing AndAlso informe.TieneCambios() Then
-      Dim resultado = MessageBox.Show("Cambios en el informe", "¿Desea guardar los cambios?", MessageBoxButtons.YesNoCancel)
+      Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
       Select Case resultado
         Case DialogResult.Yes
           InformeRepository.Instance.Update(informe)
