@@ -1,5 +1,4 @@
 ﻿Imports System.Linq.Expressions
-Imports SupraReports.Model
 
 Public Class Consulta
   Inherits EntidadConEstado
@@ -27,7 +26,6 @@ Public Class Consulta
       Parametros.Add(newP)
     Next
   End Sub
-
 
   Public Property Id As Integer
     Get
@@ -81,6 +79,11 @@ Public Class Consulta
 
   Protected Overridable Property Parametros As ICollection(Of Parametro)
 
+  Public Function TieneCambios() As Boolean
+    If Estado <> EstadoEntidad.SinCambios Then Return True
+    Return Parametros.Any(Function(x) x.Estado <> EstadoEntidad.SinCambios)
+  End Function
+
   Public Sub ModificarNombre(nombre As String)
     Me.Nombre = nombre
     MarcarModificadoSiNoNuevo()
@@ -96,16 +99,22 @@ Public Class Consulta
   End Sub
 
   Public Sub EliminarParametro(parametro As Parametro)
-    parametro.MarcarComoEliminado()
-    'Parametros.Remove(parametro)
+    If parametro.Estado = EstadoEntidad.Nuevo Then
+      Parametros.Remove(parametro)
+    Else
+      parametro.MarcarComoEliminado()
+    End If
   End Sub
 
+  Public Function ObtenerTodosParametros() As IEnumerable(Of Parametro)
+    Return Parametros.ToList()
+  End Function
+
   Public Function ObtenerParametrosSinEliminar() As IEnumerable(Of Parametro)
-    Return Parametros.Where(Function(x) x.Estado <> EstadoEntidad.Eliminado).AsEnumerable()
+    Return Parametros.Where(Function(x) x.Estado <> EstadoEntidad.Eliminado).ToList()
   End Function
 
   Public Class Mappings
-
     Public Const ParametroCollectionName = NameOf(Consulta.Parametros)
     Public Shared ReadOnly Property Parametros As Expression(Of Func(Of Consulta, ICollection(Of Parametro)))
       Get
@@ -113,4 +122,5 @@ Public Class Consulta
       End Get
     End Property
   End Class
+
 End Class

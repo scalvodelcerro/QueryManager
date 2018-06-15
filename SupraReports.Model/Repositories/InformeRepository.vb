@@ -29,6 +29,27 @@ Public NotInheritable Class InformeRepository
     Return db.Informes.ToList()
   End Function
 
+  Public Sub Reload(informe As Informe)
+    db.Entry(informe).Reload()
+    informe.MarcarComoSinCambios()
+    For Each c In informe.ObtenerTodasConsultas()
+      If c.Estado = EstadoEntidad.Nuevo Then
+        informe.EliminarConsulta(c)
+      Else
+        db.Entry(c).Reload()
+        c.MarcarComoSinCambios()
+        For Each p In c.ObtenerTodosParametros()
+          If p.Estado = EstadoEntidad.Nuevo Then
+            c.EliminarParametro(p)
+          Else
+            db.Entry(p).Reload()
+            p.MarcarComoSinCambios()
+          End If
+        Next
+      End If
+    Next
+  End Sub
+
   Public Sub Update(informe As Informe)
     db.FixState()
   End Sub

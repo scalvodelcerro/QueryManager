@@ -1,5 +1,4 @@
 ﻿Imports System.Linq.Expressions
-Imports SupraReports.Model
 
 Public Class Informe
   Inherits EntidadConEstado
@@ -58,17 +57,29 @@ Public Class Informe
 
   Protected Overridable Property Consultas As ICollection(Of Consulta)
 
+  Public Function TieneCambios() As Boolean
+    If Estado <> EstadoEntidad.SinCambios Then Return True
+    Return Consultas.Any(Function(x) x.TieneCambios())
+  End Function
+
   Public Sub AnadirConsulta(consulta As Consulta)
     Consultas.Add(consulta)
   End Sub
 
   Public Sub EliminarConsulta(consulta As Consulta)
-    consulta.MarcarComoEliminado()
-    'Consultas.Remove(consulta)
+    If consulta.Estado = EstadoEntidad.Nuevo Then
+      Consultas.Remove(consulta)
+    Else
+      consulta.MarcarComoEliminado()
+    End If
   End Sub
 
+  Public Function ObtenerTodasConsultas() As IEnumerable(Of Consulta)
+    Return Consultas.ToList()
+  End Function
+
   Public Function ObtenerConsultasSinEliminar() As IEnumerable(Of Consulta)
-    Return Consultas.Where(Function(x) x.Estado <> EstadoEntidad.Eliminado).AsEnumerable()
+    Return Consultas.Where(Function(x) x.Estado <> EstadoEntidad.Eliminado).ToList()
   End Function
 
   Public Class Mappings

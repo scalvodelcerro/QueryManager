@@ -9,28 +9,31 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub CbInforme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbInforme.SelectedIndexChanged
-    PnlEditar.Controls.Clear()
-    If CbInforme.SelectedItem IsNot Nothing Then
-      informe = CType(CbInforme.SelectedItem, Informe)
-      CargarConsultas()
+    If Not CbInforme.Focused OrElse ValidarCambioInforme() Then
+      PnlEditar.Controls.Clear()
+      If CbInforme.SelectedItem IsNot Nothing Then
+        informe = CType(CbInforme.SelectedItem, Informe)
+        CargarConsultas()
+      End If
+      EstablecerEstadoBotones()
     End If
-    EstablecerEstadoBotones()
   End Sub
 
   Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
-    Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
+    If ValidarCambioInforme() Then
+      Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
+      If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+        informe = New Informe(nombreInformeDialog.TbNombre.Text, Environment.UserName)
+        informe.AnadirConsulta(New Consulta(String.Empty, String.Empty, informe))
 
-    If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-      informe = New Informe(nombreInformeDialog.TbNombre.Text, Environment.UserName)
-      informe.AnadirConsulta(New Consulta(String.Empty, String.Empty, informe))
+        InformeRepository.Instance.Create(informe)
+        'InformeRepository.Instance.Save()
 
-      InformeRepository.Instance.Create(informe)
-      InformeRepository.Instance.Save()
-
-      CbInforme.Items.Add(informe)
-      CbInforme.SelectedItem = informe
-      CargarConsultas()
-      EstablecerEstadoBotones()
+        CbInforme.Items.Add(informe)
+        CbInforme.SelectedItem = informe
+        CargarConsultas()
+        EstablecerEstadoBotones()
+      End If
     End If
   End Sub
 
@@ -73,6 +76,14 @@ Public Class FormPrincipal
     PnlEditar.ScrollControlIntoView(control)
   End Sub
 
+  Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    If ValidarCambioInforme() Then
+      InformeRepository.Instance.Dispose()
+    Else
+      e.Cancel = True
+    End If
+  End Sub
+
   Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
     BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
   End Sub
@@ -108,7 +119,22 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Enabled = habilitado
   End Sub
 
-  Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-    InformeRepository.Instance.Dispose()
-  End Sub
+  Private Function ValidarCambioInforme() As Boolean
+    If informe IsNot Nothing AndAlso informe.TieneCambios() Then
+      Dim resultado = MessageBox.Show("Cambios en el informe", "¿Desea guardar los cambios?", MessageBoxButtons.YesNoCancel)
+      Select Case resultado
+        Case DialogResult.Yes
+          InformeRepository.Instance.Update(informe)
+          InformeRepository.Instance.Save()
+          Return True
+        Case DialogResult.No
+          InformeRepository.Instance.Reload(informe)
+          Return True
+        Case DialogResult.Cancel
+          Return False
+      End Select
+    End If
+    Return True
+  End Function
+
 End Class
