@@ -5,7 +5,7 @@ Public Class ExcelBuilder
   Implements IDisposable
 
   Public Sub New(fileNamePrefix As String)
-    Dim fileName As String = String.Format("{0}_{1}.xlsx", fileNamePrefix, Now.ToString("yyyyMMdd_HHmmss"))
+    Dim fileName As String = String.Format("{0}_{1}.xlsx", fileNamePrefix.Replace(" ", "_"), Now.ToString("yyyyMMdd_HHmmss"))
     Dim outputFile As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName)
     excel = New ExcelPackage(New FileInfo(outputFile))
   End Sub
@@ -14,7 +14,7 @@ Public Class ExcelBuilder
 
   Public Function AddWorksheet(worksheetName As String, contents As IDataReader) As ExcelBuilder
     If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
-    Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName)
+    Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
     If contents IsNot Nothing Then
       worksheet.Cells("A1").LoadFromDataReader(contents, True, worksheetName, Table.TableStyles.Medium10)
     End If

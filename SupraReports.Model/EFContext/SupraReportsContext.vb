@@ -1,14 +1,24 @@
 ﻿Imports System.Data.Entity
 Imports System.Data.Entity.Infrastructure
+Imports System.Data.Entity.ModelConfiguration
 Imports MySql.Data.EntityFramework
 
 <DbConfigurationType(GetType(MySqlEFConfiguration))>
-Public Class SupraReportsContext
+Public NotInheritable Class SupraReportsContext
   Inherits DbContext
 
-  Public Property Informes As DbSet(Of Informe)
+  Public Shared ReadOnly Property Instance As SupraReportsContext
+    Get
+      If _instance Is Nothing Then _instance = New SupraReportsContext()
+      Return _instance
+    End Get
+  End Property
+  Private Shared _instance As SupraReportsContext
 
-  Public Sub New()
+  Public Property Informes As DbSet(Of Informe)
+  Public Property Programaciones As DbSet(Of Programacion)
+
+  Private Sub New()
     MyBase.New("name=SupraReports")
     Database.CreateIfNotExists()
   End Sub
@@ -19,6 +29,7 @@ Public Class SupraReportsContext
     ConfigurarEntity(modelBuilder.Entity(Of Informe)())
     ConfigurarEntity(modelBuilder.Entity(Of Consulta)())
     ConfigurarEntity(modelBuilder.Entity(Of Parametro)())
+    ConfigurarEntity(modelBuilder.Entity(Of Programacion)())
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityInforme As ModelConfiguration.EntityTypeConfiguration(Of Informe))
@@ -29,37 +40,60 @@ Public Class SupraReportsContext
       HasForeignKey(Function(x) x.IdInforme).
       WillCascadeOnDelete()
     entityInforme.
+      HasOptional(Function(x) x.Programacion).
+      WithRequired(Function(x) x.Informe).
+      WillCascadeOnDelete()
+    entityInforme.
       Property(Function(p) p.Id).
-      HasColumnName("Id_Informe")
+        HasColumnName("Id_Informe").
+        HasColumnOrder(1)
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityConsulta As ModelConfiguration.EntityTypeConfiguration(Of Consulta))
     entityConsulta.
-          ToTable("Consulta").
-          HasMany(Consulta.Mappings.Parametros).
-          WithRequired(Function(x) x.Consulta).
-          HasForeignKey(Function(x) x.IdConsulta).
-          WillCascadeOnDelete()
+      ToTable("Consulta").
+      HasMany(Consulta.Mappings.Parametros).
+      WithRequired(Function(x) x.Consulta).
+      HasForeignKey(Function(x) x.IdConsulta).
+      WillCascadeOnDelete()
     entityConsulta.
       Property(Function(p) p.Id).
-          HasColumnName("Id_Consulta")
+        HasColumnName("Id_Consulta").
+        HasColumnOrder(1)
     entityConsulta.
       Property(Function(p) p.IdInforme).
-          HasColumnName("Id_Informe")
+        HasColumnName("Id_Informe").
+        HasColumnOrder(2)
     entityConsulta.
       Property(Function(p) p.TextoSql).
-          HasColumnName("Texto_Sql")
+        HasColumnName("Texto_Sql")
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityParametro As ModelConfiguration.EntityTypeConfiguration(Of Parametro))
     entityParametro.
-          ToTable("Parametro")
+      ToTable("Parametro")
     entityParametro.
       Property(Function(p) p.Id).
-          HasColumnName("Id_Parametro")
+        HasColumnName("Id_Parametro").
+        HasColumnOrder(1)
     entityParametro.
       Property(Function(p) p.IdConsulta).
-          HasColumnName("Id_Consulta")
+        HasColumnName("Id_Consulta").
+        HasColumnOrder(2)
+  End Sub
+
+  Private Sub ConfigurarEntity(entityProgramacion As EntityTypeConfiguration(Of Programacion))
+    entityProgramacion.
+      ToTable("Programacion").
+      HasKey(Function(x) x.IdInforme)
+    'entityProgramacion.
+    '  Property(Function(p) p.Id).
+    '    HasColumnName("Id_Programacion").
+    '    HasColumnOrder(1)
+    entityProgramacion.
+      Property(Function(p) p.IdInforme).
+        HasColumnName("Id_Informe").
+        HasColumnOrder(2)
   End Sub
 
   Public Sub FixState()

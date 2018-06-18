@@ -134,7 +134,7 @@ Partial Class FormProgramacionInforme
     '
     'PickerHora
     '
-    Me.PickerHora.CustomFormat = "hh:mm"
+    Me.PickerHora.CustomFormat = "HH:mm"
     Me.PickerHora.Format = System.Windows.Forms.DateTimePickerFormat.Custom
     Me.PickerHora.Location = New System.Drawing.Point(71, 16)
     Me.PickerHora.Name = "PickerHora"

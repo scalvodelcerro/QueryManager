@@ -58,11 +58,25 @@ Public Class Informe
   End Property
   Private _usuario As String
 
+  Public Property Programacion As Programacion
+    Get
+      Return _programacion
+    End Get
+    Private Set(value As Programacion)
+      _programacion = value
+    End Set
+  End Property
+  Private _programacion As Programacion
+
   Protected Overridable Property Consultas As ICollection(Of Consulta)
 
   Public Function TieneCambios() As Boolean
     If Estado <> EstadoEntidad.SinCambios Then Return True
     Return Consultas.Any(Function(x) x.TieneCambios())
+  End Function
+
+  Public Function EstaProgramado() As Boolean
+    Return Programacion IsNot Nothing
   End Function
 
   Public Sub ModificarNombre(nombre As String)

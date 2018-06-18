@@ -80,29 +80,68 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    Using excelBuilder = New ExcelBuilder("informeSupra")
-      For Each consulta In informe.ObtenerConsultasSinEliminar()
-        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
-          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
-        End Using
-      Next
-      excelBuilder.Build()
-    End Using
+    EjecutarConsulta()
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
     Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme()
     If programacionInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+      Dim builder As Programacion.ProgramacionBuilder = New Programacion.ProgramacionBuilder()
+      builder.
+        ParaInforme(informe).
+        ParaHora(programacionInformeDialog.PickerHora.Value.ToString("HH:mm"))
+      If programacionInformeDialog.CbLunes.Checked Then builder.ParaDia(DayOfWeek.Monday)
+      If programacionInformeDialog.CbMartes.Checked Then builder.ParaDia(DayOfWeek.Tuesday)
+      If programacionInformeDialog.CbMiercoles.Checked Then builder.ParaDia(DayOfWeek.Wednesday)
+      If programacionInformeDialog.CbJueves.Checked Then builder.ParaDia(DayOfWeek.Thursday)
+      If programacionInformeDialog.CbViernes.Checked Then builder.ParaDia(DayOfWeek.Friday)
+      If programacionInformeDialog.CbSabado.Checked Then builder.ParaDia(DayOfWeek.Saturday)
+      If programacionInformeDialog.CbDomingo.Checked Then builder.ParaDia(DayOfWeek.Sunday)
 
+      Dim p = builder.Build()
+      If p.HayAlgunDiaProgramado() Then
+        If informe.EstaProgramado() Then
+          ProgramacionRepository.Instance.Delete(informe.Programacion)
+        End If
+        ProgramacionRepository.Instance.Create(p)
+        ProgramacionRepository.Instance.Save()
+      End If
+
+      WindowState = FormWindowState.Minimized
+      TimerMinuto.Enabled = True
+    End If
+  End Sub
+
+  Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
+    If informe.Programacion.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+        informe.Programacion.ObtenerHoraProgramada() = Now.Hour AndAlso
+        informe.Programacion.ObtenerMinutoProgramado() = Now.Minute Then
+      EjecutarConsulta()
     End If
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
     If ValidarCambioInforme() Then
       InformeRepository.Instance.Dispose()
+      ProgramacionRepository.Instance.Dispose()
     Else
       e.Cancel = True
     End If
+  End Sub
+
+  Private Sub FormPrincipal_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+    If WindowState = FormWindowState.Minimized Then
+      IconoNotificacion.Visible = True
+      IconoNotificacion.ShowBalloonTip(1000)
+      Hide()
+    End If
+  End Sub
+
+  Private Sub IconoNotificacion_Click(sender As Object, e As MouseEventArgs) Handles IconoNotificacion.Click
+    Show()
+    WindowState = FormWindowState.Normal
+    IconoNotificacion.Visible = False
+    TimerMinuto.Enabled = False
   End Sub
 
   Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
@@ -132,6 +171,17 @@ Public Class FormPrincipal
     End If
   End Sub
 
+  Private Sub EjecutarConsulta()
+    Using excelBuilder = New ExcelBuilder(informe.Nombre)
+      For Each consulta In informe.ObtenerConsultasSinEliminar()
+        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
+          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
+        End Using
+      Next
+      excelBuilder.Build()
+    End Using
+  End Sub
+
   Private Sub EstablecerEstadoBotones()
     Dim habilitado As Boolean = informe IsNot Nothing
     BtnGuardar.Enabled = habilitado
@@ -159,6 +209,4 @@ Public Class FormPrincipal
     End If
     Return True
   End Function
-
-
 End Class

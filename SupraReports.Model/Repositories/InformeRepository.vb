@@ -5,7 +5,7 @@ Public NotInheritable Class InformeRepository
 
   Public Shared ReadOnly Property Instance As InformeRepository
     Get
-      If _instance Is Nothing Then _instance = New InformeRepository(New SupraReportsContext())
+      If _instance Is Nothing Then _instance = New InformeRepository(SupraReportsContext.Instance)
       Return _instance
     End Get
   End Property

@@ -36,6 +36,9 @@ Partial Class FormPrincipal
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.BtnEjecutar = New System.Windows.Forms.Button()
     Me.BtnProgramar = New System.Windows.Forms.Button()
+    Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
+    Me.TimerMinuto = New System.Windows.Forms.Timer(Me.components)
+    Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -187,11 +190,32 @@ Partial Class FormPrincipal
     Me.ToolTips.SetToolTip(Me.BtnProgramar, "Programación del informe...")
     Me.BtnProgramar.UseVisualStyleBackColor = True
     '
+    'IconoNotificacion
+    '
+    Me.IconoNotificacion.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
+    Me.IconoNotificacion.BalloonTipText = "Minimizado en el área de notificación"
+    Me.IconoNotificacion.BalloonTipTitle = "Informes Supra "
+    Me.IconoNotificacion.Icon = CType(resources.GetObject("IconoNotificacion.Icon"), System.Drawing.Icon)
+    Me.IconoNotificacion.Text = "Informes Supra"
+    '
+    'TimerMinuto
+    '
+    Me.TimerMinuto.Interval = 60000
+    '
+    'ToolStrip1
+    '
+    Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+    Me.ToolStrip1.Name = "ToolStrip1"
+    Me.ToolStrip1.Size = New System.Drawing.Size(1184, 25)
+    Me.ToolStrip1.TabIndex = 16
+    Me.ToolStrip1.Text = "ToolStrip1"
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 514)
+    Me.Controls.Add(Me.ToolStrip1)
     Me.Controls.Add(Me.BtnProgramar)
     Me.Controls.Add(Me.BtnEjecutar)
     Me.Controls.Add(Me.BtnAnadirConsulta)
@@ -202,6 +226,7 @@ Partial Class FormPrincipal
     Me.Controls.Add(Me.BtnNuevo)
     Me.Controls.Add(Me.LblInforme)
     Me.Controls.Add(Me.CbInforme)
+    Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"
     Me.ResumeLayout(False)
@@ -220,4 +245,7 @@ Partial Class FormPrincipal
   Friend WithEvents ToolTips As ToolTip
   Friend WithEvents BtnEjecutar As Button
   Friend WithEvents BtnProgramar As Button
+  Friend WithEvents IconoNotificacion As NotifyIcon
+  Friend WithEvents TimerMinuto As Timer
+  Friend WithEvents ToolStrip1 As ToolStrip
 End Class

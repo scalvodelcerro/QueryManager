@@ -76,7 +76,6 @@ Public Class Consulta
       _informe = value
     End Set
   End Property
-
   Private _informe As Informe
 
   Protected Overridable Property Parametros As ICollection(Of Parametro)
