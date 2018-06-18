@@ -119,6 +119,8 @@ Public Class FormPrincipal
     BtnGuardar.Enabled = habilitado
     BtnGuardarComo.Enabled = habilitado
     BtnEliminarInforme.Enabled = habilitado
+    BtnEjecutar.Enabled = habilitado
+    BtnProgramar.Enabled = habilitado
     BtnAnadirConsulta.Enabled = habilitado
   End Sub
 
@@ -140,4 +142,14 @@ Public Class FormPrincipal
     Return True
   End Function
 
+  Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
+    Using excelBuilder = New ExcelBuilder("informeSupra")
+      For Each consulta In informe.ObtenerConsultasSinEliminar()
+        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
+          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
+        End Using
+      Next
+      excelBuilder.Build()
+    End Using
+  End Sub
 End Class

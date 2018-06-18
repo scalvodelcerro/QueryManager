@@ -34,6 +34,8 @@ Partial Class FormPrincipal
     Me.CbInforme = New System.Windows.Forms.ComboBox()
     Me.BtnAnadirConsulta = New System.Windows.Forms.Button()
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
+    Me.BtnEjecutar = New System.Windows.Forms.Button()
+    Me.BtnProgramar = New System.Windows.Forms.Button()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -44,6 +46,8 @@ Partial Class FormPrincipal
     Me.IconosBotones.Images.SetKeyName(1, "if_filesave_1743.png")
     Me.IconosBotones.Images.SetKeyName(2, "if_filesaveas_1744.png")
     Me.IconosBotones.Images.SetKeyName(3, "if_button_cancel_1709.png")
+    Me.IconosBotones.Images.SetKeyName(4, "if_player_play_1825.png")
+    Me.IconosBotones.Images.SetKeyName(5, "if_ktimer_1395.png")
     '
     'PnlEditar
     '
@@ -149,11 +153,47 @@ Partial Class FormPrincipal
     Me.BtnAnadirConsulta.Text = "Añadir consulta"
     Me.BtnAnadirConsulta.UseVisualStyleBackColor = True
     '
+    'BtnEjecutar
+    '
+    Me.BtnEjecutar.Enabled = False
+    Me.BtnEjecutar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnEjecutar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnEjecutar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnEjecutar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnEjecutar.ImageIndex = 4
+    Me.BtnEjecutar.ImageList = Me.IconosBotones
+    Me.BtnEjecutar.Location = New System.Drawing.Point(500, 11)
+    Me.BtnEjecutar.Margin = New System.Windows.Forms.Padding(10, 0, 0, 0)
+    Me.BtnEjecutar.Name = "BtnEjecutar"
+    Me.BtnEjecutar.Size = New System.Drawing.Size(20, 20)
+    Me.BtnEjecutar.TabIndex = 14
+    Me.ToolTips.SetToolTip(Me.BtnEjecutar, "Ejecutar informe")
+    Me.BtnEjecutar.UseVisualStyleBackColor = True
+    '
+    'BtnProgramar
+    '
+    Me.BtnProgramar.Enabled = False
+    Me.BtnProgramar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnProgramar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnProgramar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnProgramar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.BtnProgramar.ImageIndex = 5
+    Me.BtnProgramar.ImageList = Me.IconosBotones
+    Me.BtnProgramar.Location = New System.Drawing.Point(520, 11)
+    Me.BtnProgramar.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnProgramar.Name = "BtnProgramar"
+    Me.BtnProgramar.Size = New System.Drawing.Size(20, 20)
+    Me.BtnProgramar.TabIndex = 15
+    Me.ToolTips.SetToolTip(Me.BtnProgramar, "Programación del informe...")
+    Me.BtnProgramar.UseVisualStyleBackColor = True
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 514)
+    Me.Controls.Add(Me.BtnProgramar)
+    Me.Controls.Add(Me.BtnEjecutar)
     Me.Controls.Add(Me.BtnAnadirConsulta)
     Me.Controls.Add(Me.BtnEliminarInforme)
     Me.Controls.Add(Me.PnlEditar)
@@ -178,4 +218,6 @@ Partial Class FormPrincipal
   Friend WithEvents CbInforme As ComboBox
   Friend WithEvents BtnAnadirConsulta As Button
   Friend WithEvents ToolTips As ToolTip
+  Friend WithEvents BtnEjecutar As Button
+  Friend WithEvents BtnProgramar As Button
 End Class
