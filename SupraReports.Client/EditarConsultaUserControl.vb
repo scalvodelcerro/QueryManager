@@ -21,7 +21,8 @@ Public Class EditarConsultaUserControl
   Private _consulta As Consulta
 
   Private Sub EditarConsultaUserControl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-    ComponerSqlResultado()
+    TbSqlResult.Text = String.Empty
+    TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
   End Sub
 
   Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
@@ -40,7 +41,8 @@ Public Class EditarConsultaUserControl
         _consulta.AnadirParametro(nombreParametro, String.Empty)
       Next
       CargarParametros()
-      ComponerSqlResultado()
+      TbSqlResult.Text = String.Empty
+      TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
     End If
   End Sub
 
@@ -52,7 +54,8 @@ Public Class EditarConsultaUserControl
   Private Sub OnCambiarValorParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
     Dim parametro As Parametro = _consulta.ObtenerParametrosSinEliminar().FirstOrDefault(Function(x) x.Nombre = e.Parametro)
     parametro.ModificarValor(e.Valor)
-    ComponerSqlResultado()
+    TbSqlResult.Text = String.Empty
+    TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
     ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
   End Sub
 
@@ -74,15 +77,6 @@ Public Class EditarConsultaUserControl
       AddHandler control.Deseleccionar, AddressOf OnDeseleccionarParametro
       PnlParametros.Controls.Add(control)
     Next
-  End Sub
-
-  Private Sub ComponerSqlResultado()
-    Dim textResult As String = _consulta.TextoSql.ToUpper()
-    For Each p In _consulta.ObtenerParametrosSinEliminar()
-      textResult = textResult.Replace(String.Format("#{0}#", p.Nombre), p.Valor)
-    Next
-    TbSqlResult.Text = String.Empty
-    TbSqlResult.AppendText(textResult)
   End Sub
 
   Private Sub LimpiarResaltado(rtb As RichTextBox)

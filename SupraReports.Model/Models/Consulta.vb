@@ -121,6 +121,16 @@ Public Class Consulta
     Return Parametros.Where(Function(x) x.Estado <> EstadoEntidad.Eliminado).ToList()
   End Function
 
+  Public Function ComponerSqlResultado() As String
+    Dim textResult As String = TextoSql.ToUpper()
+    For Each p In ObtenerParametrosSinEliminar()
+      textResult = textResult.Replace(String.Format("#{0}#", p.Nombre), p.Valor)
+    Next
+    Return textResult
+  End Function
+
+
+
   Public Class Mappings
     Public Const ParametroCollectionName = NameOf(Consulta.Parametros)
     Public Shared ReadOnly Property Parametros As Expression(Of Func(Of Consulta, ICollection(Of Parametro)))

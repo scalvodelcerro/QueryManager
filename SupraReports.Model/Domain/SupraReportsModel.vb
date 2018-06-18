@@ -16,41 +16,50 @@ Public Class SupraReportsContext
   Protected Overrides Sub OnModelCreating(ByVal modelBuilder As DbModelBuilder)
     MyBase.OnModelCreating(modelBuilder)
     modelBuilder.Types(Of EntidadConEstado)().Configure(Function(c) c.Ignore(Function(p) p.Estado))
+    ConfigurarEntity(modelBuilder.Entity(Of Informe)())
+    ConfigurarEntity(modelBuilder.Entity(Of Consulta)())
+    ConfigurarEntity(modelBuilder.Entity(Of Parametro)())
+  End Sub
 
-    modelBuilder.Entity(Of Informe)().
+  Private Shared Sub ConfigurarEntity(entityInforme As ModelConfiguration.EntityTypeConfiguration(Of Informe))
+    entityInforme.
       ToTable("Informe").
       HasMany(Informe.Mappings.Consultas).
       WithRequired(Function(x) x.Informe).
       HasForeignKey(Function(x) x.IdInforme).
       WillCascadeOnDelete()
-    modelBuilder.Entity(Of Informe)().
+    entityInforme.
       Property(Function(p) p.Id).
       HasColumnName("Id_Informe")
+  End Sub
 
-    modelBuilder.Entity(Of Consulta)().
-      ToTable("Consulta").
-      HasMany(Consulta.Mappings.Parametros).
-      WithRequired(Function(x) x.Consulta).
-      HasForeignKey(Function(x) x.IdConsulta).
-      WillCascadeOnDelete()
-    modelBuilder.Entity(Of Consulta)().
+  Private Shared Sub ConfigurarEntity(entityConsulta As ModelConfiguration.EntityTypeConfiguration(Of Consulta))
+    entityConsulta.
+          ToTable("Consulta").
+          HasMany(Consulta.Mappings.Parametros).
+          WithRequired(Function(x) x.Consulta).
+          HasForeignKey(Function(x) x.IdConsulta).
+          WillCascadeOnDelete()
+    entityConsulta.
       Property(Function(p) p.Id).
-      HasColumnName("Id_Consulta")
-    modelBuilder.Entity(Of Consulta)().
+          HasColumnName("Id_Consulta")
+    entityConsulta.
       Property(Function(p) p.IdInforme).
-      HasColumnName("Id_Informe")
-    modelBuilder.Entity(Of Consulta)().
+          HasColumnName("Id_Informe")
+    entityConsulta.
       Property(Function(p) p.TextoSql).
-      HasColumnName("Texto_Sql")
+          HasColumnName("Texto_Sql")
+  End Sub
 
-    modelBuilder.Entity(Of Parametro)().
-      ToTable("Parametro")
-    modelBuilder.Entity(Of Parametro)().
+  Private Shared Sub ConfigurarEntity(entityParametro As ModelConfiguration.EntityTypeConfiguration(Of Parametro))
+    entityParametro.
+          ToTable("Parametro")
+    entityParametro.
       Property(Function(p) p.Id).
-      HasColumnName("Id_Parametro")
-    modelBuilder.Entity(Of Parametro)().
+          HasColumnName("Id_Parametro")
+    entityParametro.
       Property(Function(p) p.IdConsulta).
-      HasColumnName("Id_Consulta")
+          HasColumnName("Id_Consulta")
   End Sub
 
   Public Sub FixState()
@@ -79,4 +88,5 @@ Public Class SupraReportsContext
         Return EntityState.Unchanged
     End Select
   End Function
+
 End Class
