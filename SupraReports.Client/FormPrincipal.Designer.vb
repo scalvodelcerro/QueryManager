@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormPrincipal
   Inherits System.Windows.Forms.Form
 
   'Form reemplaza a Dispose para limpiar la lista de componentes.
-  <System.Diagnostics.DebuggerNonUserCode()> _
+  <System.Diagnostics.DebuggerNonUserCode()>
   Protected Overrides Sub Dispose(ByVal disposing As Boolean)
     Try
       If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FormPrincipal
   'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
   'Se puede modificar usando el Diseñador de Windows Forms.  
   'No lo modifique con el editor de código.
-  <System.Diagnostics.DebuggerStepThrough()> _
+  <System.Diagnostics.DebuggerStepThrough()>
   Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container()
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPrincipal))
@@ -38,7 +38,6 @@ Partial Class FormPrincipal
     Me.BtnProgramar = New System.Windows.Forms.Button()
     Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
     Me.TimerMinuto = New System.Windows.Forms.Timer(Me.components)
-    Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -202,20 +201,11 @@ Partial Class FormPrincipal
     '
     Me.TimerMinuto.Interval = 60000
     '
-    'ToolStrip1
-    '
-    Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-    Me.ToolStrip1.Name = "ToolStrip1"
-    Me.ToolStrip1.Size = New System.Drawing.Size(1184, 25)
-    Me.ToolStrip1.TabIndex = 16
-    Me.ToolStrip1.Text = "ToolStrip1"
-    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 514)
-    Me.Controls.Add(Me.ToolStrip1)
     Me.Controls.Add(Me.BtnProgramar)
     Me.Controls.Add(Me.BtnEjecutar)
     Me.Controls.Add(Me.BtnAnadirConsulta)
@@ -247,5 +237,4 @@ Partial Class FormPrincipal
   Friend WithEvents BtnProgramar As Button
   Friend WithEvents IconoNotificacion As NotifyIcon
   Friend WithEvents TimerMinuto As Timer
-  Friend WithEvents ToolStrip1 As ToolStrip
 End Class
