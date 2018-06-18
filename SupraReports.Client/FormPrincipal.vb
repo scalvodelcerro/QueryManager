@@ -21,9 +21,9 @@ Public Class FormPrincipal
 
   Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
     If ValidarCambioInforme() Then
-      Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
-      If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-        informe = Informe.Crear(nombreInformeDialog.TbNombre.Text, Environment.UserName)
+      Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
+      If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+        informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
         InformeRepository.Instance.Create(informe)
@@ -44,11 +44,11 @@ Public Class FormPrincipal
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
     If ValidarCambioInforme() Then
-      Dim nombreInformeDialog As FormNombreInforme = New FormNombreInforme()
+      Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
 
-      If nombreInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+      If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
         Dim nuevoInforme = Informe.Copiar(informe)
-        nuevoInforme.ModificarNombre(nombreInformeDialog.TbNombre.Text)
+        nuevoInforme.ModificarNombre(nuevoInformeDialog.TbNombre.Text)
 
         InformeRepository.Instance.Create(nuevoInforme)
         InformeRepository.Instance.Save()
@@ -77,6 +77,24 @@ Public Class FormPrincipal
     Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
     PnlEditar.Controls.Add(control)
     PnlEditar.ScrollControlIntoView(control)
+  End Sub
+
+  Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
+    Using excelBuilder = New ExcelBuilder("informeSupra")
+      For Each consulta In informe.ObtenerConsultasSinEliminar()
+        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
+          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
+        End Using
+      Next
+      excelBuilder.Build()
+    End Using
+  End Sub
+
+  Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
+    Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme()
+    If programacionInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+
+    End If
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -142,14 +160,5 @@ Public Class FormPrincipal
     Return True
   End Function
 
-  Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    Using excelBuilder = New ExcelBuilder("informeSupra")
-      For Each consulta In informe.ObtenerConsultasSinEliminar()
-        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
-          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
-        End Using
-      Next
-      excelBuilder.Build()
-    End Using
-  End Sub
+
 End Class

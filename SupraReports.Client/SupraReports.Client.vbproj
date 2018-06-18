@@ -78,10 +78,10 @@
     <Compile Include="EditarConsultaUserControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FormNombreInforme.Designer.vb">
-      <DependentUpon>FormNombreInforme.vb</DependentUpon>
+    <Compile Include="FormNuevoInforme.Designer.vb">
+      <DependentUpon>FormNuevoInforme.vb</DependentUpon>
     </Compile>
-    <Compile Include="FormNombreInforme.vb">
+    <Compile Include="FormNuevoInforme.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormPrincipal.vb">
@@ -89,6 +89,12 @@
     </Compile>
     <Compile Include="FormPrincipal.Designer.vb">
       <DependentUpon>FormPrincipal.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProgramacionInforme.Designer.vb">
+      <DependentUpon>FormProgramacionInforme.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormProgramacionInforme.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -117,11 +123,14 @@
     <EmbeddedResource Include="EditarConsultaUserControl.resx">
       <DependentUpon>EditarConsultaUserControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormNombreInforme.resx">
-      <DependentUpon>FormNombreInforme.vb</DependentUpon>
+    <EmbeddedResource Include="FormNuevoInforme.resx">
+      <DependentUpon>FormNuevoInforme.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormPrincipal.resx">
       <DependentUpon>FormPrincipal.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormProgramacionInforme.resx">
+      <DependentUpon>FormProgramacionInforme.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

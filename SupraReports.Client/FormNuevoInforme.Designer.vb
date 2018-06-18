@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormNombreInforme
+Partial Class FormNuevoInforme
   Inherits System.Windows.Forms.Form
 
   'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -64,7 +64,7 @@ Partial Class FormNombreInforme
     Me.BtnCancelar.Text = "Cancelar"
     Me.BtnCancelar.UseVisualStyleBackColor = True
     '
-    'FormNombreInforme
+    'FormNuevoInforme
     '
     Me.AcceptButton = Me.BtnOk
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -79,8 +79,9 @@ Partial Class FormNombreInforme
     Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
     Me.MaximizeBox = False
     Me.MinimizeBox = False
-    Me.Name = "FormNombreInforme"
-    Me.Text = "FormNombreInforme"
+    Me.Name = "FormNuevoInforme"
+    Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+    Me.Text = "Nuevo informe"
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
