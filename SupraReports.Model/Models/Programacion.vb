@@ -107,7 +107,7 @@ Public Class Programacion
     End Set
   End Property
 
-  Public Property Informe As Informe
+  Public Overridable Property Informe As Informe
     Get
       Return _informe
     End Get

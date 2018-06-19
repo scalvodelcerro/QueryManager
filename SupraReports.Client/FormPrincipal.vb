@@ -80,11 +80,11 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    EjecutarConsulta()
+    EjecutarInforme(informe)
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
-    Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme()
+    Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme(informe.Programacion)
     If programacionInformeDialog.ShowDialog(Me) = DialogResult.OK Then
       Dim builder As Programacion.ProgramacionBuilder = New Programacion.ProgramacionBuilder()
       builder.
@@ -106,18 +106,24 @@ Public Class FormPrincipal
         ProgramacionRepository.Instance.Create(p)
         ProgramacionRepository.Instance.Save()
       End If
-
-      WindowState = FormWindowState.Minimized
-      TimerMinuto.Enabled = True
     End If
   End Sub
 
+  Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
+    MinimizarEnAreaNotificacion()
+    TimerMinuto.Start()
+  End Sub
+
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    If informe.Programacion.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
-        informe.Programacion.ObtenerHoraProgramada() = Now.Hour AndAlso
-        informe.Programacion.ObtenerMinutoProgramado() = Now.Minute Then
-      EjecutarConsulta()
-    End If
+    Dim programaciones As IEnumerable(Of Programacion) = ProgramacionRepository.Instance.FindAll()
+
+    For Each p In programaciones
+      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+        p.ObtenerHoraProgramada() = Now.Hour AndAlso
+        p.ObtenerMinutoProgramado() = Now.Minute Then
+        EjecutarInforme(p.Informe)
+      End If
+    Next
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -129,19 +135,11 @@ Public Class FormPrincipal
     End If
   End Sub
 
-  Private Sub FormPrincipal_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
-    If WindowState = FormWindowState.Minimized Then
-      IconoNotificacion.Visible = True
-      IconoNotificacion.ShowBalloonTip(1000)
-      Hide()
-    End If
-  End Sub
 
-  Private Sub IconoNotificacion_Click(sender As Object, e As MouseEventArgs) Handles IconoNotificacion.Click
+  Private Sub MenuIconoNotificacionCancelarProgramaciones_Click(sender As Object, e As EventArgs) Handles MenuIconoNotificacionCancelarProgramaciones.Click
     Show()
-    WindowState = FormWindowState.Normal
     IconoNotificacion.Visible = False
-    TimerMinuto.Enabled = False
+    TimerMinuto.Stop()
   End Sub
 
   Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
@@ -171,7 +169,7 @@ Public Class FormPrincipal
     End If
   End Sub
 
-  Private Sub EjecutarConsulta()
+  Private Sub EjecutarInforme(informe As Informe)
     Using excelBuilder = New ExcelBuilder(informe.Nombre)
       For Each consulta In informe.ObtenerConsultasSinEliminar()
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
@@ -192,6 +190,12 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Enabled = habilitado
   End Sub
 
+  Private Sub MinimizarEnAreaNotificacion()
+    IconoNotificacion.Visible = True
+    IconoNotificacion.ShowBalloonTip(1000)
+    Hide()
+  End Sub
+
   Private Function ValidarCambioInforme() As Boolean
     If informe IsNot Nothing AndAlso informe.TieneCambios() Then
       Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
@@ -209,4 +213,5 @@ Public Class FormPrincipal
     End If
     Return True
   End Function
+
 End Class

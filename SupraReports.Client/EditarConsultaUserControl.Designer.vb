@@ -105,13 +105,12 @@ Partial Class EditarConsultaUserControl
     Me.BtnEliminarConsulta.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEliminarConsulta.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEliminarConsulta.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnEliminarConsulta.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnEliminarConsulta.ImageIndex = 0
     Me.BtnEliminarConsulta.ImageList = Me.IconosBotones
-    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(389, 2)
+    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(389, 0)
     Me.BtnEliminarConsulta.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnEliminarConsulta.Name = "BtnEliminarConsulta"
-    Me.BtnEliminarConsulta.Size = New System.Drawing.Size(20, 20)
+    Me.BtnEliminarConsulta.Size = New System.Drawing.Size(24, 24)
     Me.BtnEliminarConsulta.TabIndex = 20
     Me.ToolTips.SetToolTip(Me.BtnEliminarConsulta, "Eliminar consulta")
     Me.BtnEliminarConsulta.UseVisualStyleBackColor = True
@@ -120,7 +119,7 @@ Partial Class EditarConsultaUserControl
     '
     Me.IconosBotones.ImageStream = CType(resources.GetObject("IconosBotones.ImageStream"), System.Windows.Forms.ImageListStreamer)
     Me.IconosBotones.TransparentColor = System.Drawing.Color.Transparent
-    Me.IconosBotones.Images.SetKeyName(0, "if_button_cancel_1709.png")
+    Me.IconosBotones.Images.SetKeyName(0, "if_cancel_1712.png")
     '
     'EditarConsultaUserControl
     '

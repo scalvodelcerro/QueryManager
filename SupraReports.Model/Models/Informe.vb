@@ -58,11 +58,11 @@ Public Class Informe
   End Property
   Private _usuario As String
 
-  Public Property Programacion As Programacion
+  Public Overridable Property Programacion As Programacion
     Get
       Return _programacion
     End Get
-    Private Set(value As Programacion)
+    Set(value As Programacion)
       _programacion = value
     End Set
   End Property

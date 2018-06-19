@@ -1,4 +1,6 @@
-﻿Public Class ProgramacionRepository
+﻿Imports SupraReports.Model
+
+Public Class ProgramacionRepository
   Implements IDisposable
 
   Public Shared ReadOnly Property Instance As ProgramacionRepository
@@ -22,6 +24,10 @@
   Public Sub Create(programacion As Programacion)
     db.Programaciones.Add(programacion)
   End Sub
+
+  Public Function FindAll() As IEnumerable(Of Programacion)
+    Return db.Programaciones.AsEnumerable()
+  End Function
 
   Public Function FindByIdInforme(idInforme As Integer) As IEnumerable(Of Programacion)
     Return db.Programaciones.Where(Function(x) x.IdInforme = idInforme).AsEnumerable()

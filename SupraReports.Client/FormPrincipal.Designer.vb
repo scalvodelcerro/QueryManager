@@ -37,7 +37,11 @@ Partial Class FormPrincipal
     Me.BtnEjecutar = New System.Windows.Forms.Button()
     Me.BtnProgramar = New System.Windows.Forms.Button()
     Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
+    Me.MenuIconoNotificacion = New System.Windows.Forms.ContextMenuStrip(Me.components)
+    Me.MenuIconoNotificacionCancelarProgramaciones = New System.Windows.Forms.ToolStripMenuItem()
     Me.TimerMinuto = New System.Windows.Forms.Timer(Me.components)
+    Me.BtnEjecutarProgramaciones = New System.Windows.Forms.Button()
+    Me.MenuIconoNotificacion.SuspendLayout()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -47,12 +51,17 @@ Partial Class FormPrincipal
     Me.IconosBotones.Images.SetKeyName(0, "if_window_new_1880.png")
     Me.IconosBotones.Images.SetKeyName(1, "if_filesave_1743.png")
     Me.IconosBotones.Images.SetKeyName(2, "if_filesaveas_1744.png")
-    Me.IconosBotones.Images.SetKeyName(3, "if_button_cancel_1709.png")
+    Me.IconosBotones.Images.SetKeyName(3, "if_cancel_1712.png")
     Me.IconosBotones.Images.SetKeyName(4, "if_player_play_1825.png")
-    Me.IconosBotones.Images.SetKeyName(5, "if_ktimer_1395.png")
+    Me.IconosBotones.Images.SetKeyName(5, "if_clock_1233 .png")
+    Me.IconosBotones.Images.SetKeyName(6, "if_clock_play_1233 .png")
+    Me.IconosBotones.Images.SetKeyName(7, "if_edit_add_1727.png")
     '
     'PnlEditar
     '
+    Me.PnlEditar.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.PnlEditar.AutoScroll = True
     Me.PnlEditar.AutoSize = True
     Me.PnlEditar.Location = New System.Drawing.Point(12, 39)
@@ -67,13 +76,12 @@ Partial Class FormPrincipal
     Me.BtnEliminarInforme.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEliminarInforme.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEliminarInforme.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnEliminarInforme.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnEliminarInforme.ImageIndex = 3
     Me.BtnEliminarInforme.ImageList = Me.IconosBotones
-    Me.BtnEliminarInforme.Location = New System.Drawing.Point(470, 11)
+    Me.BtnEliminarInforme.Location = New System.Drawing.Point(482, 9)
     Me.BtnEliminarInforme.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnEliminarInforme.Name = "BtnEliminarInforme"
-    Me.BtnEliminarInforme.Size = New System.Drawing.Size(20, 20)
+    Me.BtnEliminarInforme.Size = New System.Drawing.Size(24, 24)
     Me.BtnEliminarInforme.TabIndex = 12
     Me.ToolTips.SetToolTip(Me.BtnEliminarInforme, "Eliminar informe")
     Me.BtnEliminarInforme.UseVisualStyleBackColor = True
@@ -84,13 +92,12 @@ Partial Class FormPrincipal
     Me.BtnGuardarComo.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnGuardarComo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnGuardarComo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnGuardarComo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnGuardarComo.ImageIndex = 2
     Me.BtnGuardarComo.ImageList = Me.IconosBotones
-    Me.BtnGuardarComo.Location = New System.Drawing.Point(450, 11)
+    Me.BtnGuardarComo.Location = New System.Drawing.Point(458, 9)
     Me.BtnGuardarComo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardarComo.Name = "BtnGuardarComo"
-    Me.BtnGuardarComo.Size = New System.Drawing.Size(20, 20)
+    Me.BtnGuardarComo.Size = New System.Drawing.Size(24, 24)
     Me.BtnGuardarComo.TabIndex = 11
     Me.ToolTips.SetToolTip(Me.BtnGuardarComo, "Guardar informe como...")
     Me.BtnGuardarComo.UseVisualStyleBackColor = True
@@ -101,13 +108,12 @@ Partial Class FormPrincipal
     Me.BtnGuardar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnGuardar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnGuardar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnGuardar.ImageIndex = 1
     Me.BtnGuardar.ImageList = Me.IconosBotones
-    Me.BtnGuardar.Location = New System.Drawing.Point(430, 11)
+    Me.BtnGuardar.Location = New System.Drawing.Point(434, 9)
     Me.BtnGuardar.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardar.Name = "BtnGuardar"
-    Me.BtnGuardar.Size = New System.Drawing.Size(20, 20)
+    Me.BtnGuardar.Size = New System.Drawing.Size(24, 24)
     Me.BtnGuardar.TabIndex = 10
     Me.ToolTips.SetToolTip(Me.BtnGuardar, "Guardar informe")
     Me.BtnGuardar.UseVisualStyleBackColor = True
@@ -117,14 +123,14 @@ Partial Class FormPrincipal
     Me.BtnNuevo.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnNuevo.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnNuevo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnNuevo.ImageIndex = 0
     Me.BtnNuevo.ImageList = Me.IconosBotones
-    Me.BtnNuevo.Location = New System.Drawing.Point(410, 11)
+    Me.BtnNuevo.Location = New System.Drawing.Point(410, 9)
     Me.BtnNuevo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnNuevo.Name = "BtnNuevo"
-    Me.BtnNuevo.Size = New System.Drawing.Size(20, 20)
+    Me.BtnNuevo.Size = New System.Drawing.Size(24, 24)
     Me.BtnNuevo.TabIndex = 9
+    Me.BtnNuevo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
     Me.ToolTips.SetToolTip(Me.BtnNuevo, "Nuevo informe...")
     Me.BtnNuevo.UseVisualStyleBackColor = True
     '
@@ -140,7 +146,7 @@ Partial Class FormPrincipal
     'CbInforme
     '
     Me.CbInforme.FormattingEnabled = True
-    Me.CbInforme.Location = New System.Drawing.Point(63, 12)
+    Me.CbInforme.Location = New System.Drawing.Point(63, 11)
     Me.CbInforme.Name = "CbInforme"
     Me.CbInforme.Size = New System.Drawing.Size(344, 21)
     Me.CbInforme.TabIndex = 7
@@ -148,11 +154,14 @@ Partial Class FormPrincipal
     'BtnAnadirConsulta
     '
     Me.BtnAnadirConsulta.Enabled = False
+    Me.BtnAnadirConsulta.ImageIndex = 7
+    Me.BtnAnadirConsulta.ImageList = Me.IconosBotones
     Me.BtnAnadirConsulta.Location = New System.Drawing.Point(12, 55)
     Me.BtnAnadirConsulta.Name = "BtnAnadirConsulta"
-    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(90, 23)
+    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(104, 26)
     Me.BtnAnadirConsulta.TabIndex = 13
     Me.BtnAnadirConsulta.Text = "Añadir consulta"
+    Me.BtnAnadirConsulta.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
     Me.BtnAnadirConsulta.UseVisualStyleBackColor = True
     '
     'BtnEjecutar
@@ -161,13 +170,12 @@ Partial Class FormPrincipal
     Me.BtnEjecutar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEjecutar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnEjecutar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnEjecutar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnEjecutar.ImageIndex = 4
     Me.BtnEjecutar.ImageList = Me.IconosBotones
-    Me.BtnEjecutar.Location = New System.Drawing.Point(500, 11)
+    Me.BtnEjecutar.Location = New System.Drawing.Point(516, 9)
     Me.BtnEjecutar.Margin = New System.Windows.Forms.Padding(10, 0, 0, 0)
     Me.BtnEjecutar.Name = "BtnEjecutar"
-    Me.BtnEjecutar.Size = New System.Drawing.Size(20, 20)
+    Me.BtnEjecutar.Size = New System.Drawing.Size(24, 24)
     Me.BtnEjecutar.TabIndex = 14
     Me.ToolTips.SetToolTip(Me.BtnEjecutar, "Ejecutar informe")
     Me.BtnEjecutar.UseVisualStyleBackColor = True
@@ -178,13 +186,12 @@ Partial Class FormPrincipal
     Me.BtnProgramar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnProgramar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnProgramar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnProgramar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
     Me.BtnProgramar.ImageIndex = 5
     Me.BtnProgramar.ImageList = Me.IconosBotones
-    Me.BtnProgramar.Location = New System.Drawing.Point(520, 11)
+    Me.BtnProgramar.Location = New System.Drawing.Point(540, 9)
     Me.BtnProgramar.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnProgramar.Name = "BtnProgramar"
-    Me.BtnProgramar.Size = New System.Drawing.Size(20, 20)
+    Me.BtnProgramar.Size = New System.Drawing.Size(24, 24)
     Me.BtnProgramar.TabIndex = 15
     Me.ToolTips.SetToolTip(Me.BtnProgramar, "Programación del informe...")
     Me.BtnProgramar.UseVisualStyleBackColor = True
@@ -194,18 +201,45 @@ Partial Class FormPrincipal
     Me.IconoNotificacion.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
     Me.IconoNotificacion.BalloonTipText = "Minimizado en el área de notificación"
     Me.IconoNotificacion.BalloonTipTitle = "Informes Supra "
+    Me.IconoNotificacion.ContextMenuStrip = Me.MenuIconoNotificacion
     Me.IconoNotificacion.Icon = CType(resources.GetObject("IconoNotificacion.Icon"), System.Drawing.Icon)
     Me.IconoNotificacion.Text = "Informes Supra"
+    '
+    'MenuIconoNotificacion
+    '
+    Me.MenuIconoNotificacion.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuIconoNotificacionCancelarProgramaciones})
+    Me.MenuIconoNotificacion.Name = "MenuIconoNotificacion"
+    Me.MenuIconoNotificacion.Size = New System.Drawing.Size(210, 26)
+    '
+    'MenuIconoNotificacionCancelarProgramaciones
+    '
+    Me.MenuIconoNotificacionCancelarProgramaciones.Name = "MenuIconoNotificacionCancelarProgramaciones"
+    Me.MenuIconoNotificacionCancelarProgramaciones.Size = New System.Drawing.Size(209, 22)
+    Me.MenuIconoNotificacionCancelarProgramaciones.Text = "Cancelar programaciones"
     '
     'TimerMinuto
     '
     Me.TimerMinuto.Interval = 60000
     '
+    'BtnEjecutarProgramaciones
+    '
+    Me.BtnEjecutarProgramaciones.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.BtnEjecutarProgramaciones.ImageIndex = 6
+    Me.BtnEjecutarProgramaciones.ImageList = Me.IconosBotones
+    Me.BtnEjecutarProgramaciones.Location = New System.Drawing.Point(1031, 444)
+    Me.BtnEjecutarProgramaciones.Name = "BtnEjecutarProgramaciones"
+    Me.BtnEjecutarProgramaciones.Size = New System.Drawing.Size(141, 26)
+    Me.BtnEjecutarProgramaciones.TabIndex = 16
+    Me.BtnEjecutarProgramaciones.Text = "Lanzar programaciones"
+    Me.BtnEjecutarProgramaciones.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+    Me.BtnEjecutarProgramaciones.UseVisualStyleBackColor = True
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(1184, 514)
+    Me.ClientSize = New System.Drawing.Size(1184, 481)
+    Me.Controls.Add(Me.BtnEjecutarProgramaciones)
     Me.Controls.Add(Me.BtnProgramar)
     Me.Controls.Add(Me.BtnEjecutar)
     Me.Controls.Add(Me.BtnAnadirConsulta)
@@ -219,6 +253,7 @@ Partial Class FormPrincipal
     Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"
+    Me.MenuIconoNotificacion.ResumeLayout(False)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -237,4 +272,7 @@ Partial Class FormPrincipal
   Friend WithEvents BtnProgramar As Button
   Friend WithEvents IconoNotificacion As NotifyIcon
   Friend WithEvents TimerMinuto As Timer
+  Friend WithEvents BtnEjecutarProgramaciones As Button
+  Friend WithEvents MenuIconoNotificacion As ContextMenuStrip
+  Friend WithEvents MenuIconoNotificacionCancelarProgramaciones As ToolStripMenuItem
 End Class
