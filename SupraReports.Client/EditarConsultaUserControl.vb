@@ -26,24 +26,26 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
-    _consulta.ModificarNombre(TbNombre.Text)
+    _consulta.Nombre = TbNombre.Text
+    'FIXME -- Notificar cambio
   End Sub
 
   Private Sub TbSql_TextChanged(sender As Object, e As EventArgs) Handles TbSql.TextChanged
     If TbSql.Focused Then
-      _consulta.ModificarTextoSql(TbSql.Text)
+      _consulta.TextoSql = TbSql.Text
       Dim nombresParametros As IEnumerable(Of String) = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
-      Dim eliminados As IEnumerable(Of Parametro) = _consulta.ObtenerParametrosSinEliminar().Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
+      Dim eliminados As IEnumerable(Of Parametro) = _consulta.Parametros.Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
       For Each p In eliminados
         p.Consulta.EliminarParametro(p)
       Next
-      For Each nombreParametro In nombresParametros.Except(_consulta.ObtenerParametrosSinEliminar().Select(Function(x) x.Nombre))
+      For Each nombreParametro In nombresParametros.Except(_consulta.Parametros.Select(Function(x) x.Nombre))
         _consulta.AnadirParametro(nombreParametro, String.Empty)
       Next
       CargarParametros()
       TbSqlResult.Text = String.Empty
       TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
     End If
+    ' FIXME -- Notificar cambio
   End Sub
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
@@ -52,11 +54,12 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub OnCambiarValorParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
-    Dim parametro As Parametro = _consulta.ObtenerParametrosSinEliminar().FirstOrDefault(Function(x) x.Nombre = e.Parametro)
-    parametro.ModificarValor(e.Valor)
+    Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = e.Parametro)
+    parametro.Valor = e.Valor
     TbSqlResult.Text = String.Empty
     TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
     ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
+    ' FIXME -- Notificar cambio
   End Sub
 
   Private Sub OnSeleccionarParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
@@ -70,7 +73,7 @@ Public Class EditarConsultaUserControl
 
   Private Sub CargarParametros()
     PnlParametros.Controls.Clear()
-    For Each p In _consulta.ObtenerParametrosSinEliminar().OrderBy(Function(x) x.Nombre)
+    For Each p In _consulta.Parametros.OrderBy(Function(x) x.Nombre)
       Dim control As ValorParametroUserControl = New ValorParametroUserControl(p.Nombre, p.Valor)
       AddHandler control.CambiarValor, AddressOf OnCambiarValorParametro
       AddHandler control.Seleccionar, AddressOf OnSeleccionarParametro

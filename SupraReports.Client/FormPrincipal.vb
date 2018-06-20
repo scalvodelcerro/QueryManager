@@ -3,6 +3,7 @@
 Public Class FormPrincipal
   Private informe As Informe
   Private Const PatternParametro = "#(\w+)#"
+  Private hayCambiosPendientes As Boolean = False
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     CargarInformes()
@@ -26,8 +27,10 @@ Public Class FormPrincipal
         informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
-        InformeRepository.Instance.Create(informe)
-        'InformeRepository.Instance.Save()
+        Using repo = New InformeRepository()
+          repo.Create(informe)
+          repo.Save()
+        End Using
 
         CbInforme.Items.Add(informe)
         CbInforme.SelectedItem = informe
@@ -38,8 +41,10 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnGuardar_Click(sender As Object, e As EventArgs) Handles BtnGuardar.Click
-    InformeRepository.Instance.Update(informe)
-    InformeRepository.Instance.Save()
+    Using repo = New InformeRepository()
+      repo.Update(informe)
+      repo.Save()
+    End Using
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
@@ -48,10 +53,12 @@ Public Class FormPrincipal
 
       If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
         Dim nuevoInforme = Informe.Copiar(informe)
-        nuevoInforme.ModificarNombre(nuevoInformeDialog.TbNombre.Text)
+        nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
-        InformeRepository.Instance.Create(nuevoInforme)
-        InformeRepository.Instance.Save()
+        Using repo = New InformeRepository()
+          repo.Create(nuevoInforme)
+          repo.Save()
+        End Using
 
         CbInforme.Items.Add(nuevoInforme)
         CbInforme.SelectedItem = nuevoInforme
@@ -62,8 +69,10 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
-    InformeRepository.Instance.Delete(informe)
-    InformeRepository.Instance.Save()
+    Using repo = New InformeRepository()
+      repo.Delete(informe)
+      repo.Save()
+    End Using
 
     informe = Nothing
     CargarInformes()
@@ -100,11 +109,13 @@ Public Class FormPrincipal
 
       Dim p = builder.Build()
       If p.HayAlgunDiaProgramado() Then
-        If informe.EstaProgramado() Then
-          ProgramacionRepository.Instance.Delete(informe.Programacion)
-        End If
-        ProgramacionRepository.Instance.Create(p)
-        ProgramacionRepository.Instance.Save()
+        Using repo = New ProgramacionRepository()
+          If informe.EstaProgramado() Then
+            repo.Delete(informe.Programacion)
+          End If
+          repo.Create(p)
+          repo.Save()
+        End Using
       End If
     End If
   End Sub
@@ -115,22 +126,21 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    Dim programaciones As IEnumerable(Of Programacion) = ProgramacionRepository.Instance.FindAll()
+    Using repo = New ProgramacionRepository()
+      Dim programaciones As IEnumerable(Of Programacion) = repo.FindAll()
 
-    For Each p In programaciones
-      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+      For Each p In programaciones
+        If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
         p.ObtenerHoraProgramada() = Now.Hour AndAlso
         p.ObtenerMinutoProgramado() = Now.Minute Then
-        EjecutarInforme(p.Informe)
-      End If
-    Next
+          EjecutarInforme(p.Informe)
+        End If
+      Next
+    End Using
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-    If ValidarCambioInforme() Then
-      InformeRepository.Instance.Dispose()
-      ProgramacionRepository.Instance.Dispose()
-    Else
+    If Not ValidarCambioInforme() Then
       e.Cancel = True
     End If
   End Sub
@@ -150,10 +160,12 @@ Public Class FormPrincipal
     CbInforme.DisplayMember = "Nombre"
     CbInforme.Items.Clear()
 
-    Dim informes As IEnumerable(Of Informe) = InformeRepository.Instance.FindAll()
-    For Each i In informes
-      CbInforme.Items.Add(i)
-    Next
+    Using repo = New InformeRepository()
+      Dim informes As IEnumerable(Of Informe) = repo.FindAll()
+      For Each i In informes
+        CbInforme.Items.Add(i)
+      Next
+    End Using
 
     CbInforme.SelectedItem = Nothing
     CbInforme.Text = String.Empty
@@ -162,7 +174,7 @@ Public Class FormPrincipal
   Private Sub CargarConsultas()
     PnlEditar.Controls.Clear()
     If informe IsNot Nothing Then
-      For Each consulta In informe.ObtenerConsultasSinEliminar()
+      For Each consulta In informe.Consultas
         Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
         PnlEditar.Controls.Add(control)
       Next
@@ -171,7 +183,7 @@ Public Class FormPrincipal
 
   Private Sub EjecutarInforme(informe As Informe)
     Using excelBuilder = New ExcelBuilder(informe.Nombre)
-      For Each consulta In informe.ObtenerConsultasSinEliminar()
+      For Each consulta In informe.Consultas
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
           excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
         End Using
@@ -197,15 +209,19 @@ Public Class FormPrincipal
   End Sub
 
   Private Function ValidarCambioInforme() As Boolean
-    If informe IsNot Nothing AndAlso informe.TieneCambios() Then
+    If informe IsNot Nothing AndAlso hayCambiosPendientes Then
       Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
       Select Case resultado
         Case DialogResult.Yes
-          InformeRepository.Instance.Update(informe)
-          InformeRepository.Instance.Save()
+          Using repo = New InformeRepository()
+            repo.Update(informe)
+            repo.Save()
+          End Using
           Return True
         Case DialogResult.No
-          InformeRepository.Instance.Reload(informe)
+          Using repo = New InformeRepository()
+            informe = repo.FindById(informe.Id)
+          End Using
           Return True
         Case DialogResult.Cancel
           Return False
