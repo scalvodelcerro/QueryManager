@@ -3,8 +3,6 @@
 Public Class FormPrincipal
   Private db As SupraReportsContext
   Private informe As Informe
-  Private Const PatternParametro = "#(\w+)#"
-  Private hayCambiosPendientes As Boolean = False
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     CargarInformes()

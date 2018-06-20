@@ -33,10 +33,6 @@
     Parametros.Add(Parametro.Crear(nombreParametro, valorParametro, Me))
   End Sub
 
-  Public Sub EliminarParametro(parametro As Parametro)
-    Parametros.Remove(parametro)
-  End Sub
-
   Public Function ComponerSqlResultado() As String
     Dim textResult As String = TextoSql.ToUpper()
     For Each p In Parametros

@@ -28,10 +28,6 @@
   Public Overridable Property Programacion As Programacion
   Public Overridable Property Consultas As ICollection(Of Consulta)
 
-  Public Function EstaProgramado() As Boolean
-    Return Programacion IsNot Nothing
-  End Function
-
   Public Sub AnadirConsulta(consulta As Consulta)
     consulta.Informe = Me
     Consultas.Add(consulta)

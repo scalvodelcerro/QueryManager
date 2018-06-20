@@ -29,7 +29,6 @@ Public Class EditarConsultaUserControl
 
   Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
     _consulta.Nombre = TbNombre.Text
-    'FIXME -- Notificar cambio
   End Sub
 
   Private Sub TbSql_TextChanged(sender As Object, e As EventArgs) Handles TbSql.TextChanged
@@ -47,7 +46,6 @@ Public Class EditarConsultaUserControl
       TbSqlResult.Text = String.Empty
       TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
     End If
-    ' FIXME -- Notificar cambio
   End Sub
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
@@ -55,20 +53,21 @@ Public Class EditarConsultaUserControl
     Dispose()
   End Sub
 
-  Private Sub OnCambiarValorParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
-    Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = e.Parametro)
-    parametro.Valor = e.Valor
+  Private Sub OnCambiarValorParametro(sender As Object, e As EventArgs)
+    Dim control = CType(CType(sender, TextBox).Parent, ValorParametroUserControl)
+    Dim parametro As Parametro = _consulta.Parametros.FirstOrDefault(Function(x) x.Nombre = control.NombreParametro)
+    parametro.Valor = control.Valor
     TbSqlResult.Text = String.Empty
     TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
-    ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
-    ' FIXME -- Notificar cambio
+    ResaltarParametro(control.NombreParametro, control.Valor, colorResaltarTexto)
   End Sub
 
-  Private Sub OnSeleccionarParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
-    ResaltarParametro(e.Parametro, e.Valor, colorResaltarTexto)
+  Private Sub OnSeleccionarParametro(sender As Object, e As EventArgs)
+    Dim control = CType(CType(sender, TextBox).Parent, ValorParametroUserControl)
+    ResaltarParametro(control.NombreParametro, control.Valor, colorResaltarTexto)
   End Sub
 
-  Private Sub OnDeseleccionarParametro(sender As Object, e As ValorParametroUserControl.ValorParametroEventArgs)
+  Private Sub OnDeseleccionarParametro(sender As Object, e As EventArgs)
     LimpiarResaltado(TbSql)
     LimpiarResaltado(TbSqlResult)
   End Sub
@@ -77,9 +76,9 @@ Public Class EditarConsultaUserControl
     PnlParametros.Controls.Clear()
     For Each p In _consulta.Parametros.OrderBy(Function(x) x.Nombre)
       Dim control As ValorParametroUserControl = New ValorParametroUserControl(p.Nombre, p.Valor)
-      AddHandler control.CambiarValor, AddressOf OnCambiarValorParametro
-      AddHandler control.Seleccionar, AddressOf OnSeleccionarParametro
-      AddHandler control.Deseleccionar, AddressOf OnDeseleccionarParametro
+      AddHandler control.TbValor.GotFocus, AddressOf OnSeleccionarParametro
+      AddHandler control.TbValor.LostFocus, AddressOf OnDeseleccionarParametro
+      AddHandler control.TbValor.TextChanged, AddressOf OnCambiarValorParametro
       PnlParametros.Controls.Add(control)
     Next
   End Sub
@@ -97,7 +96,7 @@ Public Class EditarConsultaUserControl
 
   Private Sub ResaltarPalabra(rtb As RichTextBox, palabra As String, color As Color)
     If Not String.IsNullOrEmpty(palabra) And rtb.Text.ToUpper().Contains(palabra.ToUpper()) Then
-      Dim index As Integer = rtb.Text.ToUpper().IndexOf(palabra.ToUpper(), index + 1)
+      Dim index As Integer = rtb.Text.ToUpper().IndexOf(palabra.ToUpper())
       While index <> -1
         rtb.Select(index, palabra.Length)
         rtb.SelectionBackColor = color
