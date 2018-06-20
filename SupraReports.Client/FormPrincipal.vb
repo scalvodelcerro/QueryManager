@@ -51,7 +51,10 @@ Public Class FormPrincipal
         Dim nuevoInforme = Informe.Copiar(informe)
         nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
+        db.Dispose()
+        db = New SupraReportsContext()
         db.Informes.Add(nuevoInforme)
+        db.SaveChanges()
 
         CbInforme.Items.Add(nuevoInforme)
         CbInforme.SelectedItem = nuevoInforme

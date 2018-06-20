@@ -20,7 +20,7 @@ Public Class ExcelBuilder
     If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
     Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
     If contents IsNot Nothing Then
-      worksheet.Cells("A1").LoadFromDataReader(contents, True, worksheetName, Table.TableStyles.Medium10)
+      worksheet.Cells("A1").LoadFromDataReader(contents, True, worksheet.Name, Table.TableStyles.Medium10)
     End If
     Return Me
   End Function
