@@ -27,7 +27,7 @@
   Public Property Nombre As String
   Public Property TextoSql As String
   Public Property Informe As Informe
-  Public Property Parametros As ICollection(Of Parametro)
+  Public Overridable Property Parametros As ICollection(Of Parametro)
 
   Public Sub AnadirParametro(nombreParametro As String, valorParametro As String)
     Parametros.Add(Parametro.Crear(nombreParametro, valorParametro, Me))

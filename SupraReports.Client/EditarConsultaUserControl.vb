@@ -4,9 +4,11 @@ Imports SupraReports.Model
 Public Class EditarConsultaUserControl
   Private Const PatternParametro As String = "#(\w+)#"
   Private colorResaltarTexto As Color = Color.PaleGreen
+  Private db As SupraReportsContext
 
-  Public Sub New(consulta As Consulta)
+  Public Sub New(db As SupraReportsContext, consulta As Consulta)
     InitializeComponent()
+    Me.db = db
     Me.Consulta = consulta
   End Sub
 
@@ -50,6 +52,7 @@ Public Class EditarConsultaUserControl
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
     _consulta.Informe.EliminarConsulta(_consulta)
+    db.Consultas.Remove(_consulta)
     Dispose()
   End Sub
 

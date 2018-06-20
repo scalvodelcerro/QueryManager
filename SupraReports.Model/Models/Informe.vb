@@ -26,7 +26,7 @@
   Public Property Nombre As String
   Public Property Usuario As String
   Public Property Programacion As Programacion
-  Public Property Consultas As ICollection(Of Consulta)
+  Public Overridable Property Consultas As ICollection(Of Consulta)
 
   Public Function EstaProgramado() As Boolean
     Return Programacion IsNot Nothing

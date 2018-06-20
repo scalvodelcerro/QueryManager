@@ -96,7 +96,6 @@
     <Compile Include="DAO\GeneralDao.vb" />
     <Compile Include="EFContext\SupraReportsContext.vb" />
     <Compile Include="Exporter\ExcelBuilder.vb" />
-    <Compile Include="Extensions\EnumerableExtensions.vb" />
     <Compile Include="Models\Consulta.vb" />
     <Compile Include="Models\Informe.vb" />
     <Compile Include="Models\Parametro.vb" />
@@ -116,9 +115,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Repositories\BaseRepository.vb" />
-    <Compile Include="Repositories\InformeRepository.vb" />
-    <Compile Include="Repositories\ProgramacionRepository.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -140,6 +136,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

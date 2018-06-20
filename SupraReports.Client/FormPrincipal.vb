@@ -1,6 +1,7 @@
 ﻿Imports SupraReports.Model
 
 Public Class FormPrincipal
+  Private db As SupraReportsContext = New SupraReportsContext()
   Private informe As Informe
   Private Const PatternParametro = "#(\w+)#"
   Private hayCambiosPendientes As Boolean = False
@@ -27,10 +28,8 @@ Public Class FormPrincipal
         informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
-        Using repo = New InformeRepository()
-          repo.Create(informe)
-          repo.Save()
-        End Using
+        db.Informes.Add(informe)
+        db.SaveChanges()
 
         CbInforme.Items.Add(informe)
         CbInforme.SelectedItem = informe
@@ -41,10 +40,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnGuardar_Click(sender As Object, e As EventArgs) Handles BtnGuardar.Click
-    Using repo = New InformeRepository()
-      repo.Update(informe)
-      repo.Save()
-    End Using
+    db.SaveChanges()
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
@@ -55,10 +51,7 @@ Public Class FormPrincipal
         Dim nuevoInforme = Informe.Copiar(informe)
         nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
-        Using repo = New InformeRepository()
-          repo.Create(nuevoInforme)
-          repo.Save()
-        End Using
+        db.Informes.Add(nuevoInforme)
 
         CbInforme.Items.Add(nuevoInforme)
         CbInforme.SelectedItem = nuevoInforme
@@ -69,10 +62,8 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
-    Using repo = New InformeRepository()
-      repo.Delete(informe)
-      repo.Save()
-    End Using
+    db.Informes.Remove(informe)
+    db.SaveChanges()
 
     informe = Nothing
     CargarInformes()
@@ -83,7 +74,10 @@ Public Class FormPrincipal
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
     Dim consulta As Consulta = Consulta.Crear(String.Empty, String.Empty)
     informe.AnadirConsulta(consulta)
-    Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
+
+    db.Consultas.Add(consulta)
+
+    Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
     PnlEditar.Controls.Add(control)
     PnlEditar.ScrollControlIntoView(control)
   End Sub
@@ -109,13 +103,11 @@ Public Class FormPrincipal
 
       Dim p = builder.Build()
       If p.HayAlgunDiaProgramado() Then
-        Using repo = New ProgramacionRepository()
-          If informe.EstaProgramado() Then
-            repo.Delete(informe.Programacion)
-          End If
-          repo.Create(p)
-          repo.Save()
-        End Using
+        If informe.EstaProgramado() Then
+          db.Programaciones.Remove(informe.Programacion)
+        End If
+        db.Programaciones.Add(p)
+        db.SaveChanges()
       End If
     End If
   End Sub
@@ -126,17 +118,15 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    Using repo = New ProgramacionRepository()
-      Dim programaciones As IEnumerable(Of Programacion) = repo.FindAll()
+    Dim programaciones As IEnumerable(Of Programacion) = db.Programaciones.AsNoTracking().AsEnumerable()
 
-      For Each p In programaciones
-        If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+    For Each p In programaciones
+      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
         p.ObtenerHoraProgramada() = Now.Hour AndAlso
         p.ObtenerMinutoProgramado() = Now.Minute Then
-          EjecutarInforme(p.Informe)
-        End If
-      Next
-    End Using
+        EjecutarInforme(p.Informe)
+      End If
+    Next
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -160,12 +150,10 @@ Public Class FormPrincipal
     CbInforme.DisplayMember = "Nombre"
     CbInforme.Items.Clear()
 
-    Using repo = New InformeRepository()
-      Dim informes As IEnumerable(Of Informe) = repo.FindAll()
-      For Each i In informes
-        CbInforme.Items.Add(i)
-      Next
-    End Using
+    Dim informes As IEnumerable(Of Informe) = db.Informes.ToList()
+    For Each i In informes
+      CbInforme.Items.Add(i)
+    Next
 
     CbInforme.SelectedItem = Nothing
     CbInforme.Text = String.Empty
@@ -175,7 +163,7 @@ Public Class FormPrincipal
     PnlEditar.Controls.Clear()
     If informe IsNot Nothing Then
       For Each consulta In informe.Consultas
-        Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(consulta)
+        Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
         PnlEditar.Controls.Add(control)
       Next
     End If
@@ -213,15 +201,10 @@ Public Class FormPrincipal
       Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
       Select Case resultado
         Case DialogResult.Yes
-          Using repo = New InformeRepository()
-            repo.Update(informe)
-            repo.Save()
-          End Using
+          db.SaveChanges()
           Return True
         Case DialogResult.No
-          Using repo = New InformeRepository()
-            informe = repo.FindById(informe.Id)
-          End Using
+          db.Rollback()
           Return True
         Case DialogResult.Cancel
           Return False

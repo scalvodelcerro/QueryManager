@@ -90,4 +90,16 @@ Public Class SupraReportsContext
       Property(Function(p) p.Hora).
         HasMaxLength(10)
   End Sub
+
+  Public Sub Rollback()
+    For Each e In ChangeTracker.Entries()
+      Select Case e.State
+        Case EntityState.Modified, EntityState.Deleted
+          e.State = EntityState.Modified
+          e.State = EntityState.Unchanged
+        Case EntityState.Added
+          e.State = EntityState.Detached
+      End Select
+    Next
+  End Sub
 End Class
