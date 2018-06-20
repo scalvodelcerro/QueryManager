@@ -38,7 +38,7 @@ Public Class EditarConsultaUserControl
       Dim nombresParametros As IEnumerable(Of String) = Regex.Matches(_consulta.TextoSql, PatternParametro).Cast(Of Match).Select(Function(x) x.Groups(1).Value.ToUpper()).Distinct()
       Dim eliminados As IEnumerable(Of Parametro) = _consulta.Parametros.Where(Function(x) Not nombresParametros.Contains(x.Nombre)).ToList()
       For Each p In eliminados
-        p.Consulta.EliminarParametro(p)
+        db.Parametros.Remove(p)
       Next
       For Each nombreParametro In nombresParametros.Except(_consulta.Parametros.Select(Function(x) x.Nombre))
         _consulta.AnadirParametro(nombreParametro, String.Empty)
@@ -51,7 +51,6 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
-    _consulta.Informe.EliminarConsulta(_consulta)
     db.Consultas.Remove(_consulta)
     Dispose()
   End Sub

@@ -36,6 +36,7 @@ Partial Class FormPrincipal
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.BtnEjecutar = New System.Windows.Forms.Button()
     Me.BtnProgramar = New System.Windows.Forms.Button()
+    Me.BtnConfiguracion = New System.Windows.Forms.Button()
     Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
     Me.MenuIconoNotificacion = New System.Windows.Forms.ContextMenuStrip(Me.components)
     Me.MenuIconoNotificacionCancelarProgramaciones = New System.Windows.Forms.ToolStripMenuItem()
@@ -56,6 +57,7 @@ Partial Class FormPrincipal
     Me.IconosBotones.Images.SetKeyName(5, "if_clock_1233 .png")
     Me.IconosBotones.Images.SetKeyName(6, "if_clock_play_1233 .png")
     Me.IconosBotones.Images.SetKeyName(7, "if_edit_add_1727.png")
+    Me.IconosBotones.Images.SetKeyName(8, "if_kservices_1385.png")
     '
     'PnlEditar
     '
@@ -196,6 +198,21 @@ Partial Class FormPrincipal
     Me.ToolTips.SetToolTip(Me.BtnProgramar, "Programación del informe...")
     Me.BtnProgramar.UseVisualStyleBackColor = True
     '
+    'BtnConfiguracion
+    '
+    Me.BtnConfiguracion.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnConfiguracion.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnConfiguracion.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnConfiguracion.ImageIndex = 8
+    Me.BtnConfiguracion.ImageList = Me.IconosBotones
+    Me.BtnConfiguracion.Location = New System.Drawing.Point(1151, 9)
+    Me.BtnConfiguracion.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnConfiguracion.Name = "BtnConfiguracion"
+    Me.BtnConfiguracion.Size = New System.Drawing.Size(24, 24)
+    Me.BtnConfiguracion.TabIndex = 17
+    Me.ToolTips.SetToolTip(Me.BtnConfiguracion, "Configuración...")
+    Me.BtnConfiguracion.UseVisualStyleBackColor = True
+    '
     'IconoNotificacion
     '
     Me.IconoNotificacion.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
@@ -239,6 +256,7 @@ Partial Class FormPrincipal
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 481)
+    Me.Controls.Add(Me.BtnConfiguracion)
     Me.Controls.Add(Me.BtnEjecutarProgramaciones)
     Me.Controls.Add(Me.BtnProgramar)
     Me.Controls.Add(Me.BtnEjecutar)
@@ -275,4 +293,5 @@ Partial Class FormPrincipal
   Friend WithEvents BtnEjecutarProgramaciones As Button
   Friend WithEvents MenuIconoNotificacion As ContextMenuStrip
   Friend WithEvents MenuIconoNotificacionCancelarProgramaciones As ToolStripMenuItem
+  Friend WithEvents BtnConfiguracion As Button
 End Class

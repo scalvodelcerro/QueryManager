@@ -1,7 +1,7 @@
 ﻿Imports SupraReports.Model
 
 Public Class FormPrincipal
-  Private db As SupraReportsContext = New SupraReportsContext()
+  Private db As SupraReportsContext
   Private informe As Informe
   Private Const PatternParametro = "#(\w+)#"
   Private hayCambiosPendientes As Boolean = False
@@ -14,7 +14,9 @@ Public Class FormPrincipal
     If Not CbInforme.Focused OrElse ValidarCambioInforme() Then
       PnlEditar.Controls.Clear()
       If CbInforme.SelectedItem IsNot Nothing Then
-        informe = CType(CbInforme.SelectedItem, Informe)
+        If db IsNot Nothing Then db.Dispose()
+        db = New SupraReportsContext()
+        informe = db.Informes.Find(CbInforme.SelectedItem.Id)
         CargarConsultas()
       End If
       EstablecerEstadoBotones()
@@ -75,8 +77,6 @@ Public Class FormPrincipal
     Dim consulta As Consulta = Consulta.Crear(String.Empty, String.Empty)
     informe.AnadirConsulta(consulta)
 
-    db.Consultas.Add(consulta)
-
     Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
     PnlEditar.Controls.Add(control)
     PnlEditar.ScrollControlIntoView(control)
@@ -89,27 +89,29 @@ Public Class FormPrincipal
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
     Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme(informe.Programacion)
     If programacionInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-      Dim builder As Programacion.ProgramacionBuilder = New Programacion.ProgramacionBuilder()
-      builder.
-        ParaInforme(informe).
-        ParaHora(programacionInformeDialog.PickerHora.Value.ToString("HH:mm"))
-      If programacionInformeDialog.CbLunes.Checked Then builder.ParaDia(DayOfWeek.Monday)
-      If programacionInformeDialog.CbMartes.Checked Then builder.ParaDia(DayOfWeek.Tuesday)
-      If programacionInformeDialog.CbMiercoles.Checked Then builder.ParaDia(DayOfWeek.Wednesday)
-      If programacionInformeDialog.CbJueves.Checked Then builder.ParaDia(DayOfWeek.Thursday)
-      If programacionInformeDialog.CbViernes.Checked Then builder.ParaDia(DayOfWeek.Friday)
-      If programacionInformeDialog.CbSabado.Checked Then builder.ParaDia(DayOfWeek.Saturday)
-      If programacionInformeDialog.CbDomingo.Checked Then builder.ParaDia(DayOfWeek.Sunday)
-
-      Dim p = builder.Build()
-      If p.HayAlgunDiaProgramado() Then
-        If informe.EstaProgramado() Then
-          db.Programaciones.Remove(informe.Programacion)
+      If programacionInformeDialog.Controls.OfType(Of CheckBox).Any(Function(cb) cb.Checked) Then
+        Dim p As Programacion = informe.Programacion
+        If p Is Nothing Then
+          p = New Programacion()
+          informe.Programacion = p
         End If
-        db.Programaciones.Add(p)
+        p.Informe = informe
+        p.Hora = programacionInformeDialog.PickerHora.Value.ToString("HH:mm")
+        p.Lunes = programacionInformeDialog.CbLunes.Checked
+        p.Martes = programacionInformeDialog.CbMartes.Checked
+        p.Miercoles = programacionInformeDialog.CbMiercoles.Checked
+        p.Jueves = programacionInformeDialog.CbJueves.Checked
+        p.Viernes = programacionInformeDialog.CbViernes.Checked
+        p.Sabado = programacionInformeDialog.CbSabado.Checked
+        p.Domingo = programacionInformeDialog.CbDomingo.Checked
         db.SaveChanges()
       End If
     End If
+  End Sub
+
+  Private Sub BtnConfiguracion_Click(sender As Object, e As EventArgs) Handles BtnConfiguracion.Click
+    Dim formConfiguracion As FormConfiguracion = New FormConfiguracion()
+    formConfiguracion.ShowDialog(Me)
   End Sub
 
   Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
@@ -118,9 +120,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    Dim programaciones As IEnumerable(Of Programacion) = db.Programaciones.AsNoTracking().AsEnumerable()
-
-    For Each p In programaciones
+    For Each p In db.Programaciones
       If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
         p.ObtenerHoraProgramada() = Now.Hour AndAlso
         p.ObtenerMinutoProgramado() = Now.Minute Then
@@ -135,7 +135,6 @@ Public Class FormPrincipal
     End If
   End Sub
 
-
   Private Sub MenuIconoNotificacionCancelarProgramaciones_Click(sender As Object, e As EventArgs) Handles MenuIconoNotificacionCancelarProgramaciones.Click
     Show()
     IconoNotificacion.Visible = False
@@ -149,11 +148,12 @@ Public Class FormPrincipal
   Private Sub CargarInformes()
     CbInforme.DisplayMember = "Nombre"
     CbInforme.Items.Clear()
-
-    Dim informes As IEnumerable(Of Informe) = db.Informes.ToList()
-    For Each i In informes
-      CbInforme.Items.Add(i)
-    Next
+    Using db = New SupraReportsContext()
+      Dim informes As IEnumerable(Of Informe) = db.Informes.ToList()
+      For Each i In informes
+        CbInforme.Items.Add(i)
+      Next
+    End Using
 
     CbInforme.SelectedItem = Nothing
     CbInforme.Text = String.Empty
@@ -170,7 +170,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub EjecutarInforme(informe As Informe)
-    Using excelBuilder = New ExcelBuilder(informe.Nombre)
+    Using excelBuilder = New ExcelBuilder(informe.Nombre, My.Settings.RutaDirectorioSalida)
       For Each consulta In informe.Consultas
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
           excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
@@ -197,14 +197,13 @@ Public Class FormPrincipal
   End Sub
 
   Private Function ValidarCambioInforme() As Boolean
-    If informe IsNot Nothing AndAlso hayCambiosPendientes Then
+    If informe IsNot Nothing AndAlso HayCambiosSinGuardar() Then
       Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
       Select Case resultado
         Case DialogResult.Yes
           db.SaveChanges()
           Return True
         Case DialogResult.No
-          db.Rollback()
           Return True
         Case DialogResult.Cancel
           Return False
@@ -213,4 +212,7 @@ Public Class FormPrincipal
     Return True
   End Function
 
+  Private Function HayCambiosSinGuardar() As Boolean
+    Return db.ChangeTracker.HasChanges
+  End Function
 End Class

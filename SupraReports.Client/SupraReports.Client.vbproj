@@ -85,6 +85,12 @@
     <Compile Include="EditarConsultaUserControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="FormConfiguracion.Designer.vb">
+      <DependentUpon>FormConfiguracion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfiguracion.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormNuevoInforme.Designer.vb">
       <DependentUpon>FormNuevoInforme.vb</DependentUpon>
     </Compile>
@@ -129,6 +135,9 @@
   <ItemGroup>
     <EmbeddedResource Include="EditarConsultaUserControl.resx">
       <DependentUpon>EditarConsultaUserControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfiguracion.resx">
+      <DependentUpon>FormConfiguracion.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormNuevoInforme.resx">
       <DependentUpon>FormNuevoInforme.vb</DependentUpon>

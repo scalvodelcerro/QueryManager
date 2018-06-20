@@ -25,7 +25,7 @@
   Public Property Id As Integer
   Public Property Nombre As String
   Public Property Usuario As String
-  Public Property Programacion As Programacion
+  Public Overridable Property Programacion As Programacion
   Public Overridable Property Consultas As ICollection(Of Consulta)
 
   Public Function EstaProgramado() As Boolean
@@ -35,9 +35,5 @@
   Public Sub AnadirConsulta(consulta As Consulta)
     consulta.Informe = Me
     Consultas.Add(consulta)
-  End Sub
-
-  Public Sub EliminarConsulta(consulta As Consulta)
-    Consultas.Remove(consulta)
   End Sub
 End Class

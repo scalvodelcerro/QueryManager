@@ -5,8 +5,12 @@ Public Class ExcelBuilder
   Implements IDisposable
 
   Public Sub New(fileNamePrefix As String)
+    Me.New(fileNamePrefix, Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
+  End Sub
+
+  Public Sub New(fileNamePrefix As String, folderPath As String)
     Dim fileName As String = String.Format("{0}_{1}.xlsx", fileNamePrefix.Replace(" ", "_"), Now.ToString("yyyyMMdd_HHmmss"))
-    Dim outputFile As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName)
+    Dim outputFile As String = Path.Combine(folderPath, fileName)
     excel = New ExcelPackage(New FileInfo(outputFile))
   End Sub
 
