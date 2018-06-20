@@ -1,4 +1,5 @@
-﻿Imports SupraReports.Model
+﻿Imports System.Data.Entity
+Imports SupraReports.Model
 
 Public Class FormPrincipal
   Private db As SupraReportsContext
@@ -28,10 +29,14 @@ Public Class FormPrincipal
         informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
+        If db IsNot Nothing Then db.Dispose()
+        db = New SupraReportsContext()
         db.Informes.Add(informe)
         db.SaveChanges()
 
-        CbInforme.Items.Add(informe)
+        InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
+        db.Informes.Load()
+
         CbInforme.SelectedItem = informe
         CargarConsultas()
         EstablecerEstadoBotones()
@@ -51,7 +56,7 @@ Public Class FormPrincipal
         Dim nuevoInforme = Informe.Copiar(informe)
         nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
-        db.Dispose()
+        If db IsNot Nothing Then db.Dispose()
         db = New SupraReportsContext()
         db.Informes.Add(nuevoInforme)
         db.SaveChanges()
@@ -65,6 +70,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
+    db.Programaciones.Remove(informe.Programacion)
     db.Informes.Remove(informe)
     db.SaveChanges()
 
@@ -88,26 +94,8 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
-    Dim programacionInformeDialog As FormProgramacionInforme = New FormProgramacionInforme(informe.Programacion)
-    If programacionInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-      If programacionInformeDialog.Controls.OfType(Of CheckBox).Any(Function(cb) cb.Checked) Then
-        Dim p As Programacion = informe.Programacion
-        If p Is Nothing Then
-          p = New Programacion()
-          informe.Programacion = p
-        End If
-        p.Informe = informe
-        p.Hora = programacionInformeDialog.PickerHora.Value.ToString("HH:mm")
-        p.Lunes = programacionInformeDialog.CbLunes.Checked
-        p.Martes = programacionInformeDialog.CbMartes.Checked
-        p.Miercoles = programacionInformeDialog.CbMiercoles.Checked
-        p.Jueves = programacionInformeDialog.CbJueves.Checked
-        p.Viernes = programacionInformeDialog.CbViernes.Checked
-        p.Sabado = programacionInformeDialog.CbSabado.Checked
-        p.Domingo = programacionInformeDialog.CbDomingo.Checked
-        db.SaveChanges()
-      End If
-    End If
+    Dim formProgramaciones As FormProgramaciones = New FormProgramaciones()
+    formProgramaciones.ShowDialog(Me)
   End Sub
 
   Private Sub BtnConfiguracion_Click(sender As Object, e As EventArgs) Handles BtnConfiguracion.Click
@@ -117,17 +105,22 @@ Public Class FormPrincipal
 
   Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
     MinimizarEnAreaNotificacion()
+    If db IsNot Nothing Then db.Dispose()
     TimerMinuto.Start()
   End Sub
 
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    For Each p In db.Programaciones
-      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
-        p.ObtenerHoraProgramada() = Now.Hour AndAlso
-        p.ObtenerMinutoProgramado() = Now.Minute Then
-        EjecutarInforme(p.Informe)
-      End If
-    Next
+    Console.WriteLine("Tick: {0}", DateTime.Now.ToLongTimeString)
+    Using db = New SupraReportsContext()
+      For Each p In db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking()
+        If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+          p.ObtenerHoraProgramada() = Now.Hour AndAlso
+          p.ObtenerMinutoProgramado() = Now.Minute Then
+          EjecutarInforme(p.Informe)
+        End If
+      Next
+    End Using
+    Console.WriteLine("Tock: {0}", DateTime.Now.ToLongTimeString)
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -140,6 +133,11 @@ Public Class FormPrincipal
     Show()
     IconoNotificacion.Visible = False
     TimerMinuto.Stop()
+
+    If informe IsNot Nothing Then
+      db = New SupraReportsContext()
+      db.Informes.Attach(informe)
+    End If
   End Sub
 
   Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
@@ -147,13 +145,9 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub CargarInformes()
-    CbInforme.DisplayMember = "Nombre"
-    CbInforme.Items.Clear()
     Using db = New SupraReportsContext()
-      Dim informes As IEnumerable(Of Informe) = db.Informes.ToList()
-      For Each i In informes
-        CbInforme.Items.Add(i)
-      Next
+      InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
+      db.Informes.Load()
     End Using
 
     CbInforme.SelectedItem = Nothing
@@ -187,7 +181,6 @@ Public Class FormPrincipal
     BtnGuardarComo.Enabled = habilitado
     BtnEliminarInforme.Enabled = habilitado
     BtnEjecutar.Enabled = habilitado
-    BtnProgramar.Enabled = habilitado
     BtnAnadirConsulta.Enabled = habilitado
   End Sub
 

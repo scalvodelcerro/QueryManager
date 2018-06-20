@@ -35,14 +35,16 @@ Partial Class FormPrincipal
     Me.BtnAnadirConsulta = New System.Windows.Forms.Button()
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.BtnEjecutar = New System.Windows.Forms.Button()
-    Me.BtnProgramar = New System.Windows.Forms.Button()
     Me.BtnConfiguracion = New System.Windows.Forms.Button()
+    Me.BtnProgramar = New System.Windows.Forms.Button()
     Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
     Me.MenuIconoNotificacion = New System.Windows.Forms.ContextMenuStrip(Me.components)
     Me.MenuIconoNotificacionCancelarProgramaciones = New System.Windows.Forms.ToolStripMenuItem()
     Me.TimerMinuto = New System.Windows.Forms.Timer(Me.components)
     Me.BtnEjecutarProgramaciones = New System.Windows.Forms.Button()
+    Me.InformeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     Me.MenuIconoNotificacion.SuspendLayout()
+    CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -147,6 +149,8 @@ Partial Class FormPrincipal
     '
     'CbInforme
     '
+    Me.CbInforme.DataSource = Me.InformeBindingSource
+    Me.CbInforme.DisplayMember = "Nombre"
     Me.CbInforme.FormattingEnabled = True
     Me.CbInforme.Location = New System.Drawing.Point(63, 11)
     Me.CbInforme.Name = "CbInforme"
@@ -182,22 +186,6 @@ Partial Class FormPrincipal
     Me.ToolTips.SetToolTip(Me.BtnEjecutar, "Ejecutar informe")
     Me.BtnEjecutar.UseVisualStyleBackColor = True
     '
-    'BtnProgramar
-    '
-    Me.BtnProgramar.Enabled = False
-    Me.BtnProgramar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
-    Me.BtnProgramar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
-    Me.BtnProgramar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
-    Me.BtnProgramar.ImageIndex = 5
-    Me.BtnProgramar.ImageList = Me.IconosBotones
-    Me.BtnProgramar.Location = New System.Drawing.Point(540, 9)
-    Me.BtnProgramar.Margin = New System.Windows.Forms.Padding(0)
-    Me.BtnProgramar.Name = "BtnProgramar"
-    Me.BtnProgramar.Size = New System.Drawing.Size(24, 24)
-    Me.BtnProgramar.TabIndex = 15
-    Me.ToolTips.SetToolTip(Me.BtnProgramar, "Programación del informe...")
-    Me.BtnProgramar.UseVisualStyleBackColor = True
-    '
     'BtnConfiguracion
     '
     Me.BtnConfiguracion.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
@@ -212,6 +200,23 @@ Partial Class FormPrincipal
     Me.BtnConfiguracion.TabIndex = 17
     Me.ToolTips.SetToolTip(Me.BtnConfiguracion, "Configuración...")
     Me.BtnConfiguracion.UseVisualStyleBackColor = True
+    '
+    'BtnProgramar
+    '
+    Me.BtnProgramar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.BtnProgramar.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnProgramar.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
+    Me.BtnProgramar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
+    Me.BtnProgramar.ImageIndex = 5
+    Me.BtnProgramar.ImageList = Me.IconosBotones
+    Me.BtnProgramar.Location = New System.Drawing.Point(887, 444)
+    Me.BtnProgramar.Margin = New System.Windows.Forms.Padding(0)
+    Me.BtnProgramar.Name = "BtnProgramar"
+    Me.BtnProgramar.Size = New System.Drawing.Size(141, 26)
+    Me.BtnProgramar.TabIndex = 15
+    Me.BtnProgramar.Text = "Programar informes..."
+    Me.BtnProgramar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+    Me.BtnProgramar.UseVisualStyleBackColor = True
     '
     'IconoNotificacion
     '
@@ -251,6 +256,10 @@ Partial Class FormPrincipal
     Me.BtnEjecutarProgramaciones.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
     Me.BtnEjecutarProgramaciones.UseVisualStyleBackColor = True
     '
+    'InformeBindingSource
+    '
+    Me.InformeBindingSource.DataSource = GetType(SupraReports.Model.Informe)
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -272,6 +281,7 @@ Partial Class FormPrincipal
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"
     Me.MenuIconoNotificacion.ResumeLayout(False)
+    CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -294,4 +304,5 @@ Partial Class FormPrincipal
   Friend WithEvents MenuIconoNotificacion As ContextMenuStrip
   Friend WithEvents MenuIconoNotificacionCancelarProgramaciones As ToolStripMenuItem
   Friend WithEvents BtnConfiguracion As Button
+  Friend WithEvents InformeBindingSource As BindingSource
 End Class

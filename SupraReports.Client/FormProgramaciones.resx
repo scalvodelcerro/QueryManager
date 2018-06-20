@@ -117,40 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="IconosBotones.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="Informe.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ProgramacionBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </metadata>
-  <data name="IconosBotones.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACO
-        BAAAAk1TRnQBSQFMAwEBAAEQAQABEAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
-        ARADAAEBAQABIAYAARAeAAMKAQ0DHQEqAwABARQAAwcBCgMeASsDAgED0AADDQERAkcBTwGDAkMBjwHU
-        AjUBNwFXAwIBAwwAAwoBDQJDAUoBewJPAZAB1gI6ATwBYQMDAQTIAAMNARECSgFSAYoCLAHPAfMCBAHv
-        Af8CNAGpAeUCNQE3AVgDAAEBBAADCgENAkUBTQGAAj0ByAHyAkQB8AH/AlIBuAHpAjoBPAFhAwIBA8QA
-        AigBKQE9AiwB0AH6AgAB9QH/AgAB7QH/AgEB6AH/AhoBtQH2AigBKQE9BAACOwE9AWUCJAHeAf8CMAHn
-        Af8CQQHvAf8CVQH3Af8CWAGUAdgDHwEsxAADFgEfAlEBaQGvAiQB3gH4AgAB7QH/AgAB5gH/AgIB4gH/
-        AioBpgHsAj4BQwFxAhIB0wH/AiAB4QH/AjEB6AH/AkAB7wH/AlgBzwHyAkUBSgF7AwgBC8gAAxoBJAJP
-        AWkBrwIfAe8B/wIAAeYB/wIAAd4B/wIAAdoB/wICAdMB/wIQAdkB/wIgAeAB/wIxAegB/wJHAeQB/wJH
-        AU0BgAMKAQ3QAAMWAR8CTgFkAa8CGAHnAf8CAAHeAf8CAAHVAf8CAAHNAf8CDgHXAf8CIQHgAf8CMAHY
-        Af8COwE9AWUDCgEN3AACSQFzAccCPQHyAf8CbAH9Af8CdQL/Al4B+AH/Ai8B3gH/AkABQwFx3AADCAEL
-        AjsBPQFlAjoB3AH/Am8B+QH/Ao0C/wKIAf4B/wKMAv8CbwH4Af8CRgGqAewDKQE+AwABAdAAAwoBDQJE
-        AUoBfAJCAeAB/wKEAfsB/wKkAv8CgAH2Af8CRAHwAf8CmAH8Af8CowL/AogB+gH/AkEBvAH2AjUBNwFY
-        AwIBA8gAAwgBCwJFAUoBfAJYAcoB8gKhAfwB/wK7Av8CkwH4Af8CMAHZAf8CRQFyAccCTgHtAf8CsAH9
-        Af8CugL/AqYB/QH/Al0BrgHlAjUBNwFYAwABAcQAAigBKQE9Ak8BzAH6ArEC/wLRAv8CswH6Af8CNwHc
-        Af8COwE9AWUEAAJNAWMBrwJvAfMB/wLMAf4B/wLRAv8CvwL/AmABkwHWAx4BK8QAAxgBIgJSAXIBuQKL
-        AeYB+gLCAfwB/wJVAccB8gJDAUoBfAMIAQsEAAMWAR8CTgFoAa8ChgHfAfgC0AH9Af8ChAHUAfMCSQFP
-        AYMDCgEOyAADHgErAlABcgG5Ak0BxQH5AkMBSgF8AwoBDQwAAxoBJAJPAWgBrwJrAdEB/AJKAVIBigMN
-        ARHQAAMYASICKAEpAT0DCAELFAADFgEfAykBPgMNARH/AMkAAUIBTQE+BwABPgMAASgDAAFAAwABEAMA
-        AQEBAAEBBQABgBcAA/8BAALjBgACwQYAAoAGAAKABgABgAcAAcABAQYAAeABAwYAAfgBDwYAAeABAwYA
-        AcABAQYAAYAHAAKABgACgAYAAsEGAALjBgAC/wYACw==
-</value>
-  </data>
-  <metadata name="ToolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>149, 17</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>62</value>
   </metadata>
 </root>

@@ -104,10 +104,10 @@
       <DependentUpon>FormPrincipal.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormProgramacionInforme.Designer.vb">
-      <DependentUpon>FormProgramacionInforme.vb</DependentUpon>
+    <Compile Include="FormProgramaciones.Designer.vb">
+      <DependentUpon>FormProgramaciones.vb</DependentUpon>
     </Compile>
-    <Compile Include="FormProgramacionInforme.vb">
+    <Compile Include="FormProgramaciones.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -145,8 +145,8 @@
     <EmbeddedResource Include="FormPrincipal.resx">
       <DependentUpon>FormPrincipal.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormProgramacionInforme.resx">
-      <DependentUpon>FormProgramacionInforme.vb</DependentUpon>
+    <EmbeddedResource Include="FormProgramaciones.resx">
+      <DependentUpon>FormProgramaciones.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -172,6 +172,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="SupraReports.Model.Informe.datasource" />
+    <None Include="SupraReports.Model.Programacion.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SupraReports.Model\SupraReports.Model.vbproj">

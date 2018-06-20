@@ -16,6 +16,5 @@
 
   Private Sub BtnAceptar_Click(sender As Object, e As EventArgs) Handles BtnAceptar.Click
     My.Settings.RutaDirectorioSalida = TbDirectorioSalida.Text
-    Close()
   End Sub
 End Class

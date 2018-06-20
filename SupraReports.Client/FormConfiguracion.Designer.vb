@@ -48,6 +48,7 @@ Partial Class FormConfiguracion
     '
     'BtnAceptar
     '
+    Me.BtnAceptar.DialogResult = System.Windows.Forms.DialogResult.OK
     Me.BtnAceptar.Location = New System.Drawing.Point(176, 47)
     Me.BtnAceptar.Name = "BtnAceptar"
     Me.BtnAceptar.Size = New System.Drawing.Size(75, 23)

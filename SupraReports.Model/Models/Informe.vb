@@ -14,12 +14,14 @@
   End Function
 
   Protected Sub New()
+    Programacion = New Programacion()
   End Sub
 
   Private Sub New(nombre As String, usuario As String)
+    Me.New()
     Me.Nombre = nombre
     Me.Usuario = usuario
-    _Consultas = New List(Of Consulta)()
+    Consultas = New List(Of Consulta)()
   End Sub
 
   Public Property Id As Integer
@@ -27,9 +29,14 @@
   Public Property Usuario As String
   Public Overridable Property Programacion As Programacion
   Public Overridable Property Consultas As ICollection(Of Consulta)
+  Public Overridable Property Ejecuciones As ICollection(Of Ejecucion)
 
   Public Sub AnadirConsulta(consulta As Consulta)
     consulta.Informe = Me
     Consultas.Add(consulta)
   End Sub
+
+  Public Overrides Function ToString() As String
+    Return Nombre
+  End Function
 End Class

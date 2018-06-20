@@ -22,17 +22,24 @@ Public Class SupraReportsContext
     ConfigurarEntity(modelBuilder.Entity(Of Consulta)())
     ConfigurarEntity(modelBuilder.Entity(Of Parametro)())
     ConfigurarEntity(modelBuilder.Entity(Of Programacion)())
+    ConfigurarEntity(modelBuilder.Entity(Of Ejecucion)())
   End Sub
 
-  Private Shared Sub ConfigurarEntity(entityInforme As ModelConfiguration.EntityTypeConfiguration(Of Informe))
+  Private Shared Sub ConfigurarEntity(entityInforme As EntityTypeConfiguration(Of Informe))
     entityInforme.
       ToTable("Informe").
+      HasKey(Function(x) x.Id)
+    entityInforme.
       HasMany(Function(x) x.Consultas).
       WithRequired(Function(x) x.Informe).
       Map(Function(m) m.MapKey("Id_Informe")).
       WillCascadeOnDelete()
     entityInforme.
-      HasOptional(Function(x) x.Programacion).
+      HasRequired(Function(x) x.Programacion).
+      WithRequiredPrincipal(Function(x) x.Informe).
+      WillCascadeOnDelete()
+    entityInforme.
+      HasMany(Function(x) x.Ejecuciones).
       WithRequired(Function(x) x.Informe).
       Map(Function(m) m.MapKey("Id_Informe")).
       WillCascadeOnDelete()
@@ -48,7 +55,7 @@ Public Class SupraReportsContext
         HasMaxLength(50)
   End Sub
 
-  Private Shared Sub ConfigurarEntity(entityConsulta As ModelConfiguration.EntityTypeConfiguration(Of Consulta))
+  Private Shared Sub ConfigurarEntity(entityConsulta As EntityTypeConfiguration(Of Consulta))
     entityConsulta.
       ToTable("Consulta").
       HasMany(Function(x) x.Parametros).
@@ -67,7 +74,7 @@ Public Class SupraReportsContext
         HasColumnName("Texto_Sql")
   End Sub
 
-  Private Shared Sub ConfigurarEntity(entityParametro As ModelConfiguration.EntityTypeConfiguration(Of Parametro))
+  Private Shared Sub ConfigurarEntity(entityParametro As EntityTypeConfiguration(Of Parametro))
     entityParametro.
       ToTable("Parametro")
     entityParametro.
@@ -81,13 +88,25 @@ Public Class SupraReportsContext
 
   Private Sub ConfigurarEntity(entityProgramacion As EntityTypeConfiguration(Of Programacion))
     entityProgramacion.
-      ToTable("Programacion")
+      ToTable("Informe").
+      HasKey(Function(x) x.Id)
     entityProgramacion.
       Property(Function(p) p.Id).
-        HasColumnName("Id_Programacion").
-        HasColumnOrder(1)
+        HasColumnName("Id_Informe")
     entityProgramacion.
       Property(Function(p) p.Hora).
+        HasMaxLength(10)
+  End Sub
+
+  Private Shared Sub ConfigurarEntity(entityEjecucion As EntityTypeConfiguration(Of Ejecucion))
+    entityEjecucion.
+      ToTable("Ejecucion")
+    entityEjecucion.
+      Property(Function(p) p.Id).
+        HasColumnName("Id_Ejecucion").
+        HasColumnOrder(1)
+    entityEjecucion.
+      Property(Function(p) p.HoraProgramada).
         HasMaxLength(10)
   End Sub
 End Class

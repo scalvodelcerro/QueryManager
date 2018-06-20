@@ -24,7 +24,6 @@ Partial Class EditarConsultaUserControl
   Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container()
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EditarConsultaUserControl))
-    Me.LblResult = New System.Windows.Forms.Label()
     Me.TbSqlResult = New System.Windows.Forms.RichTextBox()
     Me.PnlParametros = New System.Windows.Forms.FlowLayoutPanel()
     Me.LblParametros = New System.Windows.Forms.Label()
@@ -35,15 +34,6 @@ Partial Class EditarConsultaUserControl
     Me.IconosBotones = New System.Windows.Forms.ImageList(Me.components)
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.SuspendLayout()
-    '
-    'LblResult
-    '
-    Me.LblResult.AutoSize = True
-    Me.LblResult.Location = New System.Drawing.Point(699, 8)
-    Me.LblResult.Name = "LblResult"
-    Me.LblResult.Size = New System.Drawing.Size(71, 13)
-    Me.LblResult.TabIndex = 19
-    Me.LblResult.Text = "Sql resultado:"
     '
     'TbSqlResult
     '
@@ -127,7 +117,6 @@ Partial Class EditarConsultaUserControl
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.AutoSize = True
     Me.Controls.Add(Me.BtnEliminarConsulta)
-    Me.Controls.Add(Me.LblResult)
     Me.Controls.Add(Me.TbSqlResult)
     Me.Controls.Add(Me.PnlParametros)
     Me.Controls.Add(Me.LblParametros)
@@ -137,12 +126,11 @@ Partial Class EditarConsultaUserControl
     Me.MaximumSize = New System.Drawing.Size(1030, 0)
     Me.MinimumSize = New System.Drawing.Size(1030, 166)
     Me.Name = "EditarConsultaUserControl"
-    Me.Size = New System.Drawing.Size(1030, 166)
+    Me.Size = New System.Drawing.Size(1030, 173)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
   End Sub
-  Friend WithEvents LblResult As Label
   Friend WithEvents TbSqlResult As RichTextBox
   Friend WithEvents PnlParametros As FlowLayoutPanel
   Friend WithEvents LblParametros As Label
