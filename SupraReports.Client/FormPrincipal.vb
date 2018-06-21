@@ -8,6 +8,7 @@ Public Class FormPrincipal
   Private horaComienzoLanzarInformes As Date
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    db = New SupraReportsContext()
     CargarInformes()
   End Sub
 
@@ -15,8 +16,7 @@ Public Class FormPrincipal
     If Not CbInforme.Focused OrElse ValidarCambioInforme() Then
       PnlEditar.Controls.Clear()
       If CbInforme.SelectedItem IsNot Nothing Then
-        If db IsNot Nothing Then db.Dispose()
-        db = New SupraReportsContext()
+        DescartarCambios()
         informe = db.Informes.Find(CbInforme.SelectedItem.Id)
         CargarConsultas()
       End If
@@ -31,15 +31,10 @@ Public Class FormPrincipal
         informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
-        If db IsNot Nothing Then db.Dispose()
-        db = New SupraReportsContext()
+        DescartarCambios()
         db.Informes.Add(informe)
         db.SaveChanges()
-
-        InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
-        db.Informes.Load()
-
-        CbInforme.SelectedItem = informe
+        CargarInformes()
         CargarConsultas()
         EstablecerEstadoBotones()
       End If
@@ -58,8 +53,7 @@ Public Class FormPrincipal
         Dim nuevoInforme = Informe.Copiar(informe)
         nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
-        If db IsNot Nothing Then db.Dispose()
-        db = New SupraReportsContext()
+        DescartarCambios()
         db.Informes.Add(nuevoInforme)
         db.SaveChanges()
 
@@ -107,7 +101,6 @@ Public Class FormPrincipal
 
   Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
     MinimizarEnAreaNotificacion()
-    If db IsNot Nothing Then db.Dispose()
     horaComienzoLanzarInformes = DateTime.Now
     LanzarProgramacionesDe(horaComienzoLanzarInformes)
     TimerSegundo.Start()
@@ -132,10 +125,6 @@ Public Class FormPrincipal
     IconoNotificacion.Visible = False
     TimerSegundo.Stop()
 
-    If informe IsNot Nothing Then
-      db = New SupraReportsContext()
-      db.Informes.Attach(informe)
-    End If
     Dim formEjecuciones As FormResumenEjecuciones = New FormResumenEjecuciones(horaComienzoLanzarInformes)
     formEjecuciones.ShowDialog(Me)
   End Sub
@@ -145,13 +134,12 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub CargarInformes()
-    Using db = New SupraReportsContext()
-      InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
-      db.Informes.Load()
-    End Using
-
-    CbInforme.SelectedItem = Nothing
-    CbInforme.Text = String.Empty
+    InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
+    db.Informes.Load()
+    CbInforme.SelectedItem = informe
+    If informe Is Nothing Then
+      CbInforme.Text = String.Empty
+    End If
   End Sub
 
   Private Sub CargarConsultas()
@@ -204,11 +192,8 @@ Public Class FormPrincipal
       End Try
     End Using
     If guardarEjecucion Then
-      Using db As New SupraReportsContext()
-        db.Informes.Attach(informe)
-        informe.AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", errores), outputFile)
-        db.SaveChanges()
-      End Using
+      db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", errores), outputFile)
+      db.SaveChanges()
     End If
   End Sub
 
@@ -243,6 +228,7 @@ Public Class FormPrincipal
           db.SaveChanges()
           Return True
         Case DialogResult.No
+          DescartarCambios()
           Return True
         Case DialogResult.Cancel
           Return False
@@ -250,6 +236,12 @@ Public Class FormPrincipal
     End If
     Return True
   End Function
+
+  Private Sub DescartarCambios()
+    If db IsNot Nothing Then db.Dispose()
+    db = New SupraReportsContext()
+    If informe IsNot Nothing Then db.Informes.Attach(informe)
+  End Sub
 
   Private Function HayCambiosSinGuardar() As Boolean
     Return db.ChangeTracker.HasChanges
