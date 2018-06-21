@@ -13,7 +13,10 @@ Public Class FormResumenEjecuciones
   Private Sub FormResumenEjecuciones_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     Using db = New SupraReportsContext()
       EjecucionBindingSource.DataSource = db.Ejecuciones.Local.ToBindingList()
-      db.Ejecuciones.Include("Informe").Where(Function(x) x.HoraEjecucion >= horaDesde).Load()
+      'TODO FIXME - Se añade un margen de un par de segundos porque se producen descuadres (precisión de fecha en BBDD??)
+      Dim horaLimite = horaDesde.AddSeconds(-2)
+      Dim query = db.Ejecuciones.Include("Informe").Where(Function(x) x.HoraEjecucion >= horaLimite)
+      query.Load()
     End Using
   End Sub
 
