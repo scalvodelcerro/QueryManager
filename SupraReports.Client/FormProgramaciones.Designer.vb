@@ -26,6 +26,9 @@ Partial Class FormProgramaciones
     Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Me.GridProgramaciones = New System.Windows.Forms.DataGridView()
+    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+    Me.BtnAceptar = New System.Windows.Forms.Button()
+    Me.BtnCancelar = New System.Windows.Forms.Button()
     Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.Informe = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.DataGridViewTextBoxColumn2 = New SupraReports.Client.DateTimePickerColumn()
@@ -36,15 +39,14 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn5 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn6 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn7 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-    Me.BtnAceptar = New System.Windows.Forms.Button()
-    Me.BtnCancelar = New System.Windows.Forms.Button()
     CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).BeginInit()
     CType(Me.ProgramacionBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
     '
     'GridProgramaciones
     '
+    Me.GridProgramaciones.AllowUserToAddRows = False
+    Me.GridProgramaciones.AllowUserToDeleteRows = False
     Me.GridProgramaciones.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -54,8 +56,36 @@ Partial Class FormProgramaciones
     Me.GridProgramaciones.DataSource = Me.ProgramacionBindingSource
     Me.GridProgramaciones.Location = New System.Drawing.Point(12, 12)
     Me.GridProgramaciones.Name = "GridProgramaciones"
-    Me.GridProgramaciones.Size = New System.Drawing.Size(483, 255)
+    Me.GridProgramaciones.RowHeadersVisible = False
+    Me.GridProgramaciones.Size = New System.Drawing.Size(444, 255)
     Me.GridProgramaciones.TabIndex = 1
+    '
+    'ProgramacionBindingSource
+    '
+    Me.ProgramacionBindingSource.AllowNew = False
+    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
+    '
+    'BtnAceptar
+    '
+    Me.BtnAceptar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+    Me.BtnAceptar.DialogResult = System.Windows.Forms.DialogResult.OK
+    Me.BtnAceptar.Location = New System.Drawing.Point(156, 273)
+    Me.BtnAceptar.Name = "BtnAceptar"
+    Me.BtnAceptar.Size = New System.Drawing.Size(75, 23)
+    Me.BtnAceptar.TabIndex = 2
+    Me.BtnAceptar.Text = "Aceptar"
+    Me.BtnAceptar.UseVisualStyleBackColor = True
+    '
+    'BtnCancelar
+    '
+    Me.BtnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+    Me.BtnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel
+    Me.BtnCancelar.Location = New System.Drawing.Point(237, 273)
+    Me.BtnCancelar.Name = "BtnCancelar"
+    Me.BtnCancelar.Size = New System.Drawing.Size(75, 23)
+    Me.BtnCancelar.TabIndex = 3
+    Me.BtnCancelar.Text = "Cancelar"
+    Me.BtnCancelar.UseVisualStyleBackColor = True
     '
     'DataGridViewTextBoxColumn1
     '
@@ -75,6 +105,7 @@ Partial Class FormProgramaciones
     Me.Informe.HeaderText = "Informe"
     Me.Informe.Name = "Informe"
     Me.Informe.ReadOnly = True
+    Me.Informe.Width = 200
     '
     'DataGridViewTextBoxColumn2
     '
@@ -83,7 +114,6 @@ Partial Class FormProgramaciones
     Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
     Me.DataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
     Me.DataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-    Me.DataGridViewTextBoxColumn2.Width = 200
     '
     'DataGridViewCheckBoxColumn1
     '
@@ -141,43 +171,18 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn7.Name = "DataGridViewCheckBoxColumn7"
     Me.DataGridViewCheckBoxColumn7.Width = 20
     '
-    'ProgramacionBindingSource
-    '
-    Me.ProgramacionBindingSource.AllowNew = False
-    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
-    '
-    'BtnAceptar
-    '
-    Me.BtnAceptar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-    Me.BtnAceptar.DialogResult = System.Windows.Forms.DialogResult.OK
-    Me.BtnAceptar.Location = New System.Drawing.Point(175, 273)
-    Me.BtnAceptar.Name = "BtnAceptar"
-    Me.BtnAceptar.Size = New System.Drawing.Size(75, 23)
-    Me.BtnAceptar.TabIndex = 2
-    Me.BtnAceptar.Text = "Aceptar"
-    Me.BtnAceptar.UseVisualStyleBackColor = True
-    '
-    'BtnCancelar
-    '
-    Me.BtnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-    Me.BtnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel
-    Me.BtnCancelar.Location = New System.Drawing.Point(256, 273)
-    Me.BtnCancelar.Name = "BtnCancelar"
-    Me.BtnCancelar.Size = New System.Drawing.Size(75, 23)
-    Me.BtnCancelar.TabIndex = 3
-    Me.BtnCancelar.Text = "Cancelar"
-    Me.BtnCancelar.UseVisualStyleBackColor = True
-    '
     'FormProgramaciones
     '
     Me.AcceptButton = Me.BtnAceptar
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.CancelButton = Me.BtnCancelar
-    Me.ClientSize = New System.Drawing.Size(507, 308)
+    Me.ClientSize = New System.Drawing.Size(468, 308)
+    Me.ControlBox = False
     Me.Controls.Add(Me.BtnCancelar)
     Me.Controls.Add(Me.BtnAceptar)
     Me.Controls.Add(Me.GridProgramaciones)
+    Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
     Me.Name = "FormProgramaciones"
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
     Me.Text = "Programaciones de informes"
