@@ -107,6 +107,13 @@ Public Class SupraReportsContext
         HasColumnOrder(1)
     entityEjecucion.
       Property(Function(p) p.HoraProgramada).
+        HasColumnName("Hora_Programada").
         HasMaxLength(10)
+    entityEjecucion.
+      Property(Function(p) p.HoraEjecucion).
+        HasColumnName("Hora_Ejecucion")
+    entityEjecucion.
+      Property(Function(p) p.RutaFichero).
+        HasColumnName("RutaFihero")
   End Sub
 End Class
