@@ -1,4 +1,6 @@
 ﻿Imports System.Data.Entity
+Imports System.IO
+Imports System.Text
 Imports SupraReports.Model
 
 Public Class FormPrincipal
@@ -90,7 +92,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    EjecutarInforme(informe)
+    EjecutarInforme(informe, False)
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
@@ -111,16 +113,17 @@ Public Class FormPrincipal
 
   Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
     Console.WriteLine("Tick: {0}", DateTime.Now.ToLongTimeString)
+    Dim programaciones As IEnumerable(Of Programacion)
     Using db = New SupraReportsContext()
-      For Each p In db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking()
-        If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
+      programaciones = db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking().ToList()
+    End Using
+    For Each p In programaciones
+      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
           p.ObtenerHoraProgramada() = Now.Hour AndAlso
           p.ObtenerMinutoProgramado() = Now.Minute Then
-          EjecutarInforme(p.Informe)
-        End If
-      Next
-    End Using
-    Console.WriteLine("Tock: {0}", DateTime.Now.ToLongTimeString)
+        EjecutarInforme(p.Informe, True)
+      End If
+    Next
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -164,16 +167,43 @@ Public Class FormPrincipal
     End If
   End Sub
 
-  Private Sub EjecutarInforme(informe As Informe)
-    Using excelBuilder = New ExcelBuilder(informe.Nombre, My.Settings.RutaDirectorioSalida)
+  Private Sub EjecutarInforme(informe As Informe, guardarEjecucion As Boolean)
+    Dim outputFile As String = ComponerRutaSalidaInforme(informe)
+    Dim errores As ICollection(Of String) = New List(Of String)()
+    Using excelBuilder = New ExcelBuilder(outputFile)
       For Each consulta In informe.Consultas
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
-          excelBuilder.AddWorksheet(consulta.Nombre, dao.EjecutarSelect(consulta.ComponerSqlResultado()))
+          Dim contents As IDataReader = Nothing
+          Try
+            contents = dao.EjecutarSelect(consulta.ComponerSqlResultado())
+          Catch ex As Exception
+            errores.Add(ex.Message)
+          End Try
+          Try
+            excelBuilder.AddWorksheet(consulta.Nombre, contents)
+          Catch ex As Exception
+            errores.Add(ex.Message)
+          End Try
         End Using
       Next
       excelBuilder.Build()
     End Using
+    If guardarEjecucion Then
+      Using db As New SupraReportsContext()
+        db.Informes.Attach(informe)
+        informe.AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", errores), outputFile)
+        db.SaveChanges()
+      End Using
+    End If
   End Sub
+
+  Private Shared Function ComponerRutaSalidaInforme(informe As Informe) As String
+    Dim folderPath = My.Settings.RutaDirectorioSalida
+    If String.IsNullOrEmpty(folderPath) Then folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+    Dim fileName As String = String.Format("{0}_{1}.xlsx", informe.Nombre.Replace(" ", "_"), DateTime.Now.ToString("yyyyMMdd_HHmmss"))
+    Dim outputFile As String = Path.Combine(folderPath, fileName)
+    Return outputFile
+  End Function
 
   Private Sub EstablecerEstadoBotones()
     Dim habilitado As Boolean = informe IsNot Nothing

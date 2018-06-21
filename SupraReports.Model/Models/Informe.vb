@@ -14,14 +14,14 @@
   End Function
 
   Protected Sub New()
-    Programacion = New Programacion()
   End Sub
 
   Private Sub New(nombre As String, usuario As String)
-    Me.New()
     Me.Nombre = nombre
     Me.Usuario = usuario
+    Programacion = New Programacion()
     Consultas = New List(Of Consulta)()
+    Ejecuciones = New List(Of Ejecucion)()
   End Sub
 
   Public Property Id As Integer
@@ -39,4 +39,8 @@
   Public Overrides Function ToString() As String
     Return Nombre
   End Function
+
+  Public Sub AnadirEjecucion(horaProgramada As String, resultado As String, rutaFichero As String)
+    Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
+  End Sub
 End Class

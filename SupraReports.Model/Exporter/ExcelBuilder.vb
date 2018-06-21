@@ -4,13 +4,7 @@ Imports OfficeOpenXml
 Public Class ExcelBuilder
   Implements IDisposable
 
-  Public Sub New(fileNamePrefix As String)
-    Me.New(fileNamePrefix, Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
-  End Sub
-
-  Public Sub New(fileNamePrefix As String, folderPath As String)
-    Dim fileName As String = String.Format("{0}_{1}.xlsx", fileNamePrefix.Replace(" ", "_"), Now.ToString("yyyyMMdd_HHmmss"))
-    Dim outputFile As String = Path.Combine(folderPath, fileName)
+  Public Sub New(outputFile As String)
     excel = New ExcelPackage(New FileInfo(outputFile))
   End Sub
 
@@ -26,7 +20,9 @@ Public Class ExcelBuilder
   End Function
 
   Public Sub Build()
-    excel.Save()
+    If excel.Workbook.Worksheets.Any() Then
+      excel.Save()
+    End If
   End Sub
 
 #Region "IDisposable"

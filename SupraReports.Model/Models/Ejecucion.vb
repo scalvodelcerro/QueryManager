@@ -3,9 +3,13 @@
     Return New Ejecucion(horaProgramada, resultado, rutaFichero, informe)
   End Function
 
+  Protected Sub New()
+    HoraEjecucion = DateTime.Now
+  End Sub
+
   Private Sub New(horaProgramada As String, resultado As String, rutaFichero As String, informe As Informe)
+    Me.New()
     Me.HoraProgramada = horaProgramada
-    Me.HoraEjecucion = Now
     Me.Resultado = resultado
     Me.RutaFichero = rutaFichero
     Me.Informe = informe
