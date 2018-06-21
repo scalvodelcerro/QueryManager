@@ -115,6 +115,6 @@ Public Class SupraReportsContext
         HasColumnName("Hora_Ejecucion")
     entityEjecucion.
       Property(Function(p) p.RutaFichero).
-        HasColumnName("RutaFihero")
+        HasColumnName("Ruta_Fichero")
   End Sub
 End Class

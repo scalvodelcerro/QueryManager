@@ -38,6 +38,9 @@
     For Each p In Parametros
       textResult = textResult.Replace(String.Format("#{0}#", p.Nombre), p.Valor)
     Next
+    For Each p In Parametro.ParametrosDefecto.Todos
+      textResult = textResult.Replace(String.Format("#{0}#", p), Parametro.ParametrosDefecto.ObtenerValor(p))
+    Next
     Return textResult
   End Function
 

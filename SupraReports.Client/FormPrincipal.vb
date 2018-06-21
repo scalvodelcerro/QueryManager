@@ -28,10 +28,10 @@ Public Class FormPrincipal
     If ValidarCambioInforme() Then
       Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
       If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-        informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
-        informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
         DescartarCambios()
+        informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
+        informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
         db.Informes.Add(informe)
         db.SaveChanges()
 

@@ -40,7 +40,9 @@ Public Class EditarConsultaUserControl
         db.Parametros.Remove(p)
       Next
       For Each nombreParametro In nombresParametros.Except(_consulta.Parametros.Select(Function(x) x.Nombre))
-        _consulta.AnadirParametro(nombreParametro, String.Empty)
+        If Not Parametro.ParametrosDefecto.Todos.Contains(nombreParametro) Then
+          _consulta.AnadirParametro(nombreParametro, String.Empty)
+        End If
       Next
       CargarParametros()
       TbSqlResult.Text = String.Empty
@@ -80,6 +82,17 @@ Public Class EditarConsultaUserControl
       AddHandler control.TbValor.LostFocus, AddressOf OnDeseleccionarParametro
       AddHandler control.TbValor.TextChanged, AddressOf OnCambiarValorParametro
       PnlParametros.Controls.Add(control)
+    Next
+    For Each p In Parametro.ParametrosDefecto.Todos
+      If _consulta.TextoSql.ToUpper().Contains(String.Format("#{0}#", p.ToUpper)) Then
+        Dim control As ValorParametroUserControl =
+          New ValorParametroUserControl(p, Parametro.ParametrosDefecto.ObtenerValor(p))
+        control.TbValor.ReadOnly = True
+        AddHandler control.TbValor.GotFocus, AddressOf OnSeleccionarParametro
+        AddHandler control.TbValor.LostFocus, AddressOf OnDeseleccionarParametro
+        AddHandler control.TbValor.TextChanged, AddressOf OnCambiarValorParametro
+        PnlParametros.Controls.Add(control)
+      End If
     Next
   End Sub
 
