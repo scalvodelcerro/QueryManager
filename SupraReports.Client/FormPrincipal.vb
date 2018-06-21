@@ -1,11 +1,11 @@
 ﻿Imports System.Data.Entity
 Imports System.IO
-Imports System.Text
 Imports SupraReports.Model
 
 Public Class FormPrincipal
   Private db As SupraReportsContext
   Private informe As Informe
+  Private horaComienzoLanzarInformes As Date
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     CargarInformes()
@@ -108,6 +108,7 @@ Public Class FormPrincipal
   Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
     MinimizarEnAreaNotificacion()
     If db IsNot Nothing Then db.Dispose()
+    horaComienzoLanzarInformes = DateTime.Now
     TimerMinuto.Start()
   End Sub
 
@@ -141,6 +142,8 @@ Public Class FormPrincipal
       db = New SupraReportsContext()
       db.Informes.Attach(informe)
     End If
+    Dim formEjecuciones As FormResumenEjecuciones = New FormResumenEjecuciones(horaComienzoLanzarInformes)
+    formEjecuciones.ShowDialog(Me)
   End Sub
 
   Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize

@@ -24,8 +24,7 @@ Partial Class FormResumenEjecuciones
   Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container()
     Me.GridEjecuciones = New System.Windows.Forms.DataGridView()
-    Me.BtnCancelar = New System.Windows.Forms.Button()
-    Me.BtnAceptar = New System.Windows.Forms.Button()
+    Me.BtnCerrar = New System.Windows.Forms.Button()
     Me.EjecucionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -52,30 +51,19 @@ Partial Class FormResumenEjecuciones
     Me.GridEjecuciones.Name = "GridEjecuciones"
     Me.GridEjecuciones.ReadOnly = True
     Me.GridEjecuciones.RowHeadersVisible = False
-    Me.GridEjecuciones.Size = New System.Drawing.Size(803, 277)
+    Me.GridEjecuciones.Size = New System.Drawing.Size(904, 277)
     Me.GridEjecuciones.TabIndex = 1
     '
-    'BtnCancelar
+    'BtnCerrar
     '
-    Me.BtnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-    Me.BtnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel
-    Me.BtnCancelar.Location = New System.Drawing.Point(416, 295)
-    Me.BtnCancelar.Name = "BtnCancelar"
-    Me.BtnCancelar.Size = New System.Drawing.Size(75, 23)
-    Me.BtnCancelar.TabIndex = 5
-    Me.BtnCancelar.Text = "Cancelar"
-    Me.BtnCancelar.UseVisualStyleBackColor = True
-    '
-    'BtnAceptar
-    '
-    Me.BtnAceptar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-    Me.BtnAceptar.DialogResult = System.Windows.Forms.DialogResult.OK
-    Me.BtnAceptar.Location = New System.Drawing.Point(335, 295)
-    Me.BtnAceptar.Name = "BtnAceptar"
-    Me.BtnAceptar.Size = New System.Drawing.Size(75, 23)
-    Me.BtnAceptar.TabIndex = 4
-    Me.BtnAceptar.Text = "Aceptar"
-    Me.BtnAceptar.UseVisualStyleBackColor = True
+    Me.BtnCerrar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+    Me.BtnCerrar.DialogResult = System.Windows.Forms.DialogResult.Cancel
+    Me.BtnCerrar.Location = New System.Drawing.Point(427, 295)
+    Me.BtnCerrar.Name = "BtnCerrar"
+    Me.BtnCerrar.Size = New System.Drawing.Size(75, 23)
+    Me.BtnCerrar.TabIndex = 5
+    Me.BtnCerrar.Text = "Cerrar"
+    Me.BtnCerrar.UseVisualStyleBackColor = True
     '
     'EjecucionBindingSource
     '
@@ -127,19 +115,20 @@ Partial Class FormResumenEjecuciones
     Me.DataGridViewTextBoxColumn4.HeaderText = "Resultado"
     Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
     Me.DataGridViewTextBoxColumn4.ReadOnly = True
-    Me.DataGridViewTextBoxColumn4.Width = 200
+    Me.DataGridViewTextBoxColumn4.Width = 300
     '
     'FormResumenEjecuciones
     '
-    Me.AcceptButton = Me.BtnAceptar
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.CancelButton = Me.BtnCancelar
-    Me.ClientSize = New System.Drawing.Size(827, 330)
-    Me.Controls.Add(Me.BtnCancelar)
-    Me.Controls.Add(Me.BtnAceptar)
+    Me.CancelButton = Me.BtnCerrar
+    Me.ClientSize = New System.Drawing.Size(928, 330)
+    Me.ControlBox = False
+    Me.Controls.Add(Me.BtnCerrar)
     Me.Controls.Add(Me.GridEjecuciones)
+    Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
     Me.Name = "FormResumenEjecuciones"
+    Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
     Me.Text = "FormResumenEjecuciones"
     CType(Me.GridEjecuciones, System.ComponentModel.ISupportInitialize).EndInit()
     CType(Me.EjecucionBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
@@ -149,8 +138,7 @@ Partial Class FormResumenEjecuciones
 
   Friend WithEvents EjecucionBindingSource As BindingSource
   Friend WithEvents GridEjecuciones As DataGridView
-  Friend WithEvents BtnCancelar As Button
-  Friend WithEvents BtnAceptar As Button
+  Friend WithEvents BtnCerrar As Button
   Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
   Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
   Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
