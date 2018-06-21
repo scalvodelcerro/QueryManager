@@ -96,15 +96,6 @@
     <Compile Include="DAO\GeneralDao.vb" />
     <Compile Include="EFContext\SupraReportsContext.vb" />
     <Compile Include="Exporter\ExcelBuilder.vb" />
-    <Compile Include="Migrations\201806201407599_InitialCreate.Designer.vb">
-      <DependentUpon>201806201407599_InitialCreate.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806201407599_InitialCreate.vb" />
-    <Compile Include="Migrations\201806201715155_AddTableEjecucion.Designer.vb">
-      <DependentUpon>201806201715155_AddTableEjecucion.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806201715155_AddTableEjecucion.vb" />
-    <Compile Include="Migrations\Configuration.vb" />
     <Compile Include="Models\Consulta.vb" />
     <Compile Include="Models\Ejecucion.vb" />
     <Compile Include="Models\Informe.vb" />
@@ -127,12 +118,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806201407599_InitialCreate.resx">
-      <DependentUpon>201806201407599_InitialCreate.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806201715155_AddTableEjecucion.resx">
-      <DependentUpon>201806201715155_AddTableEjecucion.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
