@@ -16,8 +16,8 @@ Public Class FormPrincipal
     If Not CbInforme.Focused OrElse ValidarCambioInforme() Then
       PnlEditar.Controls.Clear()
       If CbInforme.SelectedItem IsNot Nothing Then
+        informe = CbInforme.SelectedItem
         DescartarCambios()
-        informe = db.Informes.Find(CbInforme.SelectedItem.Id)
         CargarConsultas()
       End If
       EstablecerEstadoBotones()
@@ -34,6 +34,7 @@ Public Class FormPrincipal
         DescartarCambios()
         db.Informes.Add(informe)
         db.SaveChanges()
+
         CargarInformes()
         CargarConsultas()
         EstablecerEstadoBotones()
@@ -53,14 +54,15 @@ Public Class FormPrincipal
         Dim nuevoInforme = Informe.Copiar(informe)
         nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
 
+        informe = nuevoInforme
+
         DescartarCambios()
-        db.Informes.Add(nuevoInforme)
+        db.Informes.Add(informe)
         db.SaveChanges()
 
-        CbInforme.Items.Add(nuevoInforme)
-        CbInforme.SelectedItem = nuevoInforme
-        informe = nuevoInforme
+        CargarInformes()
         CargarConsultas()
+        EstablecerEstadoBotones()
       End If
     End If
   End Sub
