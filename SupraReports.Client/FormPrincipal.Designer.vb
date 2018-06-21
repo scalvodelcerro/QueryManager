@@ -194,6 +194,7 @@ Partial Class FormPrincipal
     '
     'BtnConfiguracion
     '
+    Me.BtnConfiguracion.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.BtnConfiguracion.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnConfiguracion.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonShadow
     Me.BtnConfiguracion.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
