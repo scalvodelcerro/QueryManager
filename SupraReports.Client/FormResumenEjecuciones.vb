@@ -13,7 +13,7 @@ Public Class FormResumenEjecuciones
   Private Sub FormResumenEjecuciones_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     Using db = New SupraReportsContext()
       EjecucionBindingSource.DataSource = db.Ejecuciones.Local.ToBindingList()
-      db.Ejecuciones.Include("Informe").Where(Function(x) x.HoraEjecucion > horaDesde).Load()
+      db.Ejecuciones.Include("Informe").Where(Function(x) x.HoraEjecucion >= horaDesde).Load()
     End Using
   End Sub
 

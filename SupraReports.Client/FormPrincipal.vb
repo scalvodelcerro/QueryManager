@@ -109,22 +109,16 @@ Public Class FormPrincipal
     MinimizarEnAreaNotificacion()
     If db IsNot Nothing Then db.Dispose()
     horaComienzoLanzarInformes = DateTime.Now
-    TimerMinuto.Start()
+    LanzarProgramacionesDe(horaComienzoLanzarInformes)
+    TimerSegundo.Start()
   End Sub
 
-  Private Sub TimerMinuto_Tick(sender As Object, e As EventArgs) Handles TimerMinuto.Tick
-    Console.WriteLine("Tick: {0}", DateTime.Now.ToLongTimeString)
-    Dim programaciones As IEnumerable(Of Programacion)
-    Using db = New SupraReportsContext()
-      programaciones = db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking().ToList()
-    End Using
-    For Each p In programaciones
-      If p.ObtenerDiasProgramados().Contains(Now.DayOfWeek) AndAlso
-          p.ObtenerHoraProgramada() = Now.Hour AndAlso
-          p.ObtenerMinutoProgramado() = Now.Minute Then
-        EjecutarInforme(p.Informe, True)
-      End If
-    Next
+  Private Sub TimerSegundo_Tick(sender As Object, e As EventArgs) Handles TimerSegundo.Tick
+    Dim horaEjecucion = DateTime.Now
+    If horaEjecucion.Second = 0 Then
+      Console.WriteLine("Tick: {0}", horaEjecucion.ToLongTimeString)
+      LanzarProgramacionesDe(horaEjecucion)
+    End If
   End Sub
 
   Private Sub FormPrincipal_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -136,7 +130,7 @@ Public Class FormPrincipal
   Private Sub MenuIconoNotificacionCancelarProgramaciones_Click(sender As Object, e As EventArgs) Handles MenuIconoNotificacionCancelarProgramaciones.Click
     Show()
     IconoNotificacion.Visible = False
-    TimerMinuto.Stop()
+    TimerSegundo.Stop()
 
     If informe IsNot Nothing Then
       db = New SupraReportsContext()
@@ -170,6 +164,20 @@ Public Class FormPrincipal
     End If
   End Sub
 
+  Private Sub LanzarProgramacionesDe(horaEjecucion As Date)
+    Dim programaciones As IEnumerable(Of Programacion)
+    Using db = New SupraReportsContext()
+      programaciones = db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking().ToList()
+    End Using
+    For Each p In programaciones.AsParallel()
+      If p.ObtenerDiasProgramados().Contains(horaEjecucion.DayOfWeek) AndAlso
+        p.ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
+        p.ObtenerMinutoProgramado() = horaEjecucion.Minute Then
+        EjecutarInforme(p.Informe, True)
+      End If
+    Next
+  End Sub
+
   Private Sub EjecutarInforme(informe As Informe, guardarEjecucion As Boolean)
     Dim outputFile As String = ComponerRutaSalidaInforme(informe)
     Dim errores As ICollection(Of String) = New List(Of String)()
@@ -189,7 +197,11 @@ Public Class FormPrincipal
           End Try
         End Using
       Next
-      excelBuilder.Build()
+      Try
+        excelBuilder.Build()
+      Catch ex As Exception
+        errores.Add(ex.Message)
+      End Try
     End Using
     If guardarEjecucion Then
       Using db As New SupraReportsContext()

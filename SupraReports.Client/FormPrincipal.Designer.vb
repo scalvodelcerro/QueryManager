@@ -32,6 +32,7 @@ Partial Class FormPrincipal
     Me.BtnNuevo = New System.Windows.Forms.Button()
     Me.LblInforme = New System.Windows.Forms.Label()
     Me.CbInforme = New System.Windows.Forms.ComboBox()
+    Me.InformeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     Me.BtnAnadirConsulta = New System.Windows.Forms.Button()
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
     Me.BtnEjecutar = New System.Windows.Forms.Button()
@@ -40,11 +41,10 @@ Partial Class FormPrincipal
     Me.IconoNotificacion = New System.Windows.Forms.NotifyIcon(Me.components)
     Me.MenuIconoNotificacion = New System.Windows.Forms.ContextMenuStrip(Me.components)
     Me.MenuIconoNotificacionCancelarProgramaciones = New System.Windows.Forms.ToolStripMenuItem()
-    Me.TimerMinuto = New System.Windows.Forms.Timer(Me.components)
+    Me.TimerSegundo = New System.Windows.Forms.Timer(Me.components)
     Me.BtnEjecutarProgramaciones = New System.Windows.Forms.Button()
-    Me.InformeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-    Me.MenuIconoNotificacion.SuspendLayout()
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+    Me.MenuIconoNotificacion.SuspendLayout()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -149,6 +149,8 @@ Partial Class FormPrincipal
     '
     'CbInforme
     '
+    Me.CbInforme.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+    Me.CbInforme.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
     Me.CbInforme.DataSource = Me.InformeBindingSource
     Me.CbInforme.DisplayMember = "Nombre"
     Me.CbInforme.FormattingEnabled = True
@@ -156,6 +158,10 @@ Partial Class FormPrincipal
     Me.CbInforme.Name = "CbInforme"
     Me.CbInforme.Size = New System.Drawing.Size(344, 21)
     Me.CbInforme.TabIndex = 7
+    '
+    'InformeBindingSource
+    '
+    Me.InformeBindingSource.DataSource = GetType(SupraReports.Model.Informe)
     '
     'BtnAnadirConsulta
     '
@@ -239,9 +245,9 @@ Partial Class FormPrincipal
     Me.MenuIconoNotificacionCancelarProgramaciones.Size = New System.Drawing.Size(209, 22)
     Me.MenuIconoNotificacionCancelarProgramaciones.Text = "Cancelar programaciones"
     '
-    'TimerMinuto
+    'TimerSegundo
     '
-    Me.TimerMinuto.Interval = 60000
+    Me.TimerSegundo.Interval = 1000
     '
     'BtnEjecutarProgramaciones
     '
@@ -255,10 +261,6 @@ Partial Class FormPrincipal
     Me.BtnEjecutarProgramaciones.Text = "Lanzar programaciones"
     Me.BtnEjecutarProgramaciones.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
     Me.BtnEjecutarProgramaciones.UseVisualStyleBackColor = True
-    '
-    'InformeBindingSource
-    '
-    Me.InformeBindingSource.DataSource = GetType(SupraReports.Model.Informe)
     '
     'FormPrincipal
     '
@@ -280,8 +282,8 @@ Partial Class FormPrincipal
     Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
     Me.Name = "FormPrincipal"
     Me.Text = "Informes Supra"
-    Me.MenuIconoNotificacion.ResumeLayout(False)
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+    Me.MenuIconoNotificacion.ResumeLayout(False)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -299,7 +301,7 @@ Partial Class FormPrincipal
   Friend WithEvents BtnEjecutar As Button
   Friend WithEvents BtnProgramar As Button
   Friend WithEvents IconoNotificacion As NotifyIcon
-  Friend WithEvents TimerMinuto As Timer
+  Friend WithEvents TimerSegundo As Timer
   Friend WithEvents BtnEjecutarProgramaciones As Button
   Friend WithEvents MenuIconoNotificacion As ContextMenuStrip
   Friend WithEvents MenuIconoNotificacionCancelarProgramaciones As ToolStripMenuItem
