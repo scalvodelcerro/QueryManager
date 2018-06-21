@@ -10,6 +10,7 @@ Public Class SupraReportsContext
   Public Property Consultas As DbSet(Of Consulta)
   Public Property Parametros As DbSet(Of Parametro)
   Public Property Programaciones As DbSet(Of Programacion)
+  Public Property Ejecuciones As DbSet(Of Ejecucion)
 
   Public Sub New()
     MyBase.New("name=SupraReports")

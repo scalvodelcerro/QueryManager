@@ -110,6 +110,12 @@
     <Compile Include="FormProgramaciones.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormResumenEjecuciones.Designer.vb">
+      <DependentUpon>FormResumenEjecuciones.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormResumenEjecuciones.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -148,6 +154,9 @@
     <EmbeddedResource Include="FormProgramaciones.resx">
       <DependentUpon>FormProgramaciones.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormResumenEjecuciones.resx">
+      <DependentUpon>FormResumenEjecuciones.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -172,6 +181,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="SupraReports.Model.Ejecucion.datasource" />
     <None Include="SupraReports.Model.Informe.datasource" />
     <None Include="SupraReports.Model.Programacion.datasource" />
   </ItemGroup>
