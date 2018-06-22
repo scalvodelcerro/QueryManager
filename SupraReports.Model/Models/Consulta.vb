@@ -5,7 +5,6 @@
     Return consulta
   End Function
 
-
   Public Shared Function Copiar(consulta As Consulta) As Consulta
     Dim copiaConsulta As Consulta = Crear(consulta.Nombre, consulta.TextoSql)
     For Each p In consulta.Parametros
@@ -38,8 +37,8 @@
     For Each p In Parametros
       textResult = textResult.Replace(String.Format("#{0}#", p.Nombre), p.Valor)
     Next
-    For Each p In Parametro.ParametrosDefecto.Todos
-      textResult = textResult.Replace(String.Format("#{0}#", p), Parametro.ParametrosDefecto.ObtenerValor(p))
+    For Each p In Parametro.ParametroDefecto.Todos
+      textResult = textResult.Replace(String.Format("#{0}#", p.NombreParametro), p.Valor)
     Next
     Return textResult
   End Function
