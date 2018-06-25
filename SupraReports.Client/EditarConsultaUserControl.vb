@@ -56,8 +56,10 @@ Public Class EditarConsultaUserControl
   End Sub
 
   Private Sub BtnEliminarConsulta_Click(sender As Object, e As EventArgs) Handles BtnEliminarConsulta.Click
-    db.Consultas.Remove(_consulta)
-    Dispose()
+    If MessageBox.Show(Me, "¿Desea eliminar la consulta?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+      db.Consultas.Remove(_consulta)
+      Dispose()
+    End If
   End Sub
 
   Private Sub OnCambiarValorParametro(sender As Object, e As EventArgs)

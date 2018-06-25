@@ -77,14 +77,16 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
-    db.Programaciones.Remove(informe.Programacion)
-    db.Informes.Remove(informe)
-    db.SaveChanges()
+    If MessageBox.Show(Me, "¿Desea eliminar el informe?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+      db.Programaciones.Remove(informe.Programacion)
+      db.Informes.Remove(informe)
+      db.SaveChanges()
 
-    informe = Nothing
-    CargarInformes()
-    CargarConsultas()
-    EstablecerEstadoBotones()
+      informe = Nothing
+      CargarInformes()
+      CargarConsultas()
+      EstablecerEstadoBotones()
+    End If
   End Sub
 
   Private Sub BtnAnadirConsulta_Click(sender As Object, e As EventArgs) Handles BtnAnadirConsulta.Click
