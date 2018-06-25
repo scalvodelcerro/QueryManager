@@ -17,16 +17,21 @@ Public Class FormPrincipal
     Randomize()
     Text = titulos(Math.Floor((titulos.Count) * Rnd()))
 
-    db = New SupraReportsContext()
+    CargarProyectos()
     CargarInformes()
+    DeseleccionarInforme()
+  End Sub
+
+  Private Sub CbProyecto_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbProyecto.SelectedIndexChanged
+    CargarInformes()
+    DeseleccionarInforme()
   End Sub
 
   Private Sub CbInforme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbInforme.SelectedIndexChanged
     If Not CbInforme.Focused OrElse ValidarCambioInforme() Then
       PnlEditar.Controls.Clear()
       If CbInforme.SelectedItem IsNot Nothing Then
-        informe = CbInforme.SelectedItem
-        DescartarCambios()
+        SeleccionarInforme()
         CargarConsultas()
       End If
       EstablecerEstadoBotones()
@@ -37,14 +42,13 @@ Public Class FormPrincipal
     If ValidarCambioInforme() Then
       Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
       If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-
-        DescartarCambios()
         informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
-        db.Informes.Add(informe)
-        db.SaveChanges()
+
+        CrearInforme()
 
         CargarInformes()
+        CbInforme.SelectedItem = CbInforme.Items.Cast(Of Informe).SingleOrDefault(Function(x) x.Id = informe.Id)
         CargarConsultas()
         EstablecerEstadoBotones()
       End If
@@ -56,34 +60,33 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
-    If ValidarCambioInforme() Then
-      Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
+    'If ValidarCambioInforme() Then
+    Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
+    If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
+      DescartarCambios()
 
-      If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-        Dim nuevoInforme = Informe.Copiar(informe)
-        nuevoInforme.Nombre = nuevoInformeDialog.TbNombre.Text
+      informe = Informe.Copiar(informe)
+      informe.Nombre = nuevoInformeDialog.TbNombre.Text
 
-        informe = nuevoInforme
+      CrearInforme()
 
-        DescartarCambios()
-        db.Informes.Add(informe)
-        db.SaveChanges()
-
-        CargarInformes()
-        CargarConsultas()
-        EstablecerEstadoBotones()
-      End If
+      CargarInformes()
+      CbInforme.SelectedItem = CbInforme.Items.Cast(Of Informe).SingleOrDefault(Function(x) x.Id = informe.Id)
+      CargarConsultas()
+      EstablecerEstadoBotones()
     End If
+    'End If
   End Sub
+
+
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
     If MessageBox.Show(Me, "¿Desea eliminar el informe?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
-      db.Programaciones.Remove(informe.Programacion)
-      db.Informes.Remove(informe)
-      db.SaveChanges()
+      EliminarInforme()
+      GuardarCambios()
 
-      informe = Nothing
       CargarInformes()
+      DeseleccionarInforme()
       CargarConsultas()
       EstablecerEstadoBotones()
     End If
@@ -146,13 +149,28 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
   End Sub
 
+  Private Sub CargarProyectos()
+    Using db = New SupraReportsContext()
+      Dim proyectos As ComponentModel.BindingList(Of Proyecto) = db.Proyectos.Local.ToBindingList()
+      proyectos.Insert(0, Proyecto.Crear("--"))
+      ProyectoBindingSource.DataSource = proyectos
+
+      db.Proyectos.Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).Load()
+    End Using
+    CbProyecto.SelectedItem = Nothing
+    CbInforme.Text = String.Empty
+  End Sub
+
   Private Sub CargarInformes()
-    InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
-    db.Informes.Load()
-    CbInforme.SelectedItem = informe
-    If informe Is Nothing Then
-      CbInforme.Text = String.Empty
-    End If
+    Using db = New SupraReportsContext()
+      InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
+      If CbProyecto.SelectedIndex <= 0 Then
+        db.Informes.Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).Load()
+      Else
+        Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
+        db.Informes.Where(Function(x) x.Proyecto.Id = idProyecto).Load()
+      End If
+    End Using
   End Sub
 
   Private Sub CargarConsultas()
@@ -177,6 +195,32 @@ Public Class FormPrincipal
         EjecutarInforme(p.Informe, True)
       End If
     Next
+  End Sub
+
+  Private Sub CrearInforme()
+    db = New SupraReportsContext()
+    If CbProyecto.SelectedIndex > 0 Then
+      informe.Proyecto = db.Proyectos.Find(CbProyecto.SelectedItem.Id)
+    End If
+    db.Informes.Add(informe)
+    db.SaveChanges()
+  End Sub
+
+  Private Sub SeleccionarInforme()
+    db = New SupraReportsContext()
+    Dim idInforme As Integer = CbInforme.SelectedItem.Id
+    informe = db.Informes.SingleOrDefault(Function(x) x.Id = idInforme)
+  End Sub
+
+  Private Sub DeseleccionarInforme()
+    CbInforme.SelectedIndex = -1
+    informe = Nothing
+  End Sub
+
+  Private Sub EliminarInforme()
+    db.Programaciones.Remove(informe.Programacion)
+    db.Informes.Remove(informe)
+    informe = Nothing
   End Sub
 
   Private Sub EjecutarInforme(informe As Informe, guardarEjecucion As Boolean)
@@ -215,12 +259,15 @@ Public Class FormPrincipal
   End Function
 
   Private Sub EstablecerEstadoBotones()
-    Dim habilitado As Boolean = informe IsNot Nothing
-    BtnGuardar.Enabled = habilitado
-    BtnGuardarComo.Enabled = habilitado
-    BtnEliminarInforme.Enabled = habilitado
-    BtnEjecutar.Enabled = habilitado
-    BtnAnadirConsulta.Enabled = habilitado
+    Dim informeCargado As Boolean = informe IsNot Nothing
+    Dim sinProyecto As Boolean = CbProyecto.SelectedIndex <= 0
+    Dim esUsuarioAdministrador As Boolean = True
+    BtnNuevo.Enabled = sinProyecto OrElse esUsuarioAdministrador
+    BtnGuardar.Enabled = informeCargado
+    BtnGuardarComo.Enabled = informeCargado
+    BtnEliminarInforme.Enabled = informeCargado
+    BtnEjecutar.Enabled = informeCargado
+    BtnAnadirConsulta.Enabled = informeCargado
   End Sub
 
   Private Sub MinimizarEnAreaNotificacion()
@@ -234,10 +281,11 @@ Public Class FormPrincipal
       Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
       Select Case resultado
         Case DialogResult.Yes
-          db.SaveChanges()
+          GuardarCambios()
           Return True
         Case DialogResult.No
           DescartarCambios()
+          DeseleccionarInforme()
           Return True
         Case DialogResult.Cancel
           Return False
@@ -246,13 +294,17 @@ Public Class FormPrincipal
     Return True
   End Function
 
+  Private Sub GuardarCambios()
+    db.SaveChanges()
+    If db IsNot Nothing Then db.Dispose()
+  End Sub
+
   Private Sub DescartarCambios()
     If db IsNot Nothing Then db.Dispose()
-    db = New SupraReportsContext()
-    If informe IsNot Nothing Then db.Informes.Attach(informe)
   End Sub
 
   Private Function HayCambiosSinGuardar() As Boolean
-    Return db.ChangeTracker.HasChanges
+    Return db Is Nothing OrElse db.ChangeTracker.HasChanges
   End Function
+
 End Class

@@ -43,8 +43,12 @@ Partial Class FormPrincipal
     Me.MenuIconoNotificacionCancelarProgramaciones = New System.Windows.Forms.ToolStripMenuItem()
     Me.TimerSegundo = New System.Windows.Forms.Timer(Me.components)
     Me.BtnEjecutarProgramaciones = New System.Windows.Forms.Button()
+    Me.LblProyecto = New System.Windows.Forms.Label()
+    Me.CbProyecto = New System.Windows.Forms.ComboBox()
+    Me.ProyectoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.MenuIconoNotificacion.SuspendLayout()
+    CType(Me.ProyectoBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
     '
     'IconosBotones
@@ -68,7 +72,7 @@ Partial Class FormPrincipal
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.PnlEditar.AutoScroll = True
     Me.PnlEditar.AutoSize = True
-    Me.PnlEditar.Location = New System.Drawing.Point(12, 39)
+    Me.PnlEditar.Location = New System.Drawing.Point(12, 66)
     Me.PnlEditar.MaximumSize = New System.Drawing.Size(1152, 399)
     Me.PnlEditar.Name = "PnlEditar"
     Me.PnlEditar.Size = New System.Drawing.Size(1152, 10)
@@ -82,7 +86,7 @@ Partial Class FormPrincipal
     Me.BtnEliminarInforme.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnEliminarInforme.ImageIndex = 3
     Me.BtnEliminarInforme.ImageList = Me.IconosBotones
-    Me.BtnEliminarInforme.Location = New System.Drawing.Point(482, 9)
+    Me.BtnEliminarInforme.Location = New System.Drawing.Point(489, 36)
     Me.BtnEliminarInforme.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnEliminarInforme.Name = "BtnEliminarInforme"
     Me.BtnEliminarInforme.Size = New System.Drawing.Size(24, 24)
@@ -98,7 +102,7 @@ Partial Class FormPrincipal
     Me.BtnGuardarComo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnGuardarComo.ImageIndex = 2
     Me.BtnGuardarComo.ImageList = Me.IconosBotones
-    Me.BtnGuardarComo.Location = New System.Drawing.Point(458, 9)
+    Me.BtnGuardarComo.Location = New System.Drawing.Point(465, 36)
     Me.BtnGuardarComo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardarComo.Name = "BtnGuardarComo"
     Me.BtnGuardarComo.Size = New System.Drawing.Size(24, 24)
@@ -114,7 +118,7 @@ Partial Class FormPrincipal
     Me.BtnGuardar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnGuardar.ImageIndex = 1
     Me.BtnGuardar.ImageList = Me.IconosBotones
-    Me.BtnGuardar.Location = New System.Drawing.Point(434, 9)
+    Me.BtnGuardar.Location = New System.Drawing.Point(441, 36)
     Me.BtnGuardar.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardar.Name = "BtnGuardar"
     Me.BtnGuardar.Size = New System.Drawing.Size(24, 24)
@@ -129,7 +133,7 @@ Partial Class FormPrincipal
     Me.BtnNuevo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnNuevo.ImageIndex = 0
     Me.BtnNuevo.ImageList = Me.IconosBotones
-    Me.BtnNuevo.Location = New System.Drawing.Point(410, 9)
+    Me.BtnNuevo.Location = New System.Drawing.Point(417, 36)
     Me.BtnNuevo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnNuevo.Name = "BtnNuevo"
     Me.BtnNuevo.Size = New System.Drawing.Size(24, 24)
@@ -141,7 +145,7 @@ Partial Class FormPrincipal
     'LblInforme
     '
     Me.LblInforme.AutoSize = True
-    Me.LblInforme.Location = New System.Drawing.Point(12, 15)
+    Me.LblInforme.Location = New System.Drawing.Point(12, 42)
     Me.LblInforme.Name = "LblInforme"
     Me.LblInforme.Size = New System.Drawing.Size(45, 13)
     Me.LblInforme.TabIndex = 8
@@ -154,7 +158,7 @@ Partial Class FormPrincipal
     Me.CbInforme.DataSource = Me.InformeBindingSource
     Me.CbInforme.DisplayMember = "Nombre"
     Me.CbInforme.FormattingEnabled = True
-    Me.CbInforme.Location = New System.Drawing.Point(63, 11)
+    Me.CbInforme.Location = New System.Drawing.Point(70, 39)
     Me.CbInforme.Name = "CbInforme"
     Me.CbInforme.Size = New System.Drawing.Size(344, 21)
     Me.CbInforme.TabIndex = 7
@@ -168,9 +172,9 @@ Partial Class FormPrincipal
     Me.BtnAnadirConsulta.Enabled = False
     Me.BtnAnadirConsulta.ImageIndex = 7
     Me.BtnAnadirConsulta.ImageList = Me.IconosBotones
-    Me.BtnAnadirConsulta.Location = New System.Drawing.Point(12, 55)
+    Me.BtnAnadirConsulta.Location = New System.Drawing.Point(12, 82)
     Me.BtnAnadirConsulta.Name = "BtnAnadirConsulta"
-    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(104, 26)
+    Me.BtnAnadirConsulta.Size = New System.Drawing.Size(115, 26)
     Me.BtnAnadirConsulta.TabIndex = 13
     Me.BtnAnadirConsulta.Text = "Añadir consulta"
     Me.BtnAnadirConsulta.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -184,7 +188,7 @@ Partial Class FormPrincipal
     Me.BtnEjecutar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnEjecutar.ImageIndex = 4
     Me.BtnEjecutar.ImageList = Me.IconosBotones
-    Me.BtnEjecutar.Location = New System.Drawing.Point(516, 9)
+    Me.BtnEjecutar.Location = New System.Drawing.Point(523, 36)
     Me.BtnEjecutar.Margin = New System.Windows.Forms.Padding(10, 0, 0, 0)
     Me.BtnEjecutar.Name = "BtnEjecutar"
     Me.BtnEjecutar.Size = New System.Drawing.Size(24, 24)
@@ -263,11 +267,38 @@ Partial Class FormPrincipal
     Me.BtnEjecutarProgramaciones.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
     Me.BtnEjecutarProgramaciones.UseVisualStyleBackColor = True
     '
+    'LblProyecto
+    '
+    Me.LblProyecto.AutoSize = True
+    Me.LblProyecto.Location = New System.Drawing.Point(12, 15)
+    Me.LblProyecto.Name = "LblProyecto"
+    Me.LblProyecto.Size = New System.Drawing.Size(52, 13)
+    Me.LblProyecto.TabIndex = 19
+    Me.LblProyecto.Text = "Proyecto:"
+    '
+    'CbProyecto
+    '
+    Me.CbProyecto.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+    Me.CbProyecto.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
+    Me.CbProyecto.DataSource = Me.ProyectoBindingSource
+    Me.CbProyecto.DisplayMember = "Nombre"
+    Me.CbProyecto.FormattingEnabled = True
+    Me.CbProyecto.Location = New System.Drawing.Point(70, 12)
+    Me.CbProyecto.Name = "CbProyecto"
+    Me.CbProyecto.Size = New System.Drawing.Size(344, 21)
+    Me.CbProyecto.TabIndex = 18
+    '
+    'ProyectoBindingSource
+    '
+    Me.ProyectoBindingSource.DataSource = GetType(SupraReports.Model.Proyecto)
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 481)
+    Me.Controls.Add(Me.LblProyecto)
+    Me.Controls.Add(Me.CbProyecto)
     Me.Controls.Add(Me.BtnConfiguracion)
     Me.Controls.Add(Me.BtnEjecutarProgramaciones)
     Me.Controls.Add(Me.BtnProgramar)
@@ -285,6 +316,7 @@ Partial Class FormPrincipal
     Me.Text = "Navegador del Entorno Supra con Salida de Informes Excel"
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     Me.MenuIconoNotificacion.ResumeLayout(False)
+    CType(Me.ProyectoBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -308,4 +340,7 @@ Partial Class FormPrincipal
   Friend WithEvents MenuIconoNotificacionCancelarProgramaciones As ToolStripMenuItem
   Friend WithEvents BtnConfiguracion As Button
   Friend WithEvents InformeBindingSource As BindingSource
+  Friend WithEvents LblProyecto As Label
+  Friend WithEvents CbProyecto As ComboBox
+  Friend WithEvents ProyectoBindingSource As BindingSource
 End Class

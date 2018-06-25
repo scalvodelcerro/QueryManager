@@ -193,6 +193,7 @@
     <None Include="SupraReports.Model.Ejecucion.datasource" />
     <None Include="SupraReports.Model.Informe.datasource" />
     <None Include="SupraReports.Model.Programacion.datasource" />
+    <None Include="SupraReports.Model.Proyecto.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SupraReports.Model\SupraReports.Model.vbproj">
