@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports OfficeOpenXml
 
 Public Class ExcelBuilder
@@ -15,6 +16,20 @@ Public Class ExcelBuilder
     Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
     If contents IsNot Nothing Then
       worksheet.Cells("A1").LoadFromDataReader(contents, True, worksheet.Name, Table.TableStyles.Medium10)
+    End If
+    Return Me
+  End Function
+
+  Public Function AddWorksheet(worksheetName As String, contents As IEnumerable(Of Exception)) As ExcelBuilder
+    If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
+    Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
+    If contents IsNot Nothing Then
+      Dim mi As MemberInfo() = GetType(Exception).GetProperties().
+        Where(Function(pi) pi.Name = "Message").
+        Select(Function(pi) CType(pi, MemberInfo)).
+        ToArray()
+
+      worksheet.Cells("A1").LoadFromCollection(contents, True, Table.TableStyles.Medium10, Nothing, mi)
     End If
     Return Me
   End Function

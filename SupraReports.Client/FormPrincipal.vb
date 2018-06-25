@@ -181,31 +181,27 @@ Public Class FormPrincipal
 
   Private Sub EjecutarInforme(informe As Informe, guardarEjecucion As Boolean)
     Dim outputFile As String = ComponerRutaSalidaInforme(informe)
-    Dim errores As ICollection(Of String) = New List(Of String)()
+    Dim erroresInforme As List(Of String) = New List(Of String)()
     Using excelBuilder = New ExcelBuilder(outputFile)
       For Each consulta In informe.Consultas
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
           Dim contents As IDataReader = Nothing
           Try
             contents = dao.EjecutarSelect(consulta.ComponerSqlResultado())
-          Catch ex As Exception
-            errores.Add(ex.Message)
-          End Try
-          Try
             excelBuilder.AddWorksheet(consulta.Nombre, contents)
           Catch ex As Exception
-            errores.Add(ex.Message)
+            excelBuilder.AddWorksheet(consulta.Nombre, {ex})
           End Try
         End Using
       Next
       Try
         excelBuilder.Build()
       Catch ex As Exception
-        errores.Add(ex.Message)
+        erroresInforme.Add(ex.Message)
       End Try
     End Using
     If guardarEjecucion Then
-      db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", errores), outputFile)
+      db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", erroresInforme), outputFile)
       db.SaveChanges()
     End If
   End Sub
