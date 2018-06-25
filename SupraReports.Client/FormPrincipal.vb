@@ -60,7 +60,6 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnGuardarComo_Click(sender As Object, e As EventArgs) Handles BtnGuardarComo.Click
-    'If ValidarCambioInforme() Then
     Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
     If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
       DescartarCambios()
@@ -75,10 +74,7 @@ Public Class FormPrincipal
       CargarConsultas()
       EstablecerEstadoBotones()
     End If
-    'End If
   End Sub
-
-
 
   Private Sub BtnEliminarInforme_Click(sender As Object, e As EventArgs) Handles BtnEliminarInforme.Click
     If MessageBox.Show(Me, "¿Desea eliminar el informe?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
@@ -282,6 +278,7 @@ Public Class FormPrincipal
       Select Case resultado
         Case DialogResult.Yes
           GuardarCambios()
+          DeseleccionarInforme()
           Return True
         Case DialogResult.No
           DescartarCambios()
