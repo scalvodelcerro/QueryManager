@@ -5,66 +5,82 @@ Public Class SuggestionRichTextBox
     InitializeComponent()
   End Sub
 
-  Public Property Suggestions As Collection(Of String)
+  Public Property Sugerencias As Collection(Of String)
     Get
-      Return _suggestions
+      Return _sugerencias
     End Get
     Set(value As Collection(Of String))
-      _suggestions = value
-      LbSuggestions.Items.Clear()
-      LbSuggestions.Items.AddRange(_suggestions.ToArray())
+      _sugerencias = value
+      LbSugerencias.Items.Clear()
+      LbSugerencias.Items.AddRange(_sugerencias.ToArray())
     End Set
   End Property
-  Private _suggestions As Collection(Of String) = New Collection(Of String)()
+  Private _sugerencias As Collection(Of String) = New Collection(Of String)()
 
   Private Sub SuggestionRichTextBox_ParentChanged(sender As Object, e As EventArgs) Handles MyBase.ParentChanged
-    Parent.Controls.Add(LbSuggestions)
+    Parent.Controls.Add(LbSugerencias)
   End Sub
 
   Private Sub SuggestionRichTextBox_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-    If e.KeyCode = Keys.Down And LbSuggestions.Visible Then
-      LbSuggestions.Focus()
-      LbSuggestions.SelectedIndex = 0
+    If e.KeyCode = Keys.Down And LbSugerencias.Visible Then
+      LbSugerencias.Focus()
+      LbSugerencias.SelectedIndex = 0
       e.Handled = True
     End If
   End Sub
 
   Private Sub SuggestionRichTextBox_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
     If e.KeyCode <> Keys.Back Then
-      ShowSuggestionList()
+      MostrarListadoSugerencias()
     End If
   End Sub
 
-  Private Sub LbSuggestions_KeyDown(sender As Object, e As KeyEventArgs) Handles LbSuggestions.KeyDown
+  Private Sub LbSuggestions_KeyDown(sender As Object, e As KeyEventArgs) Handles LbSugerencias.KeyDown
     If e.KeyCode = Keys.Enter Then
-      InsertText()
+      InsertarSugerencia()
     End If
   End Sub
 
-  Private Sub LbSuggestions_KeyDown(sender As Object, e As MouseEventArgs) Handles LbSuggestions.MouseDoubleClick
-    InsertText()
+  Private Sub LbSuggestions_KeyDown(sender As Object, e As MouseEventArgs) Handles LbSugerencias.MouseDoubleClick
+    InsertarSugerencia()
   End Sub
 
-  Private Sub InsertText()
+  Private Sub InsertarSugerencia()
     SelectionLength = 0
-    SelectedText = LbSuggestions.SelectedItem
+    SelectedText = LbSugerencias.SelectedItem
     Focus()
-    LbSuggestions.Visible = False
+    LbSugerencias.Visible = False
   End Sub
 
-  Private Sub ShowSuggestionList()
+  Private Sub MostrarListadoSugerencias()
     If SelectionStart > 0 Then
       Dim c = Text(SelectionStart - 1)
       If c = "#"c Then
-        Dim cursorPosition = GetPositionFromCharIndex(SelectionStart)
+        PosicionarListadoSugerencias()
 
-        LbSuggestions.Location = New Point(cursorPosition.X + 10, cursorPosition.Y + 20)
-        LbSuggestions.BringToFront()
-        LbSuggestions.ClearSelected()
-        LbSuggestions.Visible = True
+        LbSugerencias.BringToFront()
+        LbSugerencias.ClearSelected()
+        LbSugerencias.Visible = True
       Else
-        LbSuggestions.Visible = False
+        LbSugerencias.Visible = False
       End If
     End If
+  End Sub
+
+  Private Sub PosicionarListadoSugerencias()
+    Dim cursorPosition = GetPositionFromCharIndex(SelectionStart)
+    Dim x As Integer
+    If Parent IsNot Nothing AndAlso Location.X + cursorPosition.X + LbSugerencias.Width > Parent.Width Then
+      x = Parent.Width - LbSugerencias.Width
+    Else
+      x = cursorPosition.X + Location.X
+    End If
+    Dim y As Integer
+    If Parent IsNot Nothing AndAlso Location.Y + cursorPosition.Y + LbSugerencias.Height > Parent.Height Then
+      y = Parent.Height - LbSugerencias.Height
+    Else
+      y = cursorPosition.Y + Location.Y
+    End If
+    LbSugerencias.Location = New Point(x, y)
   End Sub
 End Class

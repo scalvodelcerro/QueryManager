@@ -39,27 +39,27 @@ Partial Class EditarConsultaUserControl
     '
     Me.TbSqlResult.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.TbSqlResult.HideSelection = False
-    Me.TbSqlResult.Location = New System.Drawing.Point(648, 29)
+    Me.TbSqlResult.Location = New System.Drawing.Point(644, 29)
     Me.TbSqlResult.Name = "TbSqlResult"
     Me.TbSqlResult.ReadOnly = True
-    Me.TbSqlResult.Size = New System.Drawing.Size(379, 134)
+    Me.TbSqlResult.Size = New System.Drawing.Size(383, 137)
     Me.TbSqlResult.TabIndex = 18
     Me.TbSqlResult.Text = ""
     '
     'PnlParametros
     '
     Me.PnlParametros.AutoSize = True
-    Me.PnlParametros.Location = New System.Drawing.Point(392, 48)
+    Me.PnlParametros.Location = New System.Drawing.Point(388, 48)
     Me.PnlParametros.MaximumSize = New System.Drawing.Size(250, 0)
     Me.PnlParametros.MinimumSize = New System.Drawing.Size(250, 115)
     Me.PnlParametros.Name = "PnlParametros"
-    Me.PnlParametros.Size = New System.Drawing.Size(250, 115)
+    Me.PnlParametros.Size = New System.Drawing.Size(250, 118)
     Me.PnlParametros.TabIndex = 17
     '
     'LblParametros
     '
     Me.LblParametros.AutoSize = True
-    Me.LblParametros.Location = New System.Drawing.Point(392, 32)
+    Me.LblParametros.Location = New System.Drawing.Point(385, 32)
     Me.LblParametros.Name = "LblParametros"
     Me.LblParametros.Size = New System.Drawing.Size(60, 13)
     Me.LblParametros.TabIndex = 16
@@ -68,10 +68,10 @@ Partial Class EditarConsultaUserControl
     'TbSql
     '
     Me.TbSql.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.TbSql.Location = New System.Drawing.Point(7, 29)
+    Me.TbSql.Location = New System.Drawing.Point(3, 32)
     Me.TbSql.Name = "TbSql"
     Me.TbSql.Size = New System.Drawing.Size(379, 134)
-    Me.TbSql.Suggestions = CType(resources.GetObject("TbSql.Suggestions"), System.Collections.ObjectModel.Collection(Of String))
+    Me.TbSql.Sugerencias = CType(resources.GetObject("TbSql.Sugerencias"), System.Collections.ObjectModel.Collection(Of String))
     Me.TbSql.TabIndex = 15
     Me.TbSql.Text = ""
     '
@@ -88,7 +88,7 @@ Partial Class EditarConsultaUserControl
     '
     Me.TbNombre.Location = New System.Drawing.Point(61, 3)
     Me.TbNombre.Name = "TbNombre"
-    Me.TbNombre.Size = New System.Drawing.Size(325, 20)
+    Me.TbNombre.Size = New System.Drawing.Size(321, 20)
     Me.TbNombre.TabIndex = 13
     '
     'BtnEliminarConsulta
@@ -98,7 +98,7 @@ Partial Class EditarConsultaUserControl
     Me.BtnEliminarConsulta.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnEliminarConsulta.ImageIndex = 0
     Me.BtnEliminarConsulta.ImageList = Me.IconosBotones
-    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(389, 0)
+    Me.BtnEliminarConsulta.Location = New System.Drawing.Point(385, 0)
     Me.BtnEliminarConsulta.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnEliminarConsulta.Name = "BtnEliminarConsulta"
     Me.BtnEliminarConsulta.Size = New System.Drawing.Size(24, 24)
@@ -123,6 +123,7 @@ Partial Class EditarConsultaUserControl
     Me.Controls.Add(Me.TbSql)
     Me.Controls.Add(Me.LblNombre)
     Me.Controls.Add(Me.TbNombre)
+    Me.Margin = New System.Windows.Forms.Padding(0)
     Me.MaximumSize = New System.Drawing.Size(1030, 0)
     Me.MinimumSize = New System.Drawing.Size(1030, 166)
     Me.Name = "EditarConsultaUserControl"

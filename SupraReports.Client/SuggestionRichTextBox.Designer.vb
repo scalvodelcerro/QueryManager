@@ -22,19 +22,19 @@ Partial Class SuggestionRichTextBox
   ' usando el editor de código.
   <System.Diagnostics.DebuggerStepThrough()> _
   Private Sub InitializeComponent()
-    Me.LbSuggestions = New System.Windows.Forms.ListBox()
+    Me.LbSugerencias = New System.Windows.Forms.ListBox()
     Me.SuspendLayout()
     '
     'LbSuggestions
     '
-    Me.LbSuggestions.FormattingEnabled = True
-    Me.LbSuggestions.Location = New System.Drawing.Point(0, 0)
-    Me.LbSuggestions.MaximumSize = New System.Drawing.Size(100, 100)
-    Me.LbSuggestions.MinimumSize = New System.Drawing.Size(100, 100)
-    Me.LbSuggestions.Name = "LbSuggestions"
-    Me.LbSuggestions.Size = New System.Drawing.Size(100, 100)
-    Me.LbSuggestions.TabIndex = 0
-    Me.LbSuggestions.Visible = False
+    Me.LbSugerencias.FormattingEnabled = True
+    Me.LbSugerencias.Location = New System.Drawing.Point(0, 0)
+    Me.LbSugerencias.MaximumSize = New System.Drawing.Size(100, 100)
+    Me.LbSugerencias.MinimumSize = New System.Drawing.Size(100, 100)
+    Me.LbSugerencias.Name = "LbSuggestions"
+    Me.LbSugerencias.Size = New System.Drawing.Size(100, 100)
+    Me.LbSugerencias.TabIndex = 0
+    Me.LbSugerencias.Visible = False
     '
     'SuggestionRichTextBox
     '
@@ -42,6 +42,6 @@ Partial Class SuggestionRichTextBox
 
   End Sub
 
-  Friend WithEvents LbSuggestions As ListBox
+  Friend WithEvents LbSugerencias As ListBox
 End Class
 
