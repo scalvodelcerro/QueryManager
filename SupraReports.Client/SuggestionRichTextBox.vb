@@ -30,8 +30,10 @@ Public Class SuggestionRichTextBox
   End Sub
 
   Private Sub SuggestionRichTextBox_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
-    If e.KeyCode <> Keys.Back Then
+    If e.KeyCode <> Keys.Back AndAlso DebeMostrarListadoSugerencias() Then
       MostrarListadoSugerencias()
+    Else
+      OcultarListadoSugerencias()
     End If
   End Sub
 
@@ -45,26 +47,19 @@ Public Class SuggestionRichTextBox
     InsertarSugerencia()
   End Sub
 
-  Private Sub InsertarSugerencia()
-    SelectionLength = 0
-    SelectedText = LbSugerencias.SelectedItem
-    Focus()
-    LbSugerencias.Visible = False
-  End Sub
+  Private Function DebeMostrarListadoSugerencias() As Boolean
+    If SelectionStart <= 0 Then Return False
+    Dim c = Text(SelectionStart - 1)
+    If c <> "#"c Then Return False
+    If (Text.Count(Function(x) x = "#"c) Mod 2) = 0 Then Return False
+    Return True
+  End Function
 
   Private Sub MostrarListadoSugerencias()
-    If SelectionStart > 0 Then
-      Dim c = Text(SelectionStart - 1)
-      If c = "#"c Then
-        PosicionarListadoSugerencias()
-
-        LbSugerencias.BringToFront()
-        LbSugerencias.ClearSelected()
-        LbSugerencias.Visible = True
-      Else
-        LbSugerencias.Visible = False
-      End If
-    End If
+    PosicionarListadoSugerencias()
+    LbSugerencias.BringToFront()
+    LbSugerencias.ClearSelected()
+    LbSugerencias.Visible = True
   End Sub
 
   Private Sub PosicionarListadoSugerencias()
@@ -82,5 +77,16 @@ Public Class SuggestionRichTextBox
       y = cursorPosition.Y + Location.Y
     End If
     LbSugerencias.Location = New Point(x, y)
+  End Sub
+
+  Private Sub OcultarListadoSugerencias()
+    LbSugerencias.Visible = False
+  End Sub
+
+  Private Sub InsertarSugerencia()
+    SelectionLength = 0
+    SelectedText = LbSugerencias.SelectedItem
+    Focus()
+    LbSugerencias.Visible = False
   End Sub
 End Class
