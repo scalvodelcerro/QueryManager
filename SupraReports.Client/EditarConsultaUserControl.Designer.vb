@@ -53,7 +53,7 @@ Partial Class EditarConsultaUserControl
     Me.PnlParametros.MaximumSize = New System.Drawing.Size(250, 0)
     Me.PnlParametros.MinimumSize = New System.Drawing.Size(250, 115)
     Me.PnlParametros.Name = "PnlParametros"
-    Me.PnlParametros.Size = New System.Drawing.Size(250, 118)
+    Me.PnlParametros.Size = New System.Drawing.Size(250, 115)
     Me.PnlParametros.TabIndex = 17
     '
     'LblParametros
