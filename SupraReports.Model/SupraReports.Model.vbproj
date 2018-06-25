@@ -100,6 +100,7 @@
     <Compile Include="Models\Ejecucion.vb" />
     <Compile Include="Models\Informe.vb" />
     <Compile Include="Models\Parametro.vb" />
+    <Compile Include="Models\PermisoUsuario.vb" />
     <Compile Include="Models\Programacion.vb" />
     <Compile Include="Models\Proyecto.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

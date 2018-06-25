@@ -17,9 +17,14 @@ Public Class SupraReportsContext
     MyBase.New("name=SupraReports")
     If Not Database.Exists() Then
       Database.Create()
-      Proyectos.Add(Proyecto.Crear("Proyecto 1"))
-      Proyectos.Add(Proyecto.Crear("Proyecto 2"))
-      Proyectos.Add(Proyecto.Crear("Proyecto 3"))
+      Dim proyecto1 = Proyecto.Crear("Proyecto 1")
+      proyecto1.Permisos.Add(New PermisoUsuario("Sergio", True, proyecto1))
+      Proyectos.Add(proyecto1)
+      Dim proyecto2 As Proyecto = Proyecto.Crear("Proyecto 2")
+      Proyectos.Add(proyecto2)
+      Dim proyecto3 As Proyecto = Proyecto.Crear("Proyecto 3")
+      proyecto3.Permisos.Add(New PermisoUsuario("Sergio", False, proyecto3))
+      Proyectos.Add(proyecto3)
       SaveChanges()
     End If
   End Sub
@@ -32,6 +37,7 @@ Public Class SupraReportsContext
     ConfigurarEntity(modelBuilder.Entity(Of Programacion)())
     ConfigurarEntity(modelBuilder.Entity(Of Ejecucion)())
     ConfigurarEntity(modelBuilder.Entity(Of Proyecto)())
+    ConfigurarEntity(modelBuilder.Entity(Of PermisoUsuario)())
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityInforme As EntityTypeConfiguration(Of Informe))
@@ -134,8 +140,22 @@ Public Class SupraReportsContext
     entityProyecto.
       ToTable("Proyecto")
     entityProyecto.
+      HasMany(Function(x) x.Permisos).
+      WithRequired(Function(x) x.Proyecto).
+      HasForeignKey(Function(x) x.IdProyecto).
+      WillCascadeOnDelete()
+    entityProyecto.
       Property(Function(p) p.Id).
         HasColumnName("Id_Proyecto").
         HasColumnOrder(1)
+  End Sub
+
+  Private Shared Sub ConfigurarEntity(entityPermisoUsuario As EntityTypeConfiguration(Of PermisoUsuario))
+    entityPermisoUsuario.
+      ToTable("Permiso_Usuario").
+      HasKey(Function(x) New With {x.IdProyecto, x.Usuario})
+    entityPermisoUsuario.
+      Property(Function(p) p.IdProyecto).
+        HasColumnName("Id_Proyecto")
   End Sub
 End Class
