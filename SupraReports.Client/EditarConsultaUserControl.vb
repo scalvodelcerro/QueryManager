@@ -22,18 +22,23 @@ Public Class EditarConsultaUserControl
       _consulta = value
       TbNombre.Text = _consulta.Nombre
       TbSql.Text = _consulta.TextoSql
+      CbHabilitada.Checked = _consulta.Habilitada
       CargarParametros()
     End Set
   End Property
   Private _consulta As Consulta
 
-  Private Sub EditarConsultaUserControl_Load(sender As Object, e As EventArgs)
+  Private Sub EditarConsultaUserControl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     TbSqlResult.Text = String.Empty
     TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
   End Sub
 
-  Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs)
+  Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
     _consulta.Nombre = TbNombre.Text
+  End Sub
+
+  Private Sub CbHabilitada_CheckedChanged(sender As Object, e As EventArgs) Handles CbHabilitada.CheckedChanged
+    _consulta.Habilitada = CbHabilitada.Checked
   End Sub
 
   Private Sub TbSql_TextChanged(sender As Object, e As EventArgs) Handles TbSql.TextChanged

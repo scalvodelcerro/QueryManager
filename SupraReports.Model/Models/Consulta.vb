@@ -19,12 +19,14 @@
   Private Sub New(nombre As String, textoSql As String)
     Me.Nombre = nombre
     Me.TextoSql = textoSql
+    Habilitada = True
     Parametros = New List(Of Parametro)()
   End Sub
 
   Public Property Id As Integer
   Public Property Nombre As String
   Public Property TextoSql As String
+  Public Property Habilitada As Boolean
   Public Property Informe As Informe
   Public Overridable Property Parametros As ICollection(Of Parametro)
 

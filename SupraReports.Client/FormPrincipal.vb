@@ -183,7 +183,7 @@ Public Class FormPrincipal
     Dim outputFile As String = ComponerRutaSalidaInforme(informe)
     Dim erroresInforme As List(Of String) = New List(Of String)()
     Using excelBuilder = New ExcelBuilder(outputFile)
-      For Each consulta In informe.Consultas
+      For Each consulta In informe.Consultas.Where(Function(x) x.Habilitada)
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
           Dim contents As IDataReader = Nothing
           Try

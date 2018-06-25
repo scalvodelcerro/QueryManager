@@ -33,6 +33,7 @@ Partial Class EditarConsultaUserControl
     Me.BtnEliminarConsulta = New System.Windows.Forms.Button()
     Me.IconosBotones = New System.Windows.Forms.ImageList(Me.components)
     Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
+    Me.CbHabilitada = New System.Windows.Forms.CheckBox()
     Me.SuspendLayout()
     '
     'TbSqlResult
@@ -112,10 +113,21 @@ Partial Class EditarConsultaUserControl
     Me.IconosBotones.TransparentColor = System.Drawing.Color.Transparent
     Me.IconosBotones.Images.SetKeyName(0, "if_cancel_1712.png")
     '
+    'CbHabilitada
+    '
+    Me.CbHabilitada.AutoSize = True
+    Me.CbHabilitada.Location = New System.Drawing.Point(412, 5)
+    Me.CbHabilitada.Name = "CbHabilitada"
+    Me.CbHabilitada.Size = New System.Drawing.Size(73, 17)
+    Me.CbHabilitada.TabIndex = 21
+    Me.CbHabilitada.Text = "Habilitada"
+    Me.CbHabilitada.UseVisualStyleBackColor = True
+    '
     'EditarConsultaUserControl
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+    Me.Controls.Add(Me.CbHabilitada)
     Me.Controls.Add(Me.BtnEliminarConsulta)
     Me.Controls.Add(Me.TbSqlResult)
     Me.Controls.Add(Me.PnlParametros)
@@ -141,4 +153,5 @@ Partial Class EditarConsultaUserControl
   Friend WithEvents BtnEliminarConsulta As Button
   Friend WithEvents IconosBotones As ImageList
   Friend WithEvents ToolTips As ToolTip
+  Friend WithEvents CbHabilitada As CheckBox
 End Class
