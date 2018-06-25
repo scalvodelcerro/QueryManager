@@ -11,10 +11,17 @@ Public Class SupraReportsContext
   Public Property Parametros As DbSet(Of Parametro)
   Public Property Programaciones As DbSet(Of Programacion)
   Public Property Ejecuciones As DbSet(Of Ejecucion)
+  Public Property Proyectos As DbSet(Of Proyecto)
 
   Public Sub New()
     MyBase.New("name=SupraReports")
-    Database.CreateIfNotExists()
+    If Not Database.Exists() Then
+      Database.Create()
+      Proyectos.Add(Proyecto.Crear("Proyecto 1"))
+      Proyectos.Add(Proyecto.Crear("Proyecto 2"))
+      Proyectos.Add(Proyecto.Crear("Proyecto 3"))
+      SaveChanges()
+    End If
   End Sub
 
   Protected Overrides Sub OnModelCreating(ByVal modelBuilder As DbModelBuilder)
@@ -24,6 +31,7 @@ Public Class SupraReportsContext
     ConfigurarEntity(modelBuilder.Entity(Of Parametro)())
     ConfigurarEntity(modelBuilder.Entity(Of Programacion)())
     ConfigurarEntity(modelBuilder.Entity(Of Ejecucion)())
+    ConfigurarEntity(modelBuilder.Entity(Of Proyecto)())
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityInforme As EntityTypeConfiguration(Of Informe))
@@ -44,6 +52,10 @@ Public Class SupraReportsContext
       WithRequired(Function(x) x.Informe).
       Map(Function(m) m.MapKey("Id_Informe")).
       WillCascadeOnDelete()
+    entityInforme.
+      HasOptional(Function(x) x.Proyecto).
+      WithMany(Function(x) x.Informes).
+      Map(Function(x) x.MapKey("Id_Proyecto"))
     entityInforme.
       Property(Function(p) p.Id).
         HasColumnName("Id_Informe").
@@ -116,5 +128,14 @@ Public Class SupraReportsContext
     entityEjecucion.
       Property(Function(p) p.RutaFichero).
         HasColumnName("Ruta_Fichero")
+  End Sub
+
+  Private Shared Sub ConfigurarEntity(entityProyecto As EntityTypeConfiguration(Of Proyecto))
+    entityProyecto.
+      ToTable("Proyecto")
+    entityProyecto.
+      Property(Function(p) p.Id).
+        HasColumnName("Id_Proyecto").
+        HasColumnOrder(1)
   End Sub
 End Class

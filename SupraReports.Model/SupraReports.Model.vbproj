@@ -101,6 +101,7 @@
     <Compile Include="Models\Informe.vb" />
     <Compile Include="Models\Parametro.vb" />
     <Compile Include="Models\Programacion.vb" />
+    <Compile Include="Models\Proyecto.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

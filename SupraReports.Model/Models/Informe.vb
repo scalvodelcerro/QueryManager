@@ -27,6 +27,7 @@
   Public Property Id As Integer
   Public Property Nombre As String
   Public Property Usuario As String
+  Public Overridable Property Proyecto As Proyecto
   Public Overridable Property Programacion As Programacion
   Public Overridable Property Consultas As ICollection(Of Consulta)
   Public Overridable Property Ejecuciones As ICollection(Of Ejecucion)
@@ -36,11 +37,12 @@
     Consultas.Add(consulta)
   End Sub
 
+  Public Sub AnadirEjecucion(horaProgramada As String, resultado As String, rutaFichero As String)
+    Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
+  End Sub
+
   Public Overrides Function ToString() As String
     Return Nombre
   End Function
 
-  Public Sub AnadirEjecucion(horaProgramada As String, resultado As String, rutaFichero As String)
-    Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
-  End Sub
 End Class
