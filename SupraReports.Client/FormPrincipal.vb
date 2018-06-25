@@ -3,11 +3,20 @@ Imports System.IO
 Imports SupraReports.Model
 
 Public Class FormPrincipal
+  Private titulos As IEnumerable(Of String) =
+    New List(Of String)() From {
+      "Nice and Easy System for Supra Info Extraction",
+      "Navegador del Entorno Supra con Salida de Informes Excel",
+      "Nuevo Editor Sql de Supra con Informes Excel"
+    }
   Private db As SupraReportsContext
   Private informe As Informe
   Private horaComienzoLanzarInformes As Date
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Randomize()
+    Text = titulos(Math.Floor((titulos.Count) * Rnd()))
+
     db = New SupraReportsContext()
     CargarInformes()
   End Sub

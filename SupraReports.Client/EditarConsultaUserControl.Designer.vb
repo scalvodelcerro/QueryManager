@@ -27,7 +27,7 @@ Partial Class EditarConsultaUserControl
     Me.TbSqlResult = New System.Windows.Forms.RichTextBox()
     Me.PnlParametros = New System.Windows.Forms.FlowLayoutPanel()
     Me.LblParametros = New System.Windows.Forms.Label()
-    Me.TbSql = New System.Windows.Forms.RichTextBox()
+    Me.TbSql = New SupraReports.Client.SuggestionRichTextBox()
     Me.LblNombre = New System.Windows.Forms.Label()
     Me.TbNombre = New System.Windows.Forms.TextBox()
     Me.BtnEliminarConsulta = New System.Windows.Forms.Button()
@@ -71,6 +71,7 @@ Partial Class EditarConsultaUserControl
     Me.TbSql.Location = New System.Drawing.Point(7, 29)
     Me.TbSql.Name = "TbSql"
     Me.TbSql.Size = New System.Drawing.Size(379, 134)
+    Me.TbSql.Suggestions = CType(resources.GetObject("TbSql.Suggestions"), System.Collections.ObjectModel.Collection(Of String))
     Me.TbSql.TabIndex = 15
     Me.TbSql.Text = ""
     '
@@ -115,7 +116,6 @@ Partial Class EditarConsultaUserControl
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.AutoSize = True
     Me.Controls.Add(Me.BtnEliminarConsulta)
     Me.Controls.Add(Me.TbSqlResult)
     Me.Controls.Add(Me.PnlParametros)
@@ -126,7 +126,7 @@ Partial Class EditarConsultaUserControl
     Me.MaximumSize = New System.Drawing.Size(1030, 0)
     Me.MinimumSize = New System.Drawing.Size(1030, 166)
     Me.Name = "EditarConsultaUserControl"
-    Me.Size = New System.Drawing.Size(1030, 173)
+    Me.Size = New System.Drawing.Size(1030, 166)
     Me.ResumeLayout(False)
     Me.PerformLayout()
 
@@ -134,7 +134,7 @@ Partial Class EditarConsultaUserControl
   Friend WithEvents TbSqlResult As RichTextBox
   Friend WithEvents PnlParametros As FlowLayoutPanel
   Friend WithEvents LblParametros As Label
-  Friend WithEvents TbSql As RichTextBox
+  Friend WithEvents TbSql As SuggestionRichTextBox
   Friend WithEvents LblNombre As Label
   Friend WithEvents TbNombre As TextBox
   Friend WithEvents BtnEliminarConsulta As Button

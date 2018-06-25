@@ -22,12 +22,12 @@ Public Class EditarConsultaUserControl
   End Property
   Private _consulta As Consulta
 
-  Private Sub EditarConsultaUserControl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+  Private Sub EditarConsultaUserControl_Load(sender As Object, e As EventArgs)
     TbSqlResult.Text = String.Empty
     TbSqlResult.AppendText(_consulta.ComponerSqlResultado())
   End Sub
 
-  Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs) Handles TbNombre.TextChanged
+  Private Sub TbNombre_TextChanged(sender As Object, e As EventArgs)
     _consulta.Nombre = TbNombre.Text
   End Sub
 

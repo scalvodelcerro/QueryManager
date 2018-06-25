@@ -282,7 +282,7 @@ Partial Class FormPrincipal
     Me.Controls.Add(Me.CbInforme)
     Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
     Me.Name = "FormPrincipal"
-    Me.Text = "Informes Supra"
+    Me.Text = "Navegador del Entorno Supra con Salida de Informes Excel"
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     Me.MenuIconoNotificacion.ResumeLayout(False)
     Me.ResumeLayout(False)
