@@ -5,8 +5,8 @@ Public Class FormProgramaciones
   Private db As SupraReportsContext = New SupraReportsContext()
   Private Sub FormProgramaciones_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     ProgramacionBindingSource.DataSource = db.Programaciones.Local.ToBindingList()
-    db.Programaciones.Include("Informe").Where(Function(x) x.Informe.Usuario = Environment.UserName AndAlso x.Informe.Proyecto Is Nothing).Load()
-    db.Programaciones.Include("Informe").Where(Function(x) x.Informe.Proyecto.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).Load()
+    db.Programaciones.Include("Informe").Where(Function(x) x.Informe.NombreUsuario = Environment.UserName AndAlso x.Informe.Proyecto Is Nothing).Load()
+    db.Programaciones.Include("Informe").Where(Function(x) x.Informe.Proyecto.Permisos.Any(Function(xx) xx.NombreUsuario = Environment.UserName)).Load()
   End Sub
 
   Private Sub BtnAceptar_Click(sender As Object, e As EventArgs) Handles BtnAceptar.Click

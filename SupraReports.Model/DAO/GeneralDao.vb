@@ -11,11 +11,13 @@ Public Class GeneralDao
     Me.conn = conn
   End Sub
 
-  Public Function EjecutarSelect(sql As String) As IDataReader
+  Public Function EjecutarSelect(sql As String) As DataTable
     If conn.State = ConnectionState.Closed Then
       conn.Open()
     End If
-    Return New MySqlCommand(sql, conn).ExecuteReader()
+    Dim dataTable = New DataTable()
+    dataTable.Load(New MySqlCommand(sql, conn).ExecuteReader())
+    Return dataTable
   End Function
 
   Public Shared Function CrearConexionMySql() As DbConnection

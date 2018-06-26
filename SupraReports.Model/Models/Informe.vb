@@ -5,7 +5,7 @@
   End Function
 
   Public Shared Function Copiar(informe As Informe) As Informe
-    Dim copiaInforme As Informe = Crear(informe.Nombre, informe.Usuario)
+    Dim copiaInforme As Informe = Crear(informe.Nombre, informe.NombreUsuario)
     For Each c In informe.Consultas
       Dim copiaConsulta As Consulta = Consulta.Copiar(c)
       copiaInforme.AnadirConsulta(copiaConsulta)
@@ -16,9 +16,9 @@
   Protected Sub New()
   End Sub
 
-  Private Sub New(nombre As String, usuario As String)
+  Private Sub New(nombre As String, nombreUsuario As String)
     Me.Nombre = nombre
-    Me.Usuario = usuario
+    Me.NombreUsuario = nombreUsuario
     Programacion = New Programacion()
     Consultas = New List(Of Consulta)()
     Ejecuciones = New List(Of Ejecucion)()
@@ -26,7 +26,8 @@
 
   Public Property Id As Integer
   Public Property Nombre As String
-  Public Property Usuario As String
+  Public Property NombreUsuario As String
+  Public Property Usuario As Usuario
   Public Overridable Property Proyecto As Proyecto
   Public Overridable Property Programacion As Programacion
   Public Overridable Property Consultas As ICollection(Of Consulta)

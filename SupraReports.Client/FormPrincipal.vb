@@ -1,22 +1,16 @@
-﻿Imports System.Data.Entity
-Imports System.IO
+﻿Imports System.IO
 Imports SupraReports.Model
 
 Public Class FormPrincipal
-  Private titulos As IEnumerable(Of String) =
-    New List(Of String)() From {
-      "Nice and Easy System for Supra Info Extraction",
-      "Navegador del Entorno Supra con Salida de Informes Excel",
-      "Nuevo Editor Sql de Supra con Informes Excel"
-    }
   Private db As SupraReportsContext
+  Private usuario As Usuario
   Private informe As Informe
   Private horaComienzoLanzarInformes As Date
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     Randomize()
-    Text = titulos(Math.Floor((titulos.Count) * Rnd()))
 
+    CargarUsuario()
     CargarComboProyectos()
     CargarComboInformes()
     DeseleccionarInforme()
@@ -147,9 +141,16 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
   End Sub
 
+  Private Sub CargarUsuario()
+    Using db As New SupraReportsContext
+      usuario = db.Usuarios.Include("Permisos").AsNoTracking().
+        SingleOrDefault(Function(x) x.Nombre = Environment.UserName)
+    End Using
+  End Sub
+
   Private Sub CargarComboProyectos()
     Using db = New SupraReportsContext()
-      Dim proyectos = db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).ToList()
+      Dim proyectos = db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.NombreUsuario = Environment.UserName)).ToList()
       proyectos.Insert(0, Proyecto.Crear("--"))
       ProyectoBindingSource.DataSource = proyectos
     End Using
@@ -162,7 +163,7 @@ Public Class FormPrincipal
       If CbProyecto.SelectedIndex <= 0 Then
         InformeBindingSource.DataSource =
           db.Informes.AsNoTracking().
-            Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).ToList()
+            Where(Function(x) x.NombreUsuario = Environment.UserName AndAlso x.Proyecto Is Nothing).ToList()
       Else
         Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
         InformeBindingSource.DataSource =
@@ -229,12 +230,20 @@ Public Class FormPrincipal
     Using excelBuilder = New ExcelBuilder(outputFile)
       For Each consulta In informe.Consultas.Where(Function(x) x.Habilitada)
         Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
-          Dim contents As IDataReader = Nothing
+          Dim sql As String = consulta.ComponerSqlResultado()
+          If usuario.MaximoNumeroFilasConsulta > 0 Then
+            sql = sql & " LIMIT " & usuario.MaximoNumeroFilasConsulta
+          End If
           Try
-            contents = dao.EjecutarSelect(consulta.ComponerSqlResultado())
-            excelBuilder.AddWorksheet(consulta.Nombre, contents)
+            Dim contents As DataTable = dao.EjecutarSelect(sql)
+            If contents.Rows.Count = usuario.MaximoNumeroFilasConsulta Then
+              excelBuilder.AddWorksheet(consulta.Nombre, contents, {"Los resultados se han truncado"})
+            Else
+              excelBuilder.AddWorksheet(consulta.Nombre, contents, Nothing)
+            End If
           Catch ex As Exception
-            excelBuilder.AddWorksheet(consulta.Nombre, {ex})
+            erroresInforme.Add(ex.Message)
+            excelBuilder.AddWorksheet(consulta.Nombre, Nothing, {ex.Message})
           End Try
         End Using
       Next
@@ -245,8 +254,12 @@ Public Class FormPrincipal
       End Try
     End Using
     If guardarEjecucion Then
+      Dim resultado As String = "Ok"
+      If erroresInforme.Any() Then
+        resultado = String.Join(" - ", erroresInforme)
+      End If
       Using db = New SupraReportsContext()
-        db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", erroresInforme), outputFile)
+        db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, resultado, outputFile)
         db.SaveChanges()
       End Using
     End If
@@ -285,7 +298,7 @@ Public Class FormPrincipal
       Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
       Return (From pr As Proyecto In db.Proyectos.AsNoTracking()
               Where pr.Id = idProyecto AndAlso
-               pr.Permisos.Any(Function(x) x.Usuario = Environment.UserName AndAlso x.Administrador)).Any()
+               pr.Permisos.Any(Function(x) x.NombreUsuario = Environment.UserName AndAlso x.Administrador)).Any()
     End Using
   End Function
 

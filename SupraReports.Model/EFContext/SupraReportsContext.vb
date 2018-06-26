@@ -6,6 +6,7 @@ Imports MySql.Data.EntityFramework
 Public Class SupraReportsContext
   Inherits DbContext
 
+  Public Property Usuarios As DbSet(Of Usuario)
   Public Property Informes As DbSet(Of Informe)
   Public Property Consultas As DbSet(Of Consulta)
   Public Property Parametros As DbSet(Of Parametro)
@@ -17,20 +18,28 @@ Public Class SupraReportsContext
     MyBase.New("name=SupraReports")
     If Not Database.Exists() Then
       Database.Create()
-      Dim proyecto1 = Proyecto.Crear("Proyecto 1")
-      proyecto1.Permisos.Add(New PermisoUsuario("Sergio", True, proyecto1))
-      Proyectos.Add(proyecto1)
-      Dim proyecto2 As Proyecto = Proyecto.Crear("Proyecto 2")
-      Proyectos.Add(proyecto2)
-      Dim proyecto3 As Proyecto = Proyecto.Crear("Proyecto 3")
-      proyecto3.Permisos.Add(New PermisoUsuario("Sergio", False, proyecto3))
-      Proyectos.Add(proyecto3)
-      SaveChanges()
+      InsertarDatosIniciales()
     End If
+  End Sub
+
+  Private Sub InsertarDatosIniciales()
+    Usuarios.Add(New Usuario("Sergio"))
+    Usuarios.Add(New Usuario("Fulanito"))
+    Usuarios.Add(New Usuario("Menganito"))
+    Dim proyecto1 = Proyecto.Crear("Proyecto 1")
+    proyecto1.Permisos.Add(New PermisoUsuario("Sergio", True, proyecto1.Id))
+    Proyectos.Add(proyecto1)
+    Dim proyecto2 As Proyecto = Proyecto.Crear("Proyecto 2")
+    Proyectos.Add(proyecto2)
+    Dim proyecto3 As Proyecto = Proyecto.Crear("Proyecto 3")
+    proyecto3.Permisos.Add(New PermisoUsuario("Sergio", False, proyecto3.Id))
+    Proyectos.Add(proyecto3)
+    SaveChanges()
   End Sub
 
   Protected Overrides Sub OnModelCreating(ByVal modelBuilder As DbModelBuilder)
     MyBase.OnModelCreating(modelBuilder)
+    ConfigurarEntity(modelBuilder.Entity(Of Usuario)())
     ConfigurarEntity(modelBuilder.Entity(Of Informe)())
     ConfigurarEntity(modelBuilder.Entity(Of Consulta)())
     ConfigurarEntity(modelBuilder.Entity(Of Parametro)())
@@ -40,10 +49,32 @@ Public Class SupraReportsContext
     ConfigurarEntity(modelBuilder.Entity(Of PermisoUsuario)())
   End Sub
 
+  Private Shared Sub ConfigurarEntity(entityUsuario As EntityTypeConfiguration(Of Usuario))
+    entityUsuario.
+      ToTable("Usuario").
+      HasKey(Function(x) x.Nombre)
+    entityUsuario.
+      HasMany(Function(x) x.Permisos).
+      WithRequired(Function(x) x.Usuario).
+      HasForeignKey(Function(x) x.NombreUsuario).
+      WillCascadeOnDelete()
+    entityUsuario.
+      Property(Function(x) x.Nombre).
+        HasColumnName("Nombre_Usuario")
+    entityUsuario.
+      Property(Function(x) x.MaximoNumeroFilasConsulta).
+        HasColumnName("Max_Rows_Query")
+  End Sub
+
   Private Shared Sub ConfigurarEntity(entityInforme As EntityTypeConfiguration(Of Informe))
     entityInforme.
       ToTable("Informe").
       HasKey(Function(x) x.Id)
+    entityInforme.
+      HasRequired(Function(x) x.Usuario).
+      WithMany(Function(x) x.Informes).
+      HasForeignKey(Function(x) x.NombreUsuario).
+      WillCascadeOnDelete()
     entityInforme.
       HasMany(Function(x) x.Consultas).
       WithRequired(Function(x) x.Informe).
@@ -70,8 +101,8 @@ Public Class SupraReportsContext
       Property(Function(p) p.Nombre).
         HasMaxLength(100)
     entityInforme.
-      Property(Function(p) p.Usuario).
-        HasMaxLength(50)
+      Property(Function(p) p.NombreUsuario).
+      HasColumnName("Nombre_Usuario")
   End Sub
 
   Private Shared Sub ConfigurarEntity(entityConsulta As EntityTypeConfiguration(Of Consulta))
@@ -153,9 +184,12 @@ Public Class SupraReportsContext
   Private Shared Sub ConfigurarEntity(entityPermisoUsuario As EntityTypeConfiguration(Of PermisoUsuario))
     entityPermisoUsuario.
       ToTable("Permiso_Usuario").
-      HasKey(Function(x) New With {x.IdProyecto, x.Usuario})
+      HasKey(Function(x) New With {x.IdProyecto, x.NombreUsuario})
     entityPermisoUsuario.
       Property(Function(p) p.IdProyecto).
         HasColumnName("Id_Proyecto")
+    entityPermisoUsuario.
+      Property(Function(p) p.NombreUsuario).
+        HasColumnName("Nombre_Usuario")
   End Sub
 End Class

@@ -11,25 +11,16 @@ Public Class ExcelBuilder
 
   Private excel As ExcelPackage
 
-  Public Function AddWorksheet(worksheetName As String, contents As IDataReader) As ExcelBuilder
+  Public Function AddWorksheet(worksheetName As String, contents As DataTable, messages As IEnumerable(Of String)) As ExcelBuilder
     If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
     Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
-    If contents IsNot Nothing Then
-      worksheet.Cells("A1").LoadFromDataReader(contents, True, worksheet.Name, Table.TableStyles.Medium10)
+    Dim contentsRowStart = 1
+    If messages IsNot Nothing AndAlso messages.Any() Then
+      worksheet.Cells("A1").LoadFromCollection(messages, False, Table.TableStyles.Medium13)
+      contentsRowStart = messages.Count() + 2
     End If
-    Return Me
-  End Function
-
-  Public Function AddWorksheet(worksheetName As String, contents As IEnumerable(Of Exception)) As ExcelBuilder
-    If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
-    Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
     If contents IsNot Nothing Then
-      Dim mi As MemberInfo() = GetType(Exception).GetProperties().
-        Where(Function(pi) pi.Name = "Message").
-        Select(Function(pi) CType(pi, MemberInfo)).
-        ToArray()
-
-      worksheet.Cells("A1").LoadFromCollection(contents, True, Table.TableStyles.Medium10, Nothing, mi)
+      worksheet.Cells(contentsRowStart, 1).LoadFromDataTable(contents, True, Table.TableStyles.Medium13)
     End If
     Return Me
   End Function
