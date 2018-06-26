@@ -37,13 +37,24 @@ Public Class SuggestionRichTextBox
     End If
   End Sub
 
+  Private Sub SuggestionRichTextBox_Click(sender As Object, e As EventArgs) Handles MyBase.Click
+    OcultarListadoSugerencias()
+  End Sub
+
   Private Sub LbSuggestions_KeyDown(sender As Object, e As KeyEventArgs) Handles LbSugerencias.KeyDown
-    If e.KeyCode = Keys.Enter Then
+    If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Tab OrElse e.KeyCode = Keys.Space Then
       InsertarSugerencia()
+      e.Handled = True
     End If
   End Sub
 
-  Private Sub LbSuggestions_KeyDown(sender As Object, e As MouseEventArgs) Handles LbSugerencias.MouseDoubleClick
+  Private Sub LbSugerencias_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles LbSugerencias.PreviewKeyDown
+    If e.KeyCode = Keys.Tab Then
+      e.IsInputKey = True
+    End If
+  End Sub
+
+  Private Sub LbSuggestions_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles LbSugerencias.MouseDoubleClick
     InsertarSugerencia()
   End Sub
 
@@ -70,11 +81,12 @@ Public Class SuggestionRichTextBox
     Else
       x = cursorPosition.X + Location.X
     End If
+    Dim offsetY As Integer = 20
     Dim y As Integer
-    If Parent IsNot Nothing AndAlso Location.Y + cursorPosition.Y + LbSugerencias.Height > Parent.Height Then
+    If Parent IsNot Nothing AndAlso Location.Y + cursorPosition.Y + offsetY + LbSugerencias.Height > Parent.Height Then
       y = Parent.Height - LbSugerencias.Height
     Else
-      y = cursorPosition.Y + Location.Y
+      y = Location.Y + cursorPosition.Y + offsetY
     End If
     LbSugerencias.Location = New Point(x, y)
   End Sub
@@ -84,9 +96,10 @@ Public Class SuggestionRichTextBox
   End Sub
 
   Private Sub InsertarSugerencia()
-    SelectionLength = 0
-    SelectedText = LbSugerencias.SelectedItem
     Focus()
+    SelectionLength = 0
+    SelectedText = LbSugerencias.SelectedItem + "#"c
     LbSugerencias.Visible = False
   End Sub
+
 End Class

@@ -25,13 +25,13 @@ Partial Class SuggestionRichTextBox
     Me.LbSugerencias = New System.Windows.Forms.ListBox()
     Me.SuspendLayout()
     '
-    'LbSuggestions
+    'LbSugerencias
     '
     Me.LbSugerencias.FormattingEnabled = True
     Me.LbSugerencias.Location = New System.Drawing.Point(0, 0)
     Me.LbSugerencias.MaximumSize = New System.Drawing.Size(100, 100)
     Me.LbSugerencias.MinimumSize = New System.Drawing.Size(100, 100)
-    Me.LbSugerencias.Name = "LbSuggestions"
+    Me.LbSugerencias.Name = "LbSugerencias"
     Me.LbSugerencias.Size = New System.Drawing.Size(100, 100)
     Me.LbSugerencias.TabIndex = 0
     Me.LbSugerencias.Visible = False
