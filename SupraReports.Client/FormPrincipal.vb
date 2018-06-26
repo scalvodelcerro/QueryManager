@@ -192,6 +192,7 @@ Public Class FormPrincipal
         p.ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
         p.ObtenerMinutoProgramado() = horaEjecucion.Minute Then
         EjecutarInforme(p.Informe, True)
+        IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
     Next
   End Sub
