@@ -72,7 +72,7 @@ Partial Class FormPrincipal
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.PnlEditar.AutoScroll = True
     Me.PnlEditar.AutoSize = True
-    Me.PnlEditar.Location = New System.Drawing.Point(12, 66)
+    Me.PnlEditar.Location = New System.Drawing.Point(16, 66)
     Me.PnlEditar.MaximumSize = New System.Drawing.Size(1152, 399)
     Me.PnlEditar.Name = "PnlEditar"
     Me.PnlEditar.Size = New System.Drawing.Size(1152, 10)
@@ -86,7 +86,7 @@ Partial Class FormPrincipal
     Me.BtnEliminarInforme.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnEliminarInforme.ImageIndex = 3
     Me.BtnEliminarInforme.ImageList = Me.IconosBotones
-    Me.BtnEliminarInforme.Location = New System.Drawing.Point(489, 36)
+    Me.BtnEliminarInforme.Location = New System.Drawing.Point(489, 37)
     Me.BtnEliminarInforme.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnEliminarInforme.Name = "BtnEliminarInforme"
     Me.BtnEliminarInforme.Size = New System.Drawing.Size(24, 24)
@@ -102,7 +102,7 @@ Partial Class FormPrincipal
     Me.BtnGuardarComo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnGuardarComo.ImageIndex = 2
     Me.BtnGuardarComo.ImageList = Me.IconosBotones
-    Me.BtnGuardarComo.Location = New System.Drawing.Point(465, 36)
+    Me.BtnGuardarComo.Location = New System.Drawing.Point(465, 37)
     Me.BtnGuardarComo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardarComo.Name = "BtnGuardarComo"
     Me.BtnGuardarComo.Size = New System.Drawing.Size(24, 24)
@@ -118,7 +118,7 @@ Partial Class FormPrincipal
     Me.BtnGuardar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnGuardar.ImageIndex = 1
     Me.BtnGuardar.ImageList = Me.IconosBotones
-    Me.BtnGuardar.Location = New System.Drawing.Point(441, 36)
+    Me.BtnGuardar.Location = New System.Drawing.Point(441, 37)
     Me.BtnGuardar.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnGuardar.Name = "BtnGuardar"
     Me.BtnGuardar.Size = New System.Drawing.Size(24, 24)
@@ -133,7 +133,7 @@ Partial Class FormPrincipal
     Me.BtnNuevo.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnNuevo.ImageIndex = 0
     Me.BtnNuevo.ImageList = Me.IconosBotones
-    Me.BtnNuevo.Location = New System.Drawing.Point(417, 36)
+    Me.BtnNuevo.Location = New System.Drawing.Point(417, 37)
     Me.BtnNuevo.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnNuevo.Name = "BtnNuevo"
     Me.BtnNuevo.Size = New System.Drawing.Size(24, 24)
@@ -189,7 +189,7 @@ Partial Class FormPrincipal
     Me.BtnEjecutar.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnEjecutar.ImageIndex = 4
     Me.BtnEjecutar.ImageList = Me.IconosBotones
-    Me.BtnEjecutar.Location = New System.Drawing.Point(523, 36)
+    Me.BtnEjecutar.Location = New System.Drawing.Point(523, 37)
     Me.BtnEjecutar.Margin = New System.Windows.Forms.Padding(10, 0, 0, 0)
     Me.BtnEjecutar.Name = "BtnEjecutar"
     Me.BtnEjecutar.Size = New System.Drawing.Size(24, 24)
@@ -205,7 +205,7 @@ Partial Class FormPrincipal
     Me.BtnConfiguracion.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonHighlight
     Me.BtnConfiguracion.ImageIndex = 8
     Me.BtnConfiguracion.ImageList = Me.IconosBotones
-    Me.BtnConfiguracion.Location = New System.Drawing.Point(1151, 9)
+    Me.BtnConfiguracion.Location = New System.Drawing.Point(1151, 10)
     Me.BtnConfiguracion.Margin = New System.Windows.Forms.Padding(0)
     Me.BtnConfiguracion.Name = "BtnConfiguracion"
     Me.BtnConfiguracion.Size = New System.Drawing.Size(24, 24)
