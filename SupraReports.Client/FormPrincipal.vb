@@ -17,14 +17,16 @@ Public Class FormPrincipal
     Randomize()
     Text = titulos(Math.Floor((titulos.Count) * Rnd()))
 
-    CargarProyectos()
-    CargarInformes()
+    CargarComboProyectos()
+    CargarComboInformes()
     DeseleccionarInforme()
+    HabilitarControles()
   End Sub
 
   Private Sub CbProyecto_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbProyecto.SelectedIndexChanged
-    CargarInformes()
+    CargarComboInformes()
     DeseleccionarInforme()
+    HabilitarControles()
   End Sub
 
   Private Sub CbInforme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbInforme.SelectedIndexChanged
@@ -34,7 +36,7 @@ Public Class FormPrincipal
         SeleccionarInforme()
         CargarConsultas()
       End If
-      EstablecerEstadoBotones()
+      HabilitarControles()
     End If
   End Sub
 
@@ -47,10 +49,10 @@ Public Class FormPrincipal
 
         CrearInforme()
 
-        CargarInformes()
+        CargarComboInformes()
         CbInforme.SelectedItem = CbInforme.Items.Cast(Of Informe).SingleOrDefault(Function(x) x.Id = informe.Id)
         CargarConsultas()
-        EstablecerEstadoBotones()
+        HabilitarControles()
       End If
     End If
   End Sub
@@ -69,10 +71,10 @@ Public Class FormPrincipal
 
       CrearInforme()
 
-      CargarInformes()
+      CargarComboInformes()
       CbInforme.SelectedItem = CbInforme.Items.Cast(Of Informe).SingleOrDefault(Function(x) x.Id = informe.Id)
       CargarConsultas()
-      EstablecerEstadoBotones()
+      HabilitarControles()
     End If
   End Sub
 
@@ -81,10 +83,10 @@ Public Class FormPrincipal
       EliminarInforme()
       GuardarCambios()
 
-      CargarInformes()
+      CargarComboInformes()
       DeseleccionarInforme()
       CargarConsultas()
-      EstablecerEstadoBotones()
+      HabilitarControles()
     End If
   End Sub
 
@@ -145,26 +147,26 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
   End Sub
 
-  Private Sub CargarProyectos()
+  Private Sub CargarComboProyectos()
     Using db = New SupraReportsContext()
       Dim proyectos As ComponentModel.BindingList(Of Proyecto) = db.Proyectos.Local.ToBindingList()
       proyectos.Insert(0, Proyecto.Crear("--"))
       ProyectoBindingSource.DataSource = proyectos
 
-      db.Proyectos.Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).Load()
+      db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).Load()
     End Using
     CbProyecto.SelectedItem = Nothing
     CbInforme.Text = String.Empty
   End Sub
 
-  Private Sub CargarInformes()
+  Private Sub CargarComboInformes()
     Using db = New SupraReportsContext()
       InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
       If CbProyecto.SelectedIndex <= 0 Then
-        db.Informes.Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).Load()
+        db.Informes.AsNoTracking().Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).Load()
       Else
         Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
-        db.Informes.Where(Function(x) x.Proyecto.Id = idProyecto).Load()
+        db.Informes.AsNoTracking().Where(Function(x) x.Proyecto.Id = idProyecto).Load()
       End If
     End Using
   End Sub
@@ -254,17 +256,34 @@ Public Class FormPrincipal
     Return outputFile
   End Function
 
-  Private Sub EstablecerEstadoBotones()
+  Private Sub HabilitarControles()
     Dim informeCargado As Boolean = informe IsNot Nothing
     Dim sinProyecto As Boolean = CbProyecto.SelectedIndex <= 0
-    Dim esUsuarioAdministrador As Boolean = True
-    BtnNuevo.Enabled = sinProyecto OrElse esUsuarioAdministrador
-    BtnGuardar.Enabled = informeCargado
-    BtnGuardarComo.Enabled = informeCargado
-    BtnEliminarInforme.Enabled = informeCargado
+    Dim esUsuarioAdministrador As Boolean = EsAdministradorProyecto()
+    Dim permitirModificaciones = sinProyecto OrElse esUsuarioAdministrador
+    BtnNuevo.Enabled = permitirModificaciones
+    BtnGuardar.Enabled = informeCargado AndAlso permitirModificaciones
+    BtnGuardarComo.Enabled = informeCargado AndAlso permitirModificaciones
+    BtnEliminarInforme.Enabled = informeCargado AndAlso permitirModificaciones
     BtnEjecutar.Enabled = informeCargado
-    BtnAnadirConsulta.Enabled = informeCargado
+    BtnAnadirConsulta.Enabled = informeCargado AndAlso permitirModificaciones
+    For Each controlConsulta In PnlEditar.Controls.OfType(Of EditarConsultaUserControl)
+      controlConsulta.TbNombre.Enabled = permitirModificaciones
+      controlConsulta.TbSql.Enabled = permitirModificaciones
+      controlConsulta.BtnEliminarConsulta.Enabled = permitirModificaciones
+      controlConsulta.CbHabilitada.Enabled = permitirModificaciones
+    Next
   End Sub
+
+  Private Function EsAdministradorProyecto() As Boolean
+    If CbProyecto.SelectedIndex <= 0 Then Return False
+    Using db = New SupraReportsContext()
+      Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
+      Return (From pr As Proyecto In db.Proyectos.AsNoTracking()
+              Where pr.Id = idProyecto AndAlso
+               pr.Permisos.Any(Function(x) x.Usuario = Environment.UserName AndAlso x.Administrador)).Any()
+    End Using
+  End Function
 
   Private Sub MinimizarEnAreaNotificacion()
     IconoNotificacion.Visible = True
