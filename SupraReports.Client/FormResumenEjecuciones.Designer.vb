@@ -24,8 +24,6 @@ Partial Class FormResumenEjecuciones
   Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container()
     Me.GridEjecuciones = New SupraReports.Client.NestedPropertiesDataGridView()
-    Me.EjecucionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-    Me.BtnCerrar = New System.Windows.Forms.Button()
     Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.Proyecto = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.Informe = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -33,6 +31,8 @@ Partial Class FormResumenEjecuciones
     Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.DataGridColumnRutaFichero = New System.Windows.Forms.DataGridViewLinkColumn()
     Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+    Me.EjecucionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+    Me.BtnCerrar = New System.Windows.Forms.Button()
     CType(Me.GridEjecuciones, System.ComponentModel.ISupportInitialize).BeginInit()
     CType(Me.EjecucionBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
@@ -54,21 +54,6 @@ Partial Class FormResumenEjecuciones
     Me.GridEjecuciones.RowHeadersVisible = False
     Me.GridEjecuciones.Size = New System.Drawing.Size(1003, 322)
     Me.GridEjecuciones.TabIndex = 1
-    '
-    'EjecucionBindingSource
-    '
-    Me.EjecucionBindingSource.DataSource = GetType(SupraReports.Model.Ejecucion)
-    '
-    'BtnCerrar
-    '
-    Me.BtnCerrar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-    Me.BtnCerrar.DialogResult = System.Windows.Forms.DialogResult.Cancel
-    Me.BtnCerrar.Location = New System.Drawing.Point(476, 340)
-    Me.BtnCerrar.Name = "BtnCerrar"
-    Me.BtnCerrar.Size = New System.Drawing.Size(75, 23)
-    Me.BtnCerrar.TabIndex = 5
-    Me.BtnCerrar.Text = "Cerrar"
-    Me.BtnCerrar.UseVisualStyleBackColor = True
     '
     'DataGridViewTextBoxColumn1
     '
@@ -99,6 +84,7 @@ Partial Class FormResumenEjecuciones
     Me.DataGridViewTextBoxColumn2.HeaderText = "HoraProgramada"
     Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
     Me.DataGridViewTextBoxColumn2.ReadOnly = True
+    Me.DataGridViewTextBoxColumn2.Visible = False
     '
     'DataGridViewTextBoxColumn3
     '
@@ -115,7 +101,7 @@ Partial Class FormResumenEjecuciones
     Me.DataGridColumnRutaFichero.ReadOnly = True
     Me.DataGridColumnRutaFichero.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
     Me.DataGridColumnRutaFichero.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-    Me.DataGridColumnRutaFichero.Width = 200
+    Me.DataGridColumnRutaFichero.Width = 400
     '
     'DataGridViewTextBoxColumn4
     '
@@ -123,7 +109,22 @@ Partial Class FormResumenEjecuciones
     Me.DataGridViewTextBoxColumn4.HeaderText = "Resultado"
     Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
     Me.DataGridViewTextBoxColumn4.ReadOnly = True
-    Me.DataGridViewTextBoxColumn4.Width = 300
+    Me.DataGridViewTextBoxColumn4.Width = 200
+    '
+    'EjecucionBindingSource
+    '
+    Me.EjecucionBindingSource.DataSource = GetType(SupraReports.Model.Ejecucion)
+    '
+    'BtnCerrar
+    '
+    Me.BtnCerrar.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+    Me.BtnCerrar.DialogResult = System.Windows.Forms.DialogResult.Cancel
+    Me.BtnCerrar.Location = New System.Drawing.Point(476, 340)
+    Me.BtnCerrar.Name = "BtnCerrar"
+    Me.BtnCerrar.Size = New System.Drawing.Size(75, 23)
+    Me.BtnCerrar.TabIndex = 5
+    Me.BtnCerrar.Text = "Cerrar"
+    Me.BtnCerrar.UseVisualStyleBackColor = True
     '
     'FormResumenEjecuciones
     '
@@ -137,7 +138,7 @@ Partial Class FormResumenEjecuciones
     Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
     Me.Name = "FormResumenEjecuciones"
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-    Me.Text = "FormResumenEjecuciones"
+    Me.Text = "Resumen de ejecución de informes "
     CType(Me.GridEjecuciones, System.ComponentModel.ISupportInitialize).EndInit()
     CType(Me.EjecucionBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     Me.ResumeLayout(False)
