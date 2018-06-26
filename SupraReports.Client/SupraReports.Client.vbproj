@@ -131,6 +131,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="NestedPropertiesDataGridView.Designer.vb">
+      <DependentUpon>NestedPropertiesDataGridView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="NestedPropertiesDataGridView.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SuggestionRichTextBox.Designer.vb">
       <DependentUpon>SuggestionRichTextBox.vb</DependentUpon>
     </Compile>
@@ -168,6 +174,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NestedPropertiesDataGridView.resx">
+      <DependentUpon>NestedPropertiesDataGridView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SuggestionRichTextBox.resx">
       <DependentUpon>SuggestionRichTextBox.vb</DependentUpon>

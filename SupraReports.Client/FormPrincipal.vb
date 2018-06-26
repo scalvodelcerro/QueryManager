@@ -149,11 +149,9 @@ Public Class FormPrincipal
 
   Private Sub CargarComboProyectos()
     Using db = New SupraReportsContext()
-      Dim proyectos As ComponentModel.BindingList(Of Proyecto) = db.Proyectos.Local.ToBindingList()
+      Dim proyectos = db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).ToList()
       proyectos.Insert(0, Proyecto.Crear("--"))
       ProyectoBindingSource.DataSource = proyectos
-
-      db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.Usuario = Environment.UserName)).Load()
     End Using
     CbProyecto.SelectedItem = Nothing
     CbInforme.Text = String.Empty
@@ -161,12 +159,15 @@ Public Class FormPrincipal
 
   Private Sub CargarComboInformes()
     Using db = New SupraReportsContext()
-      InformeBindingSource.DataSource = db.Informes.Local.ToBindingList()
       If CbProyecto.SelectedIndex <= 0 Then
-        db.Informes.AsNoTracking().Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).Load()
+        InformeBindingSource.DataSource =
+          db.Informes.AsNoTracking().
+            Where(Function(x) x.Usuario = Environment.UserName AndAlso x.Proyecto Is Nothing).ToList()
       Else
         Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
-        db.Informes.AsNoTracking().Where(Function(x) x.Proyecto.Id = idProyecto).Load()
+        InformeBindingSource.DataSource =
+          db.Informes.AsNoTracking().
+            Where(Function(x) x.Proyecto.Id = idProyecto).ToList()
       End If
     End Using
   End Sub
@@ -243,8 +244,10 @@ Public Class FormPrincipal
       End Try
     End Using
     If guardarEjecucion Then
-      db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", erroresInforme), outputFile)
-      db.SaveChanges()
+      Using db = New SupraReportsContext()
+        db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, String.Join(" - ", erroresInforme), outputFile)
+        db.SaveChanges()
+      End Using
     End If
   End Sub
 
@@ -320,7 +323,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Function HayCambiosSinGuardar() As Boolean
-    Return db Is Nothing OrElse db.ChangeTracker.HasChanges
+    Return db IsNot Nothing AndAlso db.ChangeTracker.HasChanges
   End Function
 
 End Class

@@ -41,8 +41,4 @@
     Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
   End Sub
 
-  Public Overrides Function ToString() As String
-    Return Nombre
-  End Function
-
 End Class

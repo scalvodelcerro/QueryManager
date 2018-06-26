@@ -162,6 +162,7 @@ Partial Class FormPrincipal
     Me.CbInforme.Name = "CbInforme"
     Me.CbInforme.Size = New System.Drawing.Size(344, 21)
     Me.CbInforme.TabIndex = 7
+    Me.CbInforme.ValueMember = "Id"
     '
     'InformeBindingSource
     '
@@ -287,6 +288,7 @@ Partial Class FormPrincipal
     Me.CbProyecto.Name = "CbProyecto"
     Me.CbProyecto.Size = New System.Drawing.Size(344, 21)
     Me.CbProyecto.TabIndex = 18
+    Me.CbProyecto.ValueMember = "Id"
     '
     'ProyectoBindingSource
     '
