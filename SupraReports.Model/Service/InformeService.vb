@@ -18,10 +18,10 @@
 
   Public Function ObtenerProgramacionesDeUsuario(nombreUsuario As String) As IList(Of Programacion)
     Using db = New SupraReportsContext()
-      Return db.Programaciones.Include("Informe.Consultas.Parametros").
-          Where(Function(x) (x.Informe.NombreUsuario = nombreUsuario AndAlso x.Informe.Proyecto Is Nothing) OrElse
-                            (x.Informe.Proyecto.Permisos.Any(Function(xx) xx.NombreUsuario = nombreUsuario))).
-      ToList()
+      Return db.Programaciones.Include("Informe.Consultas.Parametros").Include("Informe.Proyecto").
+        Where(Function(x) (x.Informe.NombreUsuario = nombreUsuario AndAlso x.Informe.Proyecto Is Nothing) OrElse
+                          (x.Informe.Proyecto.Permisos.Any(Function(xx) xx.NombreUsuario = nombreUsuario))).
+        ToList()
     End Using
   End Function
 
