@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports OfficeOpenXml
+Imports OfficeOpenXml.Table
 
 Public Class ExcelBuilder
   Implements IDisposable
@@ -10,22 +11,41 @@ Public Class ExcelBuilder
 
   Private excel As ExcelPackage
 
-  Public Function AddWorksheet(worksheetName As String, contents As DataTable, messages As IEnumerable(Of String)) As ExcelBuilder
-    If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
-    Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
-    Dim contentsRowStart = 1
-    If messages IsNot Nothing AndAlso messages.Any() Then
-      Dim rng As ExcelRangeBase = worksheet.Cells("A1").LoadFromCollection(messages, False)
-      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_messages", worksheetName))
-      table.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13
-      contentsRowStart = messages.Count() + 2
-    End If
-    If contents IsNot Nothing Then
-      Dim rng = worksheet.Cells(contentsRowStart, 1).LoadFromDataTable(contents, True)
-      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_contents", worksheetName))
-      table.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13
-    End If
+  Public Function AddWorksheet(worksheetName As String, content As DataTable, messages As IEnumerable(Of String)) As ExcelBuilder
+    Dim worksheet = excel.Workbook.Worksheets.Add(FormatWorksheetName(worksheetName))
+    AddMessages(worksheet, messages)
+    AddContent(worksheet, content)
     Return Me
+  End Function
+
+  Private Sub AddMessages(worksheet As ExcelWorksheet, messages As IEnumerable(Of String))
+    If messages IsNot Nothing AndAlso messages.Any() Then
+      Dim emptyRowNumber = FindEmptyRowNumber(worksheet)
+      Dim rng As ExcelRangeBase = worksheet.Cells(emptyRowNumber, 1).LoadFromCollection(messages, False)
+      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_messages", worksheet.Name))
+      table.TableStyle = TableStyles.Medium13
+    End If
+  End Sub
+
+  Private Sub AddContent(worksheet As ExcelWorksheet, content As DataTable)
+    If content IsNot Nothing Then
+      Dim emptyRowNumber = FindEmptyRowNumber(worksheet)
+      Dim rng = worksheet.Cells(FindEmptyRowNumber(worksheet), 1).LoadFromDataTable(content, True)
+      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_contents", worksheet.Name))
+      table.TableStyle = TableStyles.Medium13
+    End If
+  End Sub
+
+  Private Function FormatWorksheetName(worksheetName As String) As String
+    If String.IsNullOrEmpty(worksheetName) Then worksheetName = String.Format("sheet_{0}", excel.Workbook.Worksheets.Count)
+    worksheetName = worksheetName.Replace(" ", "_")
+    Dim worksheetNameBase = worksheetName
+    Dim i As Integer = 1
+    While (excel.Workbook.Worksheets.Any(Function(ws) ws.Name = worksheetName))
+      worksheetName = String.Format("{0}_{1}", worksheetNameBase, i)
+      i += 1
+    End While
+    Return worksheetName
   End Function
 
   Public Sub Build()
@@ -33,6 +53,11 @@ Public Class ExcelBuilder
       excel.Save()
     End If
   End Sub
+
+  Private Function FindEmptyRowNumber(worksheet As ExcelWorksheet) As Integer
+    If worksheet.Dimension Is Nothing Then Return 1
+    Return worksheet.Dimension.End.Row + 2
+  End Function
 
 #Region "IDisposable"
   Private disposedValue As Boolean
