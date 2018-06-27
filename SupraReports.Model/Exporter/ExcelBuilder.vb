@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports System.Reflection
 Imports OfficeOpenXml
 
 Public Class ExcelBuilder
@@ -16,11 +15,15 @@ Public Class ExcelBuilder
     Dim worksheet = excel.Workbook.Worksheets.Add(worksheetName.Replace(" ", "_"))
     Dim contentsRowStart = 1
     If messages IsNot Nothing AndAlso messages.Any() Then
-      worksheet.Cells("A1").LoadFromCollection(messages, False, Table.TableStyles.Medium13)
+      Dim rng As ExcelRangeBase = worksheet.Cells("A1").LoadFromCollection(messages, False)
+      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_messages", worksheetName))
+      table.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13
       contentsRowStart = messages.Count() + 2
     End If
     If contents IsNot Nothing Then
-      worksheet.Cells(contentsRowStart, 1).LoadFromDataTable(contents, True, Table.TableStyles.Medium13)
+      Dim rng = worksheet.Cells(contentsRowStart, 1).LoadFromDataTable(contents, True)
+      Dim table = worksheet.Tables.Add(rng, String.Format("{0}_contents", worksheetName))
+      table.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13
     End If
     Return Me
   End Function
