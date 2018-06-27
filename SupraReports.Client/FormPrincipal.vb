@@ -19,7 +19,6 @@ Public Class FormPrincipal
     usuarioService = New UsuarioService()
   End Sub
 
-
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     CargarUsuario()
     CargarComboProyectos()
@@ -187,15 +186,12 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub LanzarProgramacionesDe(horaEjecucion As Date)
-    Dim programaciones As IEnumerable(Of Programacion)
-    Using db = New SupraReportsContext()
-      programaciones = db.Programaciones.Include("Informe.Consultas.Parametros").AsNoTracking().ToList()
-    End Using
+    Dim programaciones As IList(Of Programacion) = informeService.ObtenerProgramacionesDeUsuario(Environment.UserName)
     For Each p In programaciones.AsParallel()
       If p.ObtenerDiasProgramados().Contains(horaEjecucion.DayOfWeek) AndAlso
         p.ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
         p.ObtenerMinutoProgramado() = horaEjecucion.Minute Then
-        informeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
+        informeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), usuario.MaximoNumeroFilasConsulta)
         IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
     Next
