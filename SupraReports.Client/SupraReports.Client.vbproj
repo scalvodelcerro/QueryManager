@@ -80,6 +80,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimePickerColumn.vb" />
     <Compile Include="EditarConsultaUserControl.Designer.vb">
       <DependentUpon>EditarConsultaUserControl.vb</DependentUpon>
     </Compile>

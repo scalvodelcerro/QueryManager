@@ -8,20 +8,19 @@ Public Class FormPrincipal
   Private horaComienzoLanzarInformes As Date
 
   Private informeService As InformeService
+  Private proyectoService As ProyectoService
   Private usuarioService As UsuarioService
 
-
-  Private Sub New()
+  Public Sub New()
     InitializeComponent()
 
     informeService = New InformeService()
+    proyectoService = New ProyectoService()
     usuarioService = New UsuarioService()
   End Sub
 
 
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-    Randomize()
-
     CargarUsuario()
     CargarComboProyectos()
     CargarComboInformes()
@@ -161,26 +160,18 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub CargarComboProyectos()
-    Using db = New SupraReportsContext()
-      Dim proyectos = db.Proyectos.AsNoTracking().Where(Function(x) x.Permisos.Any(Function(xx) xx.NombreUsuario = Environment.UserName)).ToList()
-      proyectos.Insert(0, Proyecto.Crear("--"))
-      ProyectoBindingSource.DataSource = proyectos
-    End Using
-    CbProyecto.SelectedItem = Nothing
-    CbInforme.Text = String.Empty
+    Dim proyectos As IList(Of Proyecto) = proyectoService.ObtenerProyectosDeUsuario(Environment.UserName)
+    proyectos.Insert(0, Proyecto.Crear("--"))
+    ProyectoBindingSource.DataSource = proyectos
   End Sub
 
   Private Sub CargarComboInformes()
     Using db = New SupraReportsContext()
-      If CbProyecto.SelectedIndex <= 0 Then
-        InformeBindingSource.DataSource =
-          db.Informes.AsNoTracking().
-            Where(Function(x) x.NombreUsuario = Environment.UserName AndAlso x.Proyecto Is Nothing).ToList()
+      Dim idProyecto As Integer = CbProyecto.SelectedValue
+      If idProyecto <= 0 Then
+        InformeBindingSource.DataSource = informeService.ObtenerInformesPersonalesDeUsuario(Environment.UserName)
       Else
-        Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
-        InformeBindingSource.DataSource =
-          db.Informes.AsNoTracking().
-            Where(Function(x) x.Proyecto.Id = idProyecto).ToList()
+        InformeBindingSource.DataSource = informeService.ObtenerInformesDeProyecto(idProyecto)
       End If
     End Using
   End Sub
@@ -235,7 +226,6 @@ Public Class FormPrincipal
     db.Informes.Remove(informe)
     informe = Nothing
   End Sub
-
 
   Private Shared Function ComponerRutaSalidaInforme(informe As Informe) As String
     Dim folderPath = My.Settings.RutaDirectorioSalida

@@ -1,5 +1,39 @@
 ﻿Public Class InformeService
 
+  Public Function ObtenerInformesDeProyecto(idProyecto As Integer) As IList(Of Informe)
+    Using db = New SupraReportsContext
+      Return db.Informes.AsNoTracking().
+            Where(Function(x) x.Proyecto.Id = idProyecto).
+            ToList()
+    End Using
+  End Function
+
+  Public Function ObtenerInformesPersonalesDeUsuario(nombreUsuario As String) As IList(Of Informe)
+    Using db = New SupraReportsContext()
+      Return db.Informes.AsNoTracking().
+            Where(Function(x) x.NombreUsuario = Environment.UserName AndAlso x.Proyecto Is Nothing).
+            ToList()
+    End Using
+  End Function
+
+  Public Function ObtenerProgramacionesDeUsuario(nombreUsuario As String) As IList(Of Programacion)
+    Using db = New SupraReportsContext()
+      Return db.Programaciones.Include("Informe.Consultas.Parametros").
+          Where(Function(x) (x.Informe.NombreUsuario = nombreUsuario AndAlso x.Informe.Proyecto Is Nothing) OrElse
+                            (x.Informe.Proyecto.Permisos.Any(Function(xx) xx.NombreUsuario = nombreUsuario))).
+      ToList()
+    End Using
+  End Function
+
+  Public Sub GuardarProgramaciones(programaciones As IEnumerable(Of Programacion))
+    Using db = New SupraReportsContext()
+      For Each programacion As Programacion In programaciones
+        db.Entry(programacion).State = Entity.EntityState.Modified
+      Next
+      db.SaveChanges()
+    End Using
+  End Sub
+
   Public Sub ExportarAExcel(informe As Informe, ficheroSalida As String, maximoNumeroFilas As Integer)
     Dim erroresInforme As List(Of String) = New List(Of String)()
     Using excelBuilder = New ExcelBuilder(ficheroSalida)

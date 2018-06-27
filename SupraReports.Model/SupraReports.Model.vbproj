@@ -120,6 +120,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Service\InformeService.vb" />
+    <Compile Include="Service\ProyectoService.vb" />
     <Compile Include="Service\UsuarioService.vb" />
   </ItemGroup>
   <ItemGroup>
