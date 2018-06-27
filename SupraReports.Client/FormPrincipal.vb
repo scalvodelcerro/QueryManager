@@ -7,6 +7,18 @@ Public Class FormPrincipal
   Private informe As Informe
   Private horaComienzoLanzarInformes As Date
 
+  Private informeService As InformeService
+  Private usuarioService As UsuarioService
+
+
+  Private Sub New()
+    InitializeComponent()
+
+    informeService = New InformeService()
+    usuarioService = New UsuarioService()
+  End Sub
+
+
   Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     Randomize()
 
@@ -94,7 +106,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    EjecutarInforme(informe, False)
+    informeService.ExportarAExcel(informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
@@ -192,7 +204,7 @@ Public Class FormPrincipal
       If p.ObtenerDiasProgramados().Contains(horaEjecucion.DayOfWeek) AndAlso
         p.ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
         p.ObtenerMinutoProgramado() = horaEjecucion.Minute Then
-        EjecutarInforme(p.Informe, True)
+        informeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
         IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
     Next
@@ -224,46 +236,6 @@ Public Class FormPrincipal
     informe = Nothing
   End Sub
 
-  Private Sub EjecutarInforme(informe As Informe, guardarEjecucion As Boolean)
-    Dim outputFile As String = ComponerRutaSalidaInforme(informe)
-    Dim erroresInforme As List(Of String) = New List(Of String)()
-    Using excelBuilder = New ExcelBuilder(outputFile)
-      For Each consulta In informe.Consultas.Where(Function(x) x.Habilitada)
-        Using dao = New GeneralDao(GeneralDao.CrearConexionMySql())
-          Dim sql As String = consulta.ComponerSqlResultado()
-          If usuario.MaximoNumeroFilasConsulta > 0 Then
-            sql = sql & " LIMIT " & usuario.MaximoNumeroFilasConsulta
-          End If
-          Try
-            Dim contents As DataTable = dao.EjecutarSelect(sql)
-            If contents.Rows.Count = usuario.MaximoNumeroFilasConsulta Then
-              excelBuilder.AddWorksheet(consulta.Nombre, contents, {"Los resultados se han truncado"})
-            Else
-              excelBuilder.AddWorksheet(consulta.Nombre, contents, Nothing)
-            End If
-          Catch ex As Exception
-            erroresInforme.Add(ex.Message)
-            excelBuilder.AddWorksheet(consulta.Nombre, Nothing, {ex.Message})
-          End Try
-        End Using
-      Next
-      Try
-        excelBuilder.Build()
-      Catch ex As Exception
-        erroresInforme.Add(ex.Message)
-      End Try
-    End Using
-    If guardarEjecucion Then
-      Dim resultado As String = "Ok"
-      If erroresInforme.Any() Then
-        resultado = String.Join(" - ", erroresInforme)
-      End If
-      Using db = New SupraReportsContext()
-        db.Informes.Find(informe.Id).AnadirEjecucion(informe.Programacion.Hora, resultado, outputFile)
-        db.SaveChanges()
-      End Using
-    End If
-  End Sub
 
   Private Shared Function ComponerRutaSalidaInforme(informe As Informe) As String
     Dim folderPath = My.Settings.RutaDirectorioSalida
@@ -276,7 +248,7 @@ Public Class FormPrincipal
   Private Sub HabilitarControles()
     Dim informeCargado As Boolean = informe IsNot Nothing
     Dim sinProyecto As Boolean = CbProyecto.SelectedIndex <= 0
-    Dim esUsuarioAdministrador As Boolean = EsAdministradorProyecto()
+    Dim esUsuarioAdministrador As Boolean = usuarioService.EsAdministradorProyecto(Environment.UserName, CbProyecto.SelectedValue)
     Dim permitirModificaciones = sinProyecto OrElse esUsuarioAdministrador
     BtnNuevo.Enabled = permitirModificaciones
     BtnGuardar.Enabled = informeCargado AndAlso permitirModificaciones
@@ -291,16 +263,6 @@ Public Class FormPrincipal
       controlConsulta.CbHabilitada.Enabled = permitirModificaciones
     Next
   End Sub
-
-  Private Function EsAdministradorProyecto() As Boolean
-    If CbProyecto.SelectedIndex <= 0 Then Return False
-    Using db = New SupraReportsContext()
-      Dim idProyecto As Integer = CbProyecto.SelectedItem.Id
-      Return (From pr As Proyecto In db.Proyectos.AsNoTracking()
-              Where pr.Id = idProyecto AndAlso
-               pr.Permisos.Any(Function(x) x.NombreUsuario = Environment.UserName AndAlso x.Administrador)).Any()
-    End Using
-  End Function
 
   Private Sub MinimizarEnAreaNotificacion()
     IconoNotificacion.Visible = True
