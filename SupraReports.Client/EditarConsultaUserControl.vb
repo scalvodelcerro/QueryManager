@@ -13,7 +13,6 @@ Public Class EditarConsultaUserControl
     Me.Consulta = consulta
     TbSql.Sugerencias = New Collection(Of String)(Parametro.ParametroDefecto.Todos.
                                                   Select(Function(x) x.NombreParametro).
-                                                  OrderBy(Function(x) x).
                                                   ToList())
   End Sub
 

@@ -33,6 +33,7 @@ Partial Class SuggestionRichTextBox
     Me.LbSugerencias.MinimumSize = New System.Drawing.Size(100, 100)
     Me.LbSugerencias.Name = "LbSugerencias"
     Me.LbSugerencias.Size = New System.Drawing.Size(100, 100)
+    Me.LbSugerencias.Sorted = True
     Me.LbSugerencias.TabIndex = 0
     Me.LbSugerencias.Visible = False
     '

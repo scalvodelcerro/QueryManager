@@ -14,7 +14,13 @@
   Public Property Domingo As Boolean
   Public Overridable Property Informe As Informe
 
-  Public Function ObtenerDiasProgramados() As IEnumerable(Of DayOfWeek)
+  Public Function ProgramadoPara(horaEjecucion As Date) As Boolean
+    Return ObtenerDiasProgramados().Contains(horaEjecucion.DayOfWeek) AndAlso
+      ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
+      ObtenerMinutoProgramado() = horaEjecucion.Minute
+  End Function
+
+  Private Function ObtenerDiasProgramados() As IEnumerable(Of DayOfWeek)
     Dim dias = New List(Of DayOfWeek)
     If Lunes Then dias.Add(DayOfWeek.Monday)
     If Martes Then dias.Add(DayOfWeek.Tuesday)
@@ -26,11 +32,11 @@
     Return dias
   End Function
 
-  Public Function ObtenerHoraProgramada() As Integer
+  Private Function ObtenerHoraProgramada() As Integer
     Return Integer.Parse(Hora.Split(":")(0))
   End Function
 
-  Public Function ObtenerMinutoProgramado() As Integer
+  Private Function ObtenerMinutoProgramado() As Integer
     Return Integer.Parse(Hora.Split(":")(1))
   End Function
 End Class

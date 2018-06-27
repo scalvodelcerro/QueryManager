@@ -188,9 +188,7 @@ Public Class FormPrincipal
   Private Sub LanzarProgramacionesDe(horaEjecucion As Date)
     Dim programaciones As IList(Of Programacion) = informeService.ObtenerProgramacionesDeUsuario(Environment.UserName)
     For Each p In programaciones.AsParallel()
-      If p.ObtenerDiasProgramados().Contains(horaEjecucion.DayOfWeek) AndAlso
-        p.ObtenerHoraProgramada() = horaEjecucion.Hour AndAlso
-        p.ObtenerMinutoProgramado() = horaEjecucion.Minute Then
+      If p.ProgramadoPara(horaEjecucion) Then
         informeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), usuario.MaximoNumeroFilasConsulta)
         IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
