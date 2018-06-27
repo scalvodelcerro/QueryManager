@@ -42,4 +42,7 @@
     Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
   End Sub
 
+
+
+
 End Class

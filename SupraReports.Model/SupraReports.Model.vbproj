@@ -94,16 +94,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\GeneralDao.vb" />
-    <Compile Include="EFContext\SupraReportsContext.vb" />
+    <Compile Include="EntityFramework\SupraReportsContext.vb" />
     <Compile Include="Exporter\ExcelBuilder.vb" />
-    <Compile Include="Models\Consulta.vb" />
-    <Compile Include="Models\Ejecucion.vb" />
-    <Compile Include="Models\Informe.vb" />
-    <Compile Include="Models\Parametro.vb" />
-    <Compile Include="Models\PermisoUsuario.vb" />
-    <Compile Include="Models\Programacion.vb" />
-    <Compile Include="Models\Proyecto.vb" />
-    <Compile Include="Models\Usuario.vb" />
+    <Compile Include="Model\Consulta.vb" />
+    <Compile Include="Model\Ejecucion.vb" />
+    <Compile Include="Model\Informe.vb" />
+    <Compile Include="Model\Parametro.vb" />
+    <Compile Include="Model\PermisoUsuario.vb" />
+    <Compile Include="Model\Programacion.vb" />
+    <Compile Include="Model\Proyecto.vb" />
+    <Compile Include="Model\Usuario.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -144,6 +144,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
