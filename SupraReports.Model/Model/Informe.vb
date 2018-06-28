@@ -38,8 +38,8 @@
     Consultas.Add(consulta)
   End Sub
 
-  Public Sub AnadirEjecucion(horaProgramada As String, resultado As String, rutaFichero As String)
-    Ejecuciones.Add(Ejecucion.Crear(horaProgramada, resultado, rutaFichero, Me))
+  Public Sub AnadirEjecucion(resultado As String, rutaFichero As String)
+    Ejecuciones.Add(Ejecucion.Crear(resultado, rutaFichero, Me))
   End Sub
 
 

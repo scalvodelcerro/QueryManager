@@ -11,7 +11,7 @@ Public Class FormResumenEjecuciones
   End Sub
 
   Private Sub FormResumenEjecuciones_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-    Using db = New SupraReportsContext()
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       'TODO FIXME - Se añade un margen de un par de segundos porque se producen descuadres (precisión de fecha en BBDD??)
       Dim horaLimite = horaDesde.AddSeconds(-2)
       EjecucionBindingSource.DataSource =

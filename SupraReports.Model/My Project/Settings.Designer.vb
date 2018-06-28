@@ -56,10 +56,19 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("SupraReports")>  _
-        Public ReadOnly Property SupraReportsConnectionStringName() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("SupraReportsMySql")>  _
+        Public ReadOnly Property SupraReportsMySqlConnectionStringName() As String
             Get
-                Return CType(Me("SupraReportsConnectionStringName"),String)
+                Return CType(Me("SupraReportsMySqlConnectionStringName"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("SupraReportsOracle")>  _
+        Public ReadOnly Property SupraReportsOracleConnectionStringName() As String
+            Get
+                Return CType(Me("SupraReportsOracleConnectionStringName"),String)
             End Get
         End Property
     End Class

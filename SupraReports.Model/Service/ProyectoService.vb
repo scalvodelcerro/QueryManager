@@ -1,6 +1,6 @@
 ﻿Public Class ProyectoService
   Public Function ObtenerProyectosDeUsuario(nombreUsuario As String) As IList(Of Proyecto)
-    Using db = New SupraReportsContext()
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       Return db.Proyectos.AsNoTracking().
         Where(Function(x) x.Permisos.Any(Function(xx) xx.NombreUsuario = nombreUsuario)).
         ToList()

@@ -7,14 +7,14 @@ Public Class FormPrincipal
   Private informe As Informe
   Private horaComienzoLanzarInformes As Date
 
-  Private informeService As InformeService
+  Private WithEvents InformeService As InformeService
   Private proyectoService As ProyectoService
   Private usuarioService As UsuarioService
 
   Public Sub New()
     InitializeComponent()
 
-    informeService = New InformeService()
+    InformeService = New InformeService()
     proyectoService = New ProyectoService()
     usuarioService = New UsuarioService()
   End Sub
@@ -104,7 +104,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    informeService.ExportarAExcel(informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
+    InformeService.ExportarAExcel(informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
   End Sub
 
   Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
@@ -151,8 +151,13 @@ Public Class FormPrincipal
     BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
   End Sub
 
+  Private Sub InformeService_ProgresoExportar(sender As Object, e As ProgresoEventArgs) Handles InformeService.ProgresoExportar
+    PbEjecutar.Value = e.Progress
+    PbEjecutar.Visible = PbEjecutar.Value > 0
+  End Sub
+
   Private Sub CargarUsuario()
-    Using db As New SupraReportsContext
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       usuario = db.Usuarios.Include("Permisos").AsNoTracking().
         SingleOrDefault(Function(x) x.Nombre = Environment.UserName)
     End Using
@@ -165,12 +170,12 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub CargarComboInformes()
-    Using db = New SupraReportsContext()
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       Dim idProyecto As Integer = CbProyecto.SelectedValue
       If idProyecto <= 0 Then
-        InformeBindingSource.DataSource = informeService.ObtenerInformesPersonalesDeUsuario(Environment.UserName)
+        InformeBindingSource.DataSource = InformeService.ObtenerInformesPersonalesDeUsuario(Environment.UserName)
       Else
-        InformeBindingSource.DataSource = informeService.ObtenerInformesDeProyecto(idProyecto)
+        InformeBindingSource.DataSource = InformeService.ObtenerInformesDeProyecto(idProyecto)
       End If
     End Using
   End Sub
@@ -186,17 +191,17 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub LanzarProgramacionesDe(horaEjecucion As Date)
-    Dim programaciones As IList(Of Programacion) = informeService.ObtenerProgramacionesDeUsuario(Environment.UserName)
+    Dim programaciones As IList(Of Programacion) = InformeService.ObtenerProgramacionesDeUsuario(Environment.UserName)
     For Each p In programaciones.AsParallel()
       If p.ProgramadoPara(horaEjecucion) Then
-        informeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), usuario.MaximoNumeroFilasConsulta)
+        InformeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), usuario.MaximoNumeroFilasConsulta)
         IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
     Next
   End Sub
 
   Private Sub CrearInforme()
-    db = New SupraReportsContext()
+    db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
     If CbProyecto.SelectedIndex > 0 Then
       informe.Proyecto = db.Proyectos.Find(CbProyecto.SelectedItem.Id)
     End If
@@ -205,7 +210,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub SeleccionarInforme()
-    db = New SupraReportsContext()
+    db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
     Dim idInforme As Integer = CbInforme.SelectedItem.Id
     informe = db.Informes.SingleOrDefault(Function(x) x.Id = idInforme)
   End Sub

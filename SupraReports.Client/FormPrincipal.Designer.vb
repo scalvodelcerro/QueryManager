@@ -46,6 +46,7 @@ Partial Class FormPrincipal
     Me.LblProyecto = New System.Windows.Forms.Label()
     Me.CbProyecto = New System.Windows.Forms.ComboBox()
     Me.ProyectoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+    Me.PbEjecutar = New System.Windows.Forms.ProgressBar()
     CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.MenuIconoNotificacion.SuspendLayout()
     CType(Me.ProyectoBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -294,11 +295,20 @@ Partial Class FormPrincipal
     '
     Me.ProyectoBindingSource.DataSource = GetType(SupraReports.Model.Proyecto)
     '
+    'PbEjecutar
+    '
+    Me.PbEjecutar.Location = New System.Drawing.Point(550, 43)
+    Me.PbEjecutar.Name = "PbEjecutar"
+    Me.PbEjecutar.Size = New System.Drawing.Size(120, 12)
+    Me.PbEjecutar.TabIndex = 20
+    Me.PbEjecutar.Visible = False
+    '
     'FormPrincipal
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.ClientSize = New System.Drawing.Size(1184, 481)
+    Me.Controls.Add(Me.PbEjecutar)
     Me.Controls.Add(Me.LblProyecto)
     Me.Controls.Add(Me.CbProyecto)
     Me.Controls.Add(Me.BtnConfiguracion)
@@ -345,4 +355,5 @@ Partial Class FormPrincipal
   Friend WithEvents LblProyecto As Label
   Friend WithEvents CbProyecto As ComboBox
   Friend WithEvents ProyectoBindingSource As BindingSource
+  Friend WithEvents PbEjecutar As ProgressBar
 End Class
