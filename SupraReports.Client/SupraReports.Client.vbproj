@@ -8,12 +8,28 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>SupraReports.Client.My.MyApplication</StartupObject>
     <RootNamespace>SupraReports.Client</RootNamespace>
-    <AssemblyName>SupraReports.Client</AssemblyName>
+    <AssemblyName>NESSIE</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,7 +38,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>SupraReports.Client.xml</DocumentationFile>
+    <DocumentationFile>NESSIE.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,7 +48,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>SupraReports.Client.xml</DocumentationFile>
+    <DocumentationFile>NESSIE.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,12 +63,37 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon %281%29.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>6C6AB667EE6BC33EDBA8231572F2DDCEF54AC942</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>SupraReports.Client_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess.EntityFramework">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.12.2.1100\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="RMIS_Lib">
+      <HintPath>bin\Debug\RMIS_Lib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -82,11 +123,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DateTimePickerColumn.vb" />
+    <Compile Include="Dto\PermisoUsuarioDto.vb" />
     <Compile Include="EditarConsultaUserControl.Designer.vb">
       <DependentUpon>EditarConsultaUserControl.vb</DependentUpon>
     </Compile>
     <Compile Include="EditarConsultaUserControl.vb">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormAcercaDe.Designer.vb">
+      <DependentUpon>FormAcercaDe.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAcercaDe.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormConfiguracion.Designer.vb">
       <DependentUpon>FormConfiguracion.vb</DependentUpon>
@@ -94,10 +142,40 @@
     <Compile Include="FormConfiguracion.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormConfiguracionInforme.Designer.vb">
+      <DependentUpon>FormConfiguracionInforme.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfiguracionInforme.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConfiguracionProyecto.Designer.vb">
+      <DependentUpon>FormConfiguracionProyecto.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfiguracionProyecto.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormIniciando.Designer.vb">
+      <DependentUpon>FormIniciando.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormIniciando.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormNuevoInforme.Designer.vb">
       <DependentUpon>FormNuevoInforme.vb</DependentUpon>
     </Compile>
     <Compile Include="FormNuevoInforme.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNuevoProyecto.Designer.vb">
+      <DependentUpon>FormNuevoProyecto.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormNuevoProyecto.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPrevisualizarConsulta.Designer.vb">
+      <DependentUpon>FormPrevisualizarConsulta.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormPrevisualizarConsulta.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormPrincipal.vb">
@@ -140,11 +218,15 @@
     <Compile Include="NestedPropertiesDataGridView.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Services\BaseLoggingService.vb" />
     <Compile Include="SuggestionRichTextBox.Designer.vb">
       <DependentUpon>SuggestionRichTextBox.vb</DependentUpon>
     </Compile>
     <Compile Include="SuggestionRichTextBox.vb">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ValorParametroDefectoUserControl.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ValorParametroUserControl.Designer.vb">
       <DependentUpon>ValorParametroUserControl.vb</DependentUpon>
@@ -157,14 +239,33 @@
     <EmbeddedResource Include="EditarConsultaUserControl.resx">
       <DependentUpon>EditarConsultaUserControl.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormAcercaDe.resx">
+      <DependentUpon>FormAcercaDe.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormConfiguracion.resx">
       <DependentUpon>FormConfiguracion.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfiguracionInforme.resx">
+      <DependentUpon>FormConfiguracionInforme.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfiguracionProyecto.resx">
+      <DependentUpon>FormConfiguracionProyecto.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormIniciando.resx">
+      <DependentUpon>FormIniciando.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormNuevoInforme.resx">
       <DependentUpon>FormNuevoInforme.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormNuevoProyecto.resx">
+      <DependentUpon>FormNuevoProyecto.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPrevisualizarConsulta.resx">
+      <DependentUpon>FormPrevisualizarConsulta.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormPrincipal.resx">
       <DependentUpon>FormPrincipal.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormProgramaciones.resx">
       <DependentUpon>FormProgramaciones.vb</DependentUpon>
@@ -202,16 +303,50 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="PermisoUsuarioDto.datasource" />
+    <None Include="SupraReports.Client_TemporaryKey.pfx" />
     <None Include="SupraReports.Model.Ejecucion.datasource" />
     <None Include="SupraReports.Model.Informe.datasource" />
     <None Include="SupraReports.Model.Programacion.datasource" />
     <None Include="SupraReports.Model.Proyecto.datasource" />
+    <None Include="tnsnames.ora">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SupraReports.Model\SupraReports.Model.vbproj">
       <Project>{241c8c97-1c13-448b-99c4-6871173b044d}</Project>
       <Name>SupraReports.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1530270463loading4-red.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nessie-5121.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nessie.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon %281%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

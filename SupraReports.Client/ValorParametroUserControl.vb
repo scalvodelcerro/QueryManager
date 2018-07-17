@@ -1,26 +1,23 @@
-﻿Public Class ValorParametroUserControl
+﻿Imports SupraReports.Model
 
-  Public Sub New(nombreParametro As String, valor As String)
-    InitializeComponent()
-    Me.NombreParametro = nombreParametro
-    Me.Valor = valor
-  End Sub
+Public Class ValorParametroUserControl
 
-  Public Property NombreParametro As String
-    Get
-      Return LblNombre.Text
-    End Get
-    Set(value As String)
-      LblNombre.Text = value
-    End Set
-  End Property
+    Protected Sub New()
+        InitializeComponent()
+    End Sub
 
-  Public Property Valor As String
-    Get
-      Return TbValor.Text
-    End Get
-    Set(value As String)
-      TbValor.Text = value
-    End Set
-  End Property
+    Public Sub New(parametro As Parametro)
+        Me.New()
+        Me.Parametro = parametro
+        LblNombre.DataBindings.Add("Text", parametro, "Nombre")
+        TbValor.DataBindings.Add("Text", parametro, "Valor")
+    End Sub
+
+    Public Property Parametro As Parametro
+
+    Private Sub TbValor_TextChanged(sender As Object, e As EventArgs) Handles TbValor.TextChanged
+        If Parametro IsNot Nothing Then
+            Parametro.Consulta.Informe.ActualizarValorParametro(Parametro.Nombre, TbValor.Text)
+        End If
+    End Sub
 End Class

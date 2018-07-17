@@ -1,8 +1,11 @@
-﻿Public Class SupraReportsContextOracle
-  Inherits SupraReportsContext
+﻿Imports System.Data.Entity
 
-  Public Sub New()
-    MyBase.New("name=SupraReportsOracle")
-  End Sub
+'<DbConfigurationType(GetType(SupraReportsConfigurationOracle))>
+Public Class SupraReportsContextOracle
+    Inherits SupraReportsContext
+
+    Public Sub New()
+        MyBase.New(ConnectionManager.GetConnection(ConnectionType.Oracle))
+    End Sub
 
 End Class

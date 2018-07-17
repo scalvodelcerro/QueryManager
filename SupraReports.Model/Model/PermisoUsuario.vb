@@ -1,16 +1,24 @@
 ﻿Public Class PermisoUsuario
-  Public Sub New(nombreUsuario As String, administrador As Boolean, idProyecto As Integer)
-    Me.NombreUsuario = nombreUsuario
-    Me.Administrador = administrador
-    Me.IdProyecto = idProyecto
-  End Sub
 
-  Protected Sub New()
-  End Sub
+    Public Sub New(nombreUsuario As String, administrador As Boolean, proyecto As Proyecto)
+        Me.NombreUsuario = nombreUsuario
+        Me.Administrador = administrador
+        Me.Proyecto = proyecto
+    End Sub
 
-  Public Property NombreUsuario As String
-  Public Property Usuario As Usuario
-  Public Property Administrador As Boolean
-  Public Overridable Property IdProyecto As Integer
-  Public Overridable Property Proyecto As Proyecto
+    Public Sub New(nombreUsuario As String, administrador As Boolean, idProyecto As Integer)
+        Me.NombreUsuario = nombreUsuario
+        Me.Administrador = administrador
+        Me.IdProyecto = idProyecto
+    End Sub
+
+    Protected Sub New()
+    End Sub
+
+    Public Property NombreUsuario As String
+    Public Property Usuario As Usuario
+    Public Property Administrador As Boolean
+    Public Overridable Property IdProyecto As Integer
+    Public Overridable Property Proyecto As Proyecto
+
 End Class

@@ -6,6 +6,6 @@ Public Class SupraReportsContextMySql
   Inherits SupraReportsContext
 
   Public Sub New()
-    MyBase.New("name=SupraReportsMySql")
+        MyBase.New(ConnectionManager.GetConnection(ConnectionType.MySql))
   End Sub
 End Class

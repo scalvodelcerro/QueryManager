@@ -6,7 +6,10 @@
       <Value Profile="(Default)">SupraReportsMySql</Value>
     </Setting>
     <Setting Name="SupraReportsOracleConnectionStringName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">SupraReportsOracle</Value>
+      <Value Profile="(Default)">SupraReportsOracle_DES</Value>
+    </Setting>
+    <Setting Name="SupraReportsImpalaConnectionStringName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SupraReportsImpala</Value>
     </Setting>
   </Settings>
 </SettingsFile>

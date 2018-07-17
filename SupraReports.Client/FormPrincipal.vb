@@ -1,8 +1,10 @@
 ﻿Imports System.IO
 Imports SupraReports.Model
+Imports RMIS_Lib
 
 Public Class FormPrincipal
   Private db As SupraReportsContext
+  'Private base As Base
   Private usuario As Usuario
   Private informe As Informe
   Private horaComienzoLanzarInformes As Date
@@ -10,27 +12,54 @@ Public Class FormPrincipal
   Private WithEvents InformeService As InformeService
   Private proyectoService As ProyectoService
   Private usuarioService As UsuarioService
+  Private loggingService As ILoggingService
 
   Public Sub New()
     InitializeComponent()
 
-    InformeService = New InformeService()
+    'base = New Base(My.Resources.Login_OracleDb,
+    '               My.Resources.Login_OracleUser,
+    '               My.Resources.Login_OraclePassword,
+    '               My.Resources.Login_App)
+    'loggingService = New BaseLoggingService(base)
+    InformeService = New InformeService(loggingService)
     proyectoService = New ProyectoService()
     usuarioService = New UsuarioService()
   End Sub
 
-  Private Sub FormPrincipal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-    CargarUsuario()
+  Private Sub FormPrincipal_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+    Me.Visible = False
+  End Sub
+
+  Private Async Sub FormPrincipal_LoadAsync(sender As Object, e As EventArgs) Handles MyBase.Load
+    Login()
+    Me.Visible = False
+    Await Task.WhenAll({
+        Task.Run(Sub() MostrarVentanaIniciando()),
+        Task.Run(Sub() CargarUsuario())
+    })
+    Me.Visible = True
+    Me.WindowState = FormWindowState.Normal
+    GbConsultas.AutoSize = True
     CargarComboProyectos()
     CargarComboInformes()
     DeseleccionarInforme()
     HabilitarControles()
+    If CbProyecto.Items.Count > 0 Then
+      CbProyecto.SelectedIndex = -1
+      CbProyecto.SelectedIndex = 0
+    End If
+    IniciarProgramaciones()
   End Sub
 
   Private Sub CbProyecto_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbProyecto.SelectedIndexChanged
+    ValidarCambioInforme()
     CargarComboInformes()
     DeseleccionarInforme()
     HabilitarControles()
+    If CbInforme.Items.Count > 0 Then
+      CbInforme.SelectedIndex = 0
+    End If
   End Sub
 
   Private Sub CbInforme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CbInforme.SelectedIndexChanged
@@ -44,11 +73,31 @@ Public Class FormPrincipal
     End If
   End Sub
 
-  Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevo.Click
+  Private Sub BtnNuevoProyecto_Click(sender As Object, e As EventArgs) Handles BtnNuevoProyecto.Click
+    Dim formNuevoProyecto = New FormNuevoProyecto()
+    If formNuevoProyecto.ShowDialog(Me) = DialogResult.OK Then
+      proyectoService.CrearProyecto(formNuevoProyecto.TbNombre.Text, ObtenerNombreUsuario())
+    End If
+    CargarComboProyectos()
+    CargarComboInformes()
+    DeseleccionarInforme()
+    HabilitarControles()
+  End Sub
+
+  Private Sub BtnConfigurarProyecto_Click(sender As Object, e As EventArgs) Handles BtnConfigurarProyecto.Click
+    Dim formConfiguracionProyecto As FormConfiguracionProyecto = New FormConfiguracionProyecto(CbProyecto.SelectedItem)
+    formConfiguracionProyecto.ShowDialog(Me)
+    CargarComboProyectos()
+    CargarComboInformes()
+    DeseleccionarInforme()
+    HabilitarControles()
+  End Sub
+
+  Private Sub BtnNuevo_Click(sender As Object, e As EventArgs) Handles BtnNuevoInforme.Click
     If ValidarCambioInforme() Then
       Dim nuevoInformeDialog As FormNuevoInforme = New FormNuevoInforme()
       If nuevoInformeDialog.ShowDialog(Me) = DialogResult.OK Then
-        informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, Environment.UserName)
+        informe = Informe.Crear(nuevoInformeDialog.TbNombre.Text, ObtenerNombreUsuario())
         informe.AnadirConsulta(Consulta.Crear(String.Empty, String.Empty))
 
         CrearInforme()
@@ -103,32 +152,41 @@ Public Class FormPrincipal
     PnlEditar.ScrollControlIntoView(control)
   End Sub
 
-  Private Sub BtnEjecutar_Click(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
-    InformeService.ExportarAExcel(informe, ComponerRutaSalidaInforme(informe), usuario.MaximoNumeroFilasConsulta)
-  End Sub
-
-  Private Sub BtnProgramar_Click(sender As Object, e As EventArgs) Handles BtnProgramar.Click
-    Dim formProgramaciones As FormProgramaciones = New FormProgramaciones()
-    formProgramaciones.ShowDialog(Me)
-  End Sub
-
-  Private Sub BtnConfiguracion_Click(sender As Object, e As EventArgs) Handles BtnConfiguracion.Click
-    Dim formConfiguracion As FormConfiguracion = New FormConfiguracion()
+  Private Sub RutaPorDefectoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RutaPorDefectoToolStripMenuItem.Click
+    Dim formConfiguracion As FormConfiguracion = New FormConfiguracion(usuario)
     formConfiguracion.ShowDialog(Me)
   End Sub
 
-  Private Sub BtnEjecutarProgramaciones_Click(sender As Object, e As EventArgs) Handles BtnEjecutarProgramaciones.Click
-    MinimizarEnAreaNotificacion()
-    horaComienzoLanzarInformes = DateTime.Now
-    LanzarProgramacionesDe(horaComienzoLanzarInformes)
-    TimerSegundo.Start()
+  Private Sub ProgramarInformesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProgramarInformesToolStripMenuItem.Click
+    Dim formProgramaciones As FormProgramaciones = New FormProgramaciones(ObtenerNombreUsuario())
+    formProgramaciones.ShowDialog(Me)
   End Sub
 
-  Private Sub TimerSegundo_Tick(sender As Object, e As EventArgs) Handles TimerSegundo.Tick
+  Private Sub VerProgramacionesHistóricasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VerProgramacionesHistóricasToolStripMenuItem.Click
+    Dim formEjecuciones As FormResumenEjecuciones = New FormResumenEjecuciones(ObtenerNombreUsuario())
+    formEjecuciones.ShowDialog(Me)
+  End Sub
+
+  Private Sub AcercaDeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AcercaDeToolStripMenuItem.Click
+    Dim formAcercaDe = New FormAcercaDe()
+    formAcercaDe.ShowDialog(Me)
+  End Sub
+
+  Private Async Sub BtnEjecutar_ClickAsync(sender As Object, e As EventArgs) Handles BtnEjecutar.Click
+    Dim rutaSalidaInforme As String = ComponerRutaSalidaInforme(informe)
+    Await Task.Run(Sub() InformeService.ExportarAExcel(informe, rutaSalidaInforme, ObtenerNombreUsuario(), usuario.MaximoNumeroFilasConsulta, False))
+    Process.Start(rutaSalidaInforme)
+  End Sub
+
+  Private Sub BtnConfigurarInforme_Click(sender As Object, e As EventArgs) Handles BtnConfigurarInforme.Click
+    Dim formConfigurarInforme = New FormConfiguracionInforme(informe, ObtenerNombreUsuario())
+    formConfigurarInforme.ShowDialog(Me)
+  End Sub
+
+  Private Async Sub TimerSegundo_TickAsync(sender As Object, e As EventArgs) Handles TimerSegundo.Tick
     Dim horaEjecucion = DateTime.Now
     If horaEjecucion.Second = 0 Then
-      Console.WriteLine("Tick: {0}", horaEjecucion.ToLongTimeString)
-      LanzarProgramacionesDe(horaEjecucion)
+      Await Task.Run(Sub() LanzarProgramacionesDe(horaEjecucion))
     End If
   End Sub
 
@@ -136,52 +194,96 @@ Public Class FormPrincipal
     If Not ValidarCambioInforme() Then
       e.Cancel = True
     End If
+    'base.RegistrarLog(My.Resources.Login_App, "Cerrando sesion.", "", False)
+    'base.Logout()
   End Sub
 
-  Private Sub MenuIconoNotificacionCancelarProgramaciones_Click(sender As Object, e As EventArgs) Handles MenuIconoNotificacionCancelarProgramaciones.Click
+  Private Sub FormPrincipal_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+    If (WindowState = FormWindowState.Minimized) Then
+      MinimizarEnAreaNotificacion()
+    End If
+  End Sub
+
+  Private Sub IconoNotificacion_Click(sender As Object, e As EventArgs) Handles IconoNotificacion.Click
     Show()
-    IconoNotificacion.Visible = False
-    TimerSegundo.Stop()
-
-    Dim formEjecuciones As FormResumenEjecuciones = New FormResumenEjecuciones(horaComienzoLanzarInformes)
-    formEjecuciones.ShowDialog(Me)
-  End Sub
-
-  Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
-    BtnAnadirConsulta.Location = New Point(BtnAnadirConsulta.Location.X, PnlEditar.Location.Y + PnlEditar.Size.Height + 4)
+    WindowState = FormWindowState.Normal
   End Sub
 
   Private Sub InformeService_ProgresoExportar(sender As Object, e As ProgresoEventArgs) Handles InformeService.ProgresoExportar
-    PbEjecutar.Value = e.Progress
-    PbEjecutar.Visible = PbEjecutar.Value > 0
+    ActualizarProgresoEjecucion(e.Progress)
   End Sub
+
+  Delegate Sub ActualizarProgresoEjecucionCallback(progreso As Integer)
+  Private Sub ActualizarProgresoEjecucion(progreso As Integer)
+    If InvokeRequired Then
+      Invoke(New ActualizarProgresoEjecucionCallback(AddressOf ActualizarProgresoEjecucion), {progreso})
+    Else
+      If progreso > 0 AndAlso progreso < 100 Then
+        ImgNessie.Image = My.Resources.nessie_animado
+      Else
+        ImgNessie.Image = My.Resources.nessie_512
+      End If
+      PbEjecutar.Value = progreso
+      PbEjecutar.Visible = PbEjecutar.Value > 0
+    End If
+  End Sub
+
+  Delegate Sub MostrarVentanaIniciandoCallback()
+  Private Sub MostrarVentanaIniciando()
+    If InvokeRequired Then
+      Invoke(New MostrarVentanaIniciandoCallback(AddressOf MostrarVentanaIniciando))
+    Else
+      Dim formIniciando = New FormIniciando()
+      formIniciando.ShowDialog(Me)
+    End If
+  End Sub
+
+  Private Sub Login()
+    'If base.Login() Then
+    '  base.RegistrarLog(My.Resources.Login_App, "Abriendo sesión.", "", False)
+    'Else
+    '  SalirPorUsuarioNoAutorizado()
+    'End If
+  End Sub
+
+  Private Sub SalirPorUsuarioNoAutorizado()
+    MessageBox.Show("No tiene permisos para acceder a la aplicación", "Usuario no autorizado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End
+  End Sub
+
+  Private Function ObtenerNombreUsuario() As String
+    'If base Is Nothing Then Return String.Empty
+    'Return base.CDUSUARIO
+    Return Environment.UserName
+  End Function
 
   Private Sub CargarUsuario()
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
+      Dim nombreUsuario = ObtenerNombreUsuario()
       usuario = db.Usuarios.Include("Permisos").AsNoTracking().
-        SingleOrDefault(Function(x) x.Nombre = Environment.UserName)
+        SingleOrDefault(Function(x) x.Nombre = nombreUsuario)
     End Using
+    If usuario Is Nothing Then SalirPorUsuarioNoAutorizado()
   End Sub
 
+
   Private Sub CargarComboProyectos()
-    Dim proyectos As IList(Of Proyecto) = proyectoService.ObtenerProyectosDeUsuario(Environment.UserName)
-    proyectos.Insert(0, Proyecto.Crear("--"))
-    ProyectoBindingSource.DataSource = proyectos
+    Try
+      ProyectoBindingSource.DataSource = proyectoService.ObtenerProyectosDeUsuario(ObtenerNombreUsuario())
+    Catch ex As Exception
+      Console.WriteLine(ex.Message)
+    End Try
   End Sub
 
   Private Sub CargarComboInformes()
-    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
-      Dim idProyecto As Integer = CbProyecto.SelectedValue
-      If idProyecto <= 0 Then
-        InformeBindingSource.DataSource = InformeService.ObtenerInformesPersonalesDeUsuario(Environment.UserName)
-      Else
-        InformeBindingSource.DataSource = InformeService.ObtenerInformesDeProyecto(idProyecto)
-      End If
-    End Using
+    InformeBindingSource.Clear()
+    InformeBindingSource.DataSource = InformeService.ObtenerInformesDeProyecto(CbProyecto.SelectedValue)
   End Sub
 
   Private Sub CargarConsultas()
     PnlEditar.Controls.Clear()
+    PnlEditar.Size = PnlEditar.MinimumSize
+    GbConsultas.Size = GbConsultas.MinimumSize
     If informe IsNot Nothing Then
       For Each consulta In informe.Consultas
         Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
@@ -190,11 +292,19 @@ Public Class FormPrincipal
     End If
   End Sub
 
+  Private Sub IniciarProgramaciones()
+    horaComienzoLanzarInformes = DateTime.Now
+    LanzarProgramacionesDe(horaComienzoLanzarInformes)
+    TimerSegundo.Start()
+  End Sub
+
   Private Sub LanzarProgramacionesDe(horaEjecucion As Date)
-    Dim programaciones As IList(Of Programacion) = InformeService.ObtenerProgramacionesDeUsuario(Environment.UserName)
+    Dim nombreUsuarioEjecucion = ObtenerNombreUsuario()
+    Dim programaciones As IList(Of Programacion) = InformeService.ObtenerProgramacionesDeUsuario(nombreUsuarioEjecucion)
+
     For Each p In programaciones.AsParallel()
       If p.ProgramadoPara(horaEjecucion) Then
-        InformeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), usuario.MaximoNumeroFilasConsulta)
+        InformeService.ExportarAExcel(p.Informe, ComponerRutaSalidaInforme(p.Informe), nombreUsuarioEjecucion, usuario.MaximoNumeroFilasConsulta, True)
         IconoNotificacion.ShowBalloonTip(1000, "Ejecución informe", String.Format("Se ha finalizado la ejecución del informe {0}", p.Informe.Nombre), ToolTipIcon.Info)
       End If
     Next
@@ -202,9 +312,7 @@ Public Class FormPrincipal
 
   Private Sub CrearInforme()
     db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
-    If CbProyecto.SelectedIndex > 0 Then
-      informe.Proyecto = db.Proyectos.Find(CbProyecto.SelectedItem.Id)
-    End If
+    informe.Proyecto = db.Proyectos.Find(CbProyecto.SelectedValue)
     db.Informes.Add(informe)
     db.SaveChanges()
   End Sub
@@ -226,42 +334,50 @@ Public Class FormPrincipal
     informe = Nothing
   End Sub
 
-  Private Shared Function ComponerRutaSalidaInforme(informe As Informe) As String
-    Dim folderPath = My.Settings.RutaDirectorioSalida
-    If String.IsNullOrEmpty(folderPath) Then folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+  Private Function ComponerRutaSalidaInforme(informe As Informe) As String
+    Dim folderPath As String
+    Dim confInforme As ConfiguracionInforme = InformeService.ObtenerConfiguracionInforme(informe.Id, ObtenerNombreUsuario())
+    If confInforme Is Nothing Then
+      folderPath = usuarioService.ObtenerRutaFicheroDefecto(ObtenerNombreUsuario())
+      If String.IsNullOrEmpty(folderPath) Then folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+    Else
+      folderPath = confInforme.RutaFichero
+    End If
+
     Dim fileName As String = String.Format("{0}_{1}.xlsx", informe.Nombre.Replace(" ", "_"), DateTime.Now.ToString("yyyyMMdd_HHmmss"))
-    Dim outputFile As String = Path.Combine(folderPath, fileName)
-    Return outputFile
+    Return Path.Combine(folderPath, fileName)
   End Function
 
   Private Sub HabilitarControles()
     Dim informeCargado As Boolean = informe IsNot Nothing
-    Dim sinProyecto As Boolean = CbProyecto.SelectedIndex <= 0
-    Dim esUsuarioAdministrador As Boolean = usuarioService.EsAdministradorProyecto(Environment.UserName, CbProyecto.SelectedValue)
-    Dim permitirModificaciones = sinProyecto OrElse esUsuarioAdministrador
-    BtnNuevo.Enabled = permitirModificaciones
+    Dim esUsuarioAdministrador As Boolean = usuarioService.EsAdministradorProyecto(ObtenerNombreUsuario(), CbProyecto.SelectedValue)
+    Dim permitirModificaciones = esUsuarioAdministrador
+    BtnConfigurarProyecto.Enabled = esUsuarioAdministrador
+    BtnNuevoInforme.Enabled = permitirModificaciones
     BtnGuardar.Enabled = informeCargado AndAlso permitirModificaciones
     BtnGuardarComo.Enabled = informeCargado AndAlso permitirModificaciones
     BtnEliminarInforme.Enabled = informeCargado AndAlso permitirModificaciones
+    BtnConfigurarInforme.Enabled = informeCargado
     BtnEjecutar.Enabled = informeCargado
     BtnAnadirConsulta.Enabled = informeCargado AndAlso permitirModificaciones
-    For Each controlConsulta In PnlEditar.Controls.OfType(Of EditarConsultaUserControl)
+    For Each controlConsulta In PnlEditar.Controls.OfType(Of EditarConsultaUserControl)()
       controlConsulta.TbNombre.Enabled = permitirModificaciones
       controlConsulta.TbSql.Enabled = permitirModificaciones
       controlConsulta.BtnEliminarConsulta.Enabled = permitirModificaciones
       controlConsulta.CbHabilitada.Enabled = permitirModificaciones
     Next
+    GbConsultas.Size = GbConsultas.MinimumSize
+    PnlEditar.Size = PnlEditar.MinimumSize
   End Sub
 
   Private Sub MinimizarEnAreaNotificacion()
-    IconoNotificacion.Visible = True
     IconoNotificacion.ShowBalloonTip(1000)
     Hide()
   End Sub
 
   Private Function ValidarCambioInforme() As Boolean
     If informe IsNot Nothing AndAlso HayCambiosSinGuardar() Then
-      Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNoCancel)
+      Dim resultado = MessageBox.Show("¿Desea guardar los cambios?", "Cambios en el informe", MessageBoxButtons.YesNo)
       Select Case resultado
         Case DialogResult.Yes
           GuardarCambios()

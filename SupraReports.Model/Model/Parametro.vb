@@ -1,82 +1,50 @@
-﻿Public Class Parametro
+﻿Imports System.ComponentModel
 
-  Public Shared Function Crear(nombre As String, valor As String, consulta As Consulta) As Parametro
-    Return New Parametro(nombre, valor, consulta)
-  End Function
+Public Class Parametro
+    Implements INotifyPropertyChanged
 
-  Public Shared Function Copiar(parametro As Parametro) As Parametro
-    Dim copiaParametro As Parametro = Crear(parametro.Nombre, parametro.Valor, Nothing)
-    Return copiaParametro
-  End Function
+    Public Shared Function Crear(nombre As String, valor As String, consulta As Consulta) As Parametro
+        Return New Parametro(nombre, valor, consulta)
+    End Function
 
-  Protected Sub New()
-  End Sub
+    Public Shared Function Copiar(parametro As Parametro) As Parametro
+        Dim copiaParametro As Parametro = Crear(parametro.Nombre, parametro.Valor, Nothing)
+        Return copiaParametro
+    End Function
 
-  Private Sub New(nombre As String, valor As String, consulta As Consulta)
-    Me.Nombre = nombre
-    Me.Valor = valor
-    Me.Consulta = consulta
-  End Sub
+    Protected Sub New()
+    End Sub
 
-  Public Property Id As Integer
-  Public Overridable Property Nombre As String
-  Public Overridable Property Valor As String
-  Public Property Consulta As Consulta
+    Private Sub New(nombre As String, valor As String, consulta As Consulta)
+        Me.Nombre = nombre
+        Me.Valor = valor
+        Me.Consulta = consulta
+    End Sub
 
-  Public MustInherit Class ParametroDefecto
-
-    Public MustOverride ReadOnly Property NombreParametro As String
-    Public MustOverride ReadOnly Property Valor As String
-
-    Private Shared _parametros As IEnumerable(Of ParametroDefecto) =
-      New List(Of ParametroDefecto)() From {
-        New ParametroDefectoHoy(),
-        New ParametroDefectoAyer()
-      }
-
-    Public Shared ReadOnly Property Todos As IEnumerable(Of ParametroDefecto)
-      Get
-        Return _parametros
-      End Get
+    Public Property Id As Integer
+    Public Overridable Property Nombre As String
+        Get
+            Return _nombre
+        End Get
+        Set(value As String)
+            Me._nombre = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Nombre"))
+        End Set
     End Property
+    Private _nombre As String
 
-    Public Shared ReadOnly Property Lookup(nombre As String) As ParametroDefecto
-      Get
-        Return _parametros.SingleOrDefault(Function(x) x.NombreParametro.ToUpper() = nombre.ToUpper())
-      End Get
+    Public Overridable Property Valor As String
+        Get
+            Return _valor
+        End Get
+        Set(value As String)
+            Me._valor = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Valor"))
+        End Set
     End Property
+    Private _valor As String
 
-    Private NotInheritable Class ParametroDefectoHoy
-      Inherits ParametroDefecto
+    Public Property Consulta As Consulta
 
-      Public Overrides ReadOnly Property NombreParametro As String
-        Get
-          Return "HOY"
-        End Get
-      End Property
-
-      Public Overrides ReadOnly Property Valor As String
-        Get
-          Return DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss")
-        End Get
-      End Property
-    End Class
-
-    Private NotInheritable Class ParametroDefectoAyer
-      Inherits ParametroDefecto
-
-      Public Overrides ReadOnly Property NombreParametro As String
-        Get
-          Return "AYER"
-        End Get
-      End Property
-
-      Public Overrides ReadOnly Property Valor As String
-        Get
-          Return DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss")
-        End Get
-      End Property
-    End Class
-  End Class
-
+    Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
 End Class
