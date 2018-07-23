@@ -40,7 +40,7 @@ Public Class FormPrincipal
     })
     Me.Visible = True
     Me.WindowState = FormWindowState.Normal
-    GbConsultas.AutoSize = True
+    'GbConsultas.AutoSize = True
     CargarComboProyectos()
     CargarComboInformes()
     DeseleccionarInforme()
@@ -76,12 +76,13 @@ Public Class FormPrincipal
   Private Sub BtnNuevoProyecto_Click(sender As Object, e As EventArgs) Handles BtnNuevoProyecto.Click
     Dim formNuevoProyecto = New FormNuevoProyecto()
     If formNuevoProyecto.ShowDialog(Me) = DialogResult.OK Then
-      proyectoService.CrearProyecto(formNuevoProyecto.TbNombre.Text, ObtenerNombreUsuario())
+      Dim nuevoProyecto = proyectoService.CrearProyecto(formNuevoProyecto.TbNombre.Text, ObtenerNombreUsuario())
+      CargarComboProyectos()
+      CbProyecto.SelectedValue = nuevoProyecto.Id
+      CargarComboInformes()
+      DeseleccionarInforme()
+      HabilitarControles()
     End If
-    CargarComboProyectos()
-    CargarComboInformes()
-    DeseleccionarInforme()
-    HabilitarControles()
   End Sub
 
   Private Sub BtnConfigurarProyecto_Click(sender As Object, e As EventArgs) Handles BtnConfigurarProyecto.Click
@@ -148,6 +149,7 @@ Public Class FormPrincipal
     informe.AnadirConsulta(consulta)
 
     Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
+    control.Width = PnlEditar.Width - 20
     PnlEditar.Controls.Add(control)
     PnlEditar.ScrollControlIntoView(control)
   End Sub
@@ -202,6 +204,12 @@ Public Class FormPrincipal
     If (WindowState = FormWindowState.Minimized) Then
       MinimizarEnAreaNotificacion()
     End If
+  End Sub
+
+  Private Sub PnlEditar_Resize(sender As Object, e As EventArgs) Handles PnlEditar.Resize
+    For Each control In PnlEditar.Controls.OfType(Of EditarConsultaUserControl)
+      control.Width = PnlEditar.Width - 20
+    Next
   End Sub
 
   Private Sub IconoNotificacion_Click(sender As Object, e As EventArgs) Handles IconoNotificacion.Click
@@ -260,7 +268,7 @@ Public Class FormPrincipal
   Private Sub CargarUsuario()
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       Dim nombreUsuario = ObtenerNombreUsuario()
-      usuario = db.Usuarios.Include("Permisos").AsNoTracking().
+      usuario = db.Usuarios.AsNoTracking().
         SingleOrDefault(Function(x) x.Nombre = nombreUsuario)
     End Using
     If usuario Is Nothing Then SalirPorUsuarioNoAutorizado()
@@ -282,11 +290,12 @@ Public Class FormPrincipal
 
   Private Sub CargarConsultas()
     PnlEditar.Controls.Clear()
-    PnlEditar.Size = PnlEditar.MinimumSize
-    GbConsultas.Size = GbConsultas.MinimumSize
+    'PnlEditar.Size = PnlEditar.MinimumSize
+    'GbConsultas.Size = GbConsultas.MinimumSize
     If informe IsNot Nothing Then
       For Each consulta In informe.Consultas
         Dim control As EditarConsultaUserControl = New EditarConsultaUserControl(db, consulta)
+        control.Width = PnlEditar.Width - 20
         PnlEditar.Controls.Add(control)
       Next
     End If
@@ -329,7 +338,7 @@ Public Class FormPrincipal
   End Sub
 
   Private Sub EliminarInforme()
-    db.Programaciones.Remove(informe.Programacion)
+    'db.Programaciones.Remove(informe.Programacion)
     db.Informes.Remove(informe)
     informe = Nothing
   End Sub
@@ -366,8 +375,8 @@ Public Class FormPrincipal
       controlConsulta.BtnEliminarConsulta.Enabled = permitirModificaciones
       controlConsulta.CbHabilitada.Enabled = permitirModificaciones
     Next
-    GbConsultas.Size = GbConsultas.MinimumSize
-    PnlEditar.Size = PnlEditar.MinimumSize
+    'GbConsultas.Size = GbConsultas.MinimumSize
+    'PnlEditar.Size = PnlEditar.MinimumSize
   End Sub
 
   Private Sub MinimizarEnAreaNotificacion()

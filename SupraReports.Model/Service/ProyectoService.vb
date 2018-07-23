@@ -2,22 +2,27 @@
 
     Public Function ObtenerProyectosDeUsuario(nombreUsuario As String) As IList(Of Proyecto)
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
+      Dim idsProyectosUsuario = db.PermisosUsuario.AsNoTracking().
+        Where(Function(x) x.NombreUsuario = nombreUsuario).
+        Select(Function(x) x.IdProyecto)
+
       Return db.Proyectos.AsNoTracking().
-              Where(Function(x) x.Permisos.Any(Function(xx) xx.NombreUsuario = nombreUsuario)).
+              Where(Function(x) idsProyectosUsuario.Contains(x.Id)).
               OrderBy(Function(x) x.Nombre).
               ToList()
     End Using
   End Function
 
-  Public Sub CrearProyecto(nombreProyecto As String, nombreUsuario As String)
+  Public Function CrearProyecto(nombreProyecto As String, nombreUsuario As String) As Proyecto
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       Dim nuevoProyecto = Proyecto.Crear(nombreProyecto)
-      nuevoProyecto.AnadirPermisoUsuario(nombreUsuario, True)
-
       db.Proyectos.Add(nuevoProyecto)
       db.SaveChanges()
+      db.PermisosUsuario.Add(New PermisoUsuario(nombreUsuario, True, nuevoProyecto.Id))
+      db.SaveChanges()
+      Return nuevoProyecto
     End Using
-  End Sub
+  End Function
 
   Public Function ObtenerPermisosUsuarios(idProyecto As Integer) As DataTable
     Using dao = GeneralDao.Crear(SupraReportsContext.DatabaseTypes.MySql)

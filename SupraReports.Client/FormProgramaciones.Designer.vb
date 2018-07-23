@@ -25,12 +25,9 @@ Partial Class FormProgramaciones
     Me.components = New System.ComponentModel.Container()
     Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-    Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-    Me.GridProgramaciones = New NestedPropertiesDataGridView()
-    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     Me.BtnAceptar = New System.Windows.Forms.Button()
     Me.BtnCancelar = New System.Windows.Forms.Button()
-    Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+    Me.GridProgramaciones = New SupraReports.Client.NestedPropertiesDataGridView()
     Me.Proyecto = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.Informe = New System.Windows.Forms.DataGridViewTextBoxColumn()
     Me.DataGridViewTextBoxColumn2 = New SupraReports.Client.DateTimePickerColumn()
@@ -41,31 +38,10 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn5 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn6 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn7 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).BeginInit()
     CType(Me.ProgramacionBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
-    '
-    'GridProgramaciones
-    '
-    Me.GridProgramaciones.AllowUserToAddRows = False
-    Me.GridProgramaciones.AllowUserToDeleteRows = False
-    Me.GridProgramaciones.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.GridProgramaciones.AutoGenerateColumns = False
-    Me.GridProgramaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-    Me.GridProgramaciones.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.Proyecto, Me.Informe, Me.DataGridViewTextBoxColumn2, Me.DataGridViewCheckBoxColumn1, Me.DataGridViewCheckBoxColumn2, Me.DataGridViewCheckBoxColumn3, Me.DataGridViewCheckBoxColumn4, Me.DataGridViewCheckBoxColumn5, Me.DataGridViewCheckBoxColumn6, Me.DataGridViewCheckBoxColumn7})
-    Me.GridProgramaciones.DataSource = Me.ProgramacionBindingSource
-    Me.GridProgramaciones.Location = New System.Drawing.Point(12, 12)
-    Me.GridProgramaciones.Name = "GridProgramaciones"
-    Me.GridProgramaciones.RowHeadersVisible = False
-    Me.GridProgramaciones.Size = New System.Drawing.Size(544, 255)
-    Me.GridProgramaciones.TabIndex = 1
-    '
-    'ProgramacionBindingSource
-    '
-    Me.ProgramacionBindingSource.AllowNew = False
-    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
     '
     'BtnAceptar
     '
@@ -89,21 +65,27 @@ Partial Class FormProgramaciones
     Me.BtnCancelar.Text = "Cancelar"
     Me.BtnCancelar.UseVisualStyleBackColor = True
     '
-    'DataGridViewTextBoxColumn1
+    'GridProgramaciones
     '
-    Me.DataGridViewTextBoxColumn1.DataPropertyName = "Id"
-    DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlLight
-    Me.DataGridViewTextBoxColumn1.DefaultCellStyle = DataGridViewCellStyle1
-    Me.DataGridViewTextBoxColumn1.HeaderText = "Id"
-    Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-    Me.DataGridViewTextBoxColumn1.ReadOnly = True
-    Me.DataGridViewTextBoxColumn1.Visible = False
+    Me.GridProgramaciones.AllowUserToDeleteRows = False
+    Me.GridProgramaciones.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.GridProgramaciones.AutoGenerateColumns = False
+    Me.GridProgramaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+    Me.GridProgramaciones.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Proyecto, Me.Informe, Me.DataGridViewTextBoxColumn2, Me.DataGridViewCheckBoxColumn1, Me.DataGridViewCheckBoxColumn2, Me.DataGridViewCheckBoxColumn3, Me.DataGridViewCheckBoxColumn4, Me.DataGridViewCheckBoxColumn5, Me.DataGridViewCheckBoxColumn6, Me.DataGridViewCheckBoxColumn7})
+    Me.GridProgramaciones.DataSource = Me.ProgramacionBindingSource
+    Me.GridProgramaciones.Location = New System.Drawing.Point(12, 12)
+    Me.GridProgramaciones.Name = "GridProgramaciones"
+    Me.GridProgramaciones.RowHeadersVisible = False
+    Me.GridProgramaciones.Size = New System.Drawing.Size(544, 255)
+    Me.GridProgramaciones.TabIndex = 1
     '
     'Proyecto
     '
     Me.Proyecto.DataPropertyName = "Informe.Proyecto.Nombre"
-    DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight
-    Me.Proyecto.DefaultCellStyle = DataGridViewCellStyle2
+    DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlLight
+    Me.Proyecto.DefaultCellStyle = DataGridViewCellStyle1
     Me.Proyecto.HeaderText = "Proyecto"
     Me.Proyecto.Name = "Proyecto"
     Me.Proyecto.ReadOnly = True
@@ -111,8 +93,8 @@ Partial Class FormProgramaciones
     'Informe
     '
     Me.Informe.DataPropertyName = "Informe.Nombre"
-    DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ControlLight
-    Me.Informe.DefaultCellStyle = DataGridViewCellStyle3
+    DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight
+    Me.Informe.DefaultCellStyle = DataGridViewCellStyle2
     Me.Informe.HeaderText = "Informe"
     Me.Informe.Name = "Informe"
     Me.Informe.ReadOnly = True
@@ -181,6 +163,11 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn7.MinimumWidth = 20
     Me.DataGridViewCheckBoxColumn7.Name = "DataGridViewCheckBoxColumn7"
     Me.DataGridViewCheckBoxColumn7.Width = 20
+    '
+    'ProgramacionBindingSource
+    '
+    Me.ProgramacionBindingSource.AllowNew = True
+    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
     '
     'FormProgramaciones
     '

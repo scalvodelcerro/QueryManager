@@ -105,6 +105,7 @@
     <Compile Include="Database\GeneralDaoMySql.vb" />
     <Compile Include="Database\GeneralDaoOracle.vb" />
     <Compile Include="Database\GeneralDaoImpala.vb" />
+    <Compile Include="EntityFramework\SupraReportsConfigurationMySql.vb" />
     <Compile Include="EntityFramework\SupraReportsConfigurationOracle.vb" />
     <Compile Include="EntityFramework\SupraReportsContext.vb" />
     <Compile Include="EntityFramework\SupraReportsContextMySql.vb" />
