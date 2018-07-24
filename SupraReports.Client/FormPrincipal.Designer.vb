@@ -252,7 +252,7 @@ Partial Class FormPrincipal
     Me.BtnNuevoProyecto.Size = New System.Drawing.Size(24, 24)
     Me.BtnNuevoProyecto.TabIndex = 25
     Me.BtnNuevoProyecto.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-    Me.ToolTips.SetToolTip(Me.BtnNuevoProyecto, "Nuevo informe...")
+    Me.ToolTips.SetToolTip(Me.BtnNuevoProyecto, "Nuevo proyecto...")
     Me.BtnNuevoProyecto.UseVisualStyleBackColor = True
     '
     'BtnConfigurarProyecto

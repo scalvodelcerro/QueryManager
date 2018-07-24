@@ -85,6 +85,18 @@ Public Class FormPrincipal
     End If
   End Sub
 
+  Private Sub BtnEliminarProyecto_Click(sender As Object, e As EventArgs) Handles BtnEliminarProyecto.Click
+    If MessageBox.Show(Me, "¿Desea eliminar el proyecto?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+      If MessageBox.Show(Me, "Se eliminarán todos los informes asociados al proyecto. ¿Desea continuar?", "Confirmar eliminación", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+        proyectoService.EliminarProyecto(CbProyecto.SelectedValue)
+        CargarComboProyectos()
+        CargarComboInformes()
+        DeseleccionarInforme()
+        HabilitarControles()
+      End If
+    End If
+  End Sub
+
   Private Sub BtnConfigurarProyecto_Click(sender As Object, e As EventArgs) Handles BtnConfigurarProyecto.Click
     Dim formConfiguracionProyecto As FormConfiguracionProyecto = New FormConfiguracionProyecto(CbProyecto.SelectedItem)
     formConfiguracionProyecto.ShowDialog(Me)
@@ -361,6 +373,7 @@ Public Class FormPrincipal
     Dim informeCargado As Boolean = informe IsNot Nothing
     Dim esUsuarioAdministrador As Boolean = usuarioService.EsAdministradorProyecto(ObtenerNombreUsuario(), CbProyecto.SelectedValue)
     Dim permitirModificaciones = esUsuarioAdministrador
+    BtnEliminarProyecto.Enabled = esUsuarioAdministrador
     BtnConfigurarProyecto.Enabled = esUsuarioAdministrador
     BtnNuevoInforme.Enabled = permitirModificaciones
     BtnGuardar.Enabled = informeCargado AndAlso permitirModificaciones

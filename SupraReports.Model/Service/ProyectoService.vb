@@ -61,4 +61,29 @@
     End Using
   End Sub
 
+  Public Sub EliminarProyecto(idProyecto As Integer)
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
+      Dim entityProyecto = db.Proyectos.Find(idProyecto)
+      Dim entitiesInforme = entityProyecto.Informes
+      Dim entitiesConsulta = entitiesInforme.SelectMany(Function(x) x.Consultas)
+      Dim entitiesParametro = entitiesConsulta.SelectMany(Function(x) x.Parametros)
+
+      Dim idsInforme = entitiesInforme.Select(Function(x) x.Id).Distinct()
+      Dim entitiesProgramacion = db.Programaciones.Where(Function(x) idsInforme.Contains(x.IdInforme)).AsEnumerable()
+      Dim entitiesConfiguracionInforme = db.ConfiguracionesInforme.Where(Function(x) idsInforme.Contains(x.IdInforme)).AsEnumerable()
+      Dim entitiesEjecucion = db.Ejecuciones.Where(Function(x) idsInforme.Contains(x.IdInforme)).AsEnumerable()
+
+      Dim entitiesPermisoUsuario = db.PermisosUsuario.Where(Function(x) x.IdProyecto = idProyecto)
+
+      db.PermisosUsuario.RemoveRange(entitiesPermisoUsuario)
+      db.Ejecuciones.RemoveRange(entitiesEjecucion)
+      db.ConfiguracionesInforme.RemoveRange(entitiesConfiguracionInforme)
+      db.Programaciones.RemoveRange(entitiesProgramacion)
+      db.Parametros.RemoveRange(entitiesParametro)
+      db.Consultas.RemoveRange(entitiesConsulta)
+      db.Informes.RemoveRange(entitiesInforme)
+      db.Proyectos.Remove(entityProyecto)
+      db.SaveChanges()
+    End Using
+  End Sub
 End Class
