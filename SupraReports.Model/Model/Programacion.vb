@@ -3,6 +3,7 @@
   Public Sub New()
   End Sub
 
+  Public Property Id As Integer
   Public Property IdInforme As Integer
   Public Overridable Property Informe As Informe
   Public Property NombreUsuario As String

@@ -17,6 +17,19 @@
     End Using
   End Function
 
+  Public Function ObtenerInformesDeUsuario(nombreUsuario As String) As Object
+    Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
+      Dim informes =
+        From q As PermisoUsuario In db.PermisosUsuario
+        Join i As Informe In db.Informes
+               On i.Proyecto.Id Equals q.IdProyecto
+        Where q.NombreUsuario = nombreUsuario
+        Select i
+
+      Return informes.ToList()
+    End Using
+  End Function
+
   Public Function ObtenerProgramacionesDeUsuario(nombreUsuario As String) As IList(Of Programacion)
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
       Return db.Programaciones.Include("Informe.Proyecto").
@@ -44,10 +57,24 @@
     End Using
   End Sub
 
-  Public Sub GuardarProgramaciones(programaciones As IEnumerable(Of Programacion))
+  Public Sub GuardarProgramaciones(programaciones As IEnumerable(Of Programacion), nombreUsuario As String)
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
+      'Eliminar borradas
+      Dim idsProgramaciones = programaciones.Select(Function(x) x.Id).Distinct()
+      Dim entitiesBorradas = db.Programaciones.
+        Where(Function(x) x.NombreUsuario = nombreUsuario AndAlso Not idsProgramaciones.Contains(x.Id))
+      db.Programaciones.RemoveRange(entitiesBorradas)
+
+      'Actualizar/añadir
       For Each programacion As Programacion In programaciones
-        db.Entry(programacion).State = Entity.EntityState.Modified
+        Dim informe = db.Informes.Find(programacion.IdInforme)
+        programacion.Informe = informe
+        programacion.NombreUsuario = nombreUsuario
+        If programacion.Id = 0 Then
+          db.Entry(programacion).State = Entity.EntityState.Added
+        Else
+          db.Entry(programacion).State = Entity.EntityState.Modified
+        End If
       Next
       db.SaveChanges()
     End Using

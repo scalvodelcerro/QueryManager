@@ -38,11 +38,12 @@ Public MustInherit Class SupraReportsContext
     Friend Const CAMPO_FLAG_DOMINGO As String = "SWDOMINGO"
     Friend Const CAMPO_FECHA_EJECUCION As String = "FEEJECUCION"
     Friend Const CAMPO_HORA As String = "TXHORA"
-    Friend Const CAMPO_ID_INFORME As String = "IDINFORME"
-    Friend Const CAMPO_ID_PROYECTO As String = "IDPROYECTO"
     Friend Const CAMPO_ID_CONSULTA As String = "IDCONSULTA"
     Friend Const CAMPO_ID_EJECUCION As String = "IDEJECUCION"
+    Friend Const CAMPO_ID_INFORME As String = "IDINFORME"
     Friend Const CAMPO_ID_PARAMETRO As String = "IDPARAMETRO"
+    Friend Const CAMPO_ID_PROGRAMACION As String = "IDPROGRAMACION"
+    Friend Const CAMPO_ID_PROYECTO As String = "IDPROYECTO"
     Friend Const CAMPO_NOMBRE As String = "TXNOMBRE"
     Friend Const CAMPO_NUMERO_MAXIMO_FILAS As String = "NUMAXFILAS"
     Friend Const CAMPO_RESULTADO As String = "TXRESULTADO"
@@ -94,7 +95,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityUsuario As EntityTypeConfiguration(Of Usuario))
     entityUsuario.
-        ToTable(Naming.TABLA_USUARIO, Naming.ESQUEMA_RMIS_ADMON).
+        ToTable(Naming.TABLA_USUARIO).
         HasKey(Function(x) x.Nombre)
     entityUsuario.Property(Function(x) x.Nombre).
         HasColumnName(Naming.CAMPO_COD_USUARIO)
@@ -106,7 +107,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityInforme As EntityTypeConfiguration(Of Informe))
     entityInforme.
-        ToTable(Naming.TABLA_INFORME, Naming.ESQUEMA_RMIS_ADMON).
+        ToTable(Naming.TABLA_INFORME).
         HasKey(Function(x) x.Id)
     entityInforme.
         HasRequired(Function(x) x.UsuarioCreacion).
@@ -134,7 +135,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityConsulta As EntityTypeConfiguration(Of Consulta))
     entityConsulta.
-        ToTable(Naming.TABLA_CONSULTA, Naming.ESQUEMA_RMIS_ADMON).
+        ToTable(Naming.TABLA_CONSULTA).
         HasMany(Function(x) x.Parametros).
         WithRequired(Function(x) x.Consulta).
         Map(Function(m) m.MapKey(Naming.CAMPO_ID_CONSULTA)).
@@ -153,7 +154,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityParametro As EntityTypeConfiguration(Of Parametro))
     entityParametro.
-        ToTable(Naming.TABLA_PARAMETRO, Naming.ESQUEMA_RMIS_ADMON)
+        ToTable(Naming.TABLA_PARAMETRO)
     entityParametro.Property(Function(p) p.Id).
         HasColumnName(Naming.CAMPO_ID_PARAMETRO).
         HasColumnOrder(1)
@@ -166,8 +167,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityProgramacion As EntityTypeConfiguration(Of Programacion))
     entityProgramacion.
-        ToTable(Naming.TABLA_PROGRAMACION, Naming.ESQUEMA_RMIS_ADMON).
-        HasKey(Function(x) New With {x.IdInforme, x.NombreUsuario})
+        ToTable(Naming.TABLA_PROGRAMACION)
     entityProgramacion.
         HasRequired(Function(x) x.Informe).
         WithMany().
@@ -178,6 +178,8 @@ Public MustInherit Class SupraReportsContext
         WithMany().
         HasForeignKey(Function(x) x.NombreUsuario).
         WillCascadeOnDelete()
+    entityProgramacion.Property(Function(x) x.Id).
+        HasColumnName(Naming.CAMPO_ID_PROGRAMACION)
     entityProgramacion.Property(Function(x) x.IdInforme).
         HasColumnName(Naming.CAMPO_ID_INFORME)
     entityProgramacion.Property(Function(x) x.NombreUsuario).
@@ -203,7 +205,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityEjecucion As EntityTypeConfiguration(Of Ejecucion))
     entityEjecucion.
-        ToTable(Naming.TABLA_EJECUCION, Naming.ESQUEMA_RMIS_ADMON)
+        ToTable(Naming.TABLA_EJECUCION)
     entityEjecucion.
         HasRequired(Function(x) x.Informe).
         WithMany().
@@ -231,7 +233,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityProyecto As EntityTypeConfiguration(Of Proyecto))
     entityProyecto.
-        ToTable(Naming.TABLA_PROYECTO, Naming.ESQUEMA_RMIS_ADMON)
+        ToTable(Naming.TABLA_PROYECTO)
     entityProyecto.Property(Function(p) p.Id).
         HasColumnName(Naming.CAMPO_ID_PROYECTO).
         HasColumnOrder(1)
@@ -241,7 +243,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityPermisoUsuario As EntityTypeConfiguration(Of PermisoUsuario))
     entityPermisoUsuario.
-        ToTable(Naming.TABLA_PERMISO_USUARIO, Naming.ESQUEMA_RMIS_ADMON).
+        ToTable(Naming.TABLA_PERMISO_USUARIO).
         HasKey(Function(x) New With {x.IdProyecto, x.NombreUsuario})
     entityPermisoUsuario.
         HasRequired(Function(x) x.Proyecto).
@@ -263,7 +265,7 @@ Public MustInherit Class SupraReportsContext
 
   Protected Overridable Sub ConfigurarEntity(entityConfiguracionInforme As EntityTypeConfiguration(Of ConfiguracionInforme))
     entityConfiguracionInforme.
-        ToTable(Naming.TABLA_CONFIGURACION_INFORME, Naming.ESQUEMA_RMIS_ADMON).
+        ToTable(Naming.TABLA_CONFIGURACION_INFORME).
         HasKey(Function(x) New With {x.IdInforme, x.NombreUsuario})
     entityConfiguracionInforme.
         HasRequired(Function(x) x.Informe).

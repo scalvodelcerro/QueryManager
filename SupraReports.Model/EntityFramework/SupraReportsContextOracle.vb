@@ -7,6 +7,7 @@ Public Class SupraReportsContextOracle
   Public Sub New()
     MyBase.New(ConnectionManager.GetConnection(ConnectionType.Oracle))
     Database.SetInitializer(New NullDatabaseInitializer(Of SupraReportsContextOracle)())
+
   End Sub
 
   Protected Overrides Sub OnModelCreating(modelBuilder As DbModelBuilder)

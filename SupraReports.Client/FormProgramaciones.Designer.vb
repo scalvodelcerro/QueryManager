@@ -24,12 +24,13 @@ Partial Class FormProgramaciones
   Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container()
     Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-    Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Me.BtnAceptar = New System.Windows.Forms.Button()
     Me.BtnCancelar = New System.Windows.Forms.Button()
+    Me.InformeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
     Me.GridProgramaciones = New SupraReports.Client.NestedPropertiesDataGridView()
     Me.Proyecto = New System.Windows.Forms.DataGridViewTextBoxColumn()
-    Me.Informe = New System.Windows.Forms.DataGridViewTextBoxColumn()
+    Me.Informe = New System.Windows.Forms.DataGridViewComboBoxColumn()
     Me.DataGridViewTextBoxColumn2 = New SupraReports.Client.DateTimePickerColumn()
     Me.DataGridViewCheckBoxColumn1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -38,9 +39,9 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn5 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn6 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
     Me.DataGridViewCheckBoxColumn7 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-    Me.ProgramacionBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-    CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).BeginInit()
+    CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
     CType(Me.ProgramacionBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+    CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.SuspendLayout()
     '
     'BtnAceptar
@@ -64,6 +65,15 @@ Partial Class FormProgramaciones
     Me.BtnCancelar.TabIndex = 3
     Me.BtnCancelar.Text = "Cancelar"
     Me.BtnCancelar.UseVisualStyleBackColor = True
+    '
+    'InformeBindingSource
+    '
+    Me.InformeBindingSource.DataSource = GetType(SupraReports.Model.Informe)
+    '
+    'ProgramacionBindingSource
+    '
+    Me.ProgramacionBindingSource.AllowNew = True
+    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
     '
     'GridProgramaciones
     '
@@ -92,12 +102,14 @@ Partial Class FormProgramaciones
     '
     'Informe
     '
-    Me.Informe.DataPropertyName = "Informe.Nombre"
-    DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlLight
-    Me.Informe.DefaultCellStyle = DataGridViewCellStyle2
+    Me.Informe.DataPropertyName = "IdInforme"
+    Me.Informe.DataSource = Me.InformeBindingSource
+    Me.Informe.DisplayMember = "Nombre"
     Me.Informe.HeaderText = "Informe"
     Me.Informe.Name = "Informe"
-    Me.Informe.ReadOnly = True
+    Me.Informe.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+    Me.Informe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+    Me.Informe.ValueMember = "Id"
     Me.Informe.Width = 200
     '
     'DataGridViewTextBoxColumn2
@@ -164,11 +176,6 @@ Partial Class FormProgramaciones
     Me.DataGridViewCheckBoxColumn7.Name = "DataGridViewCheckBoxColumn7"
     Me.DataGridViewCheckBoxColumn7.Width = 20
     '
-    'ProgramacionBindingSource
-    '
-    Me.ProgramacionBindingSource.AllowNew = True
-    Me.ProgramacionBindingSource.DataSource = GetType(SupraReports.Model.Programacion)
-    '
     'FormProgramaciones
     '
     Me.AcceptButton = Me.BtnAceptar
@@ -184,8 +191,9 @@ Partial Class FormProgramaciones
     Me.Name = "FormProgramaciones"
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
     Me.Text = "Programaciones de informes"
-    CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).EndInit()
+    CType(Me.InformeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
     CType(Me.ProgramacionBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+    CType(Me.GridProgramaciones, System.ComponentModel.ISupportInitialize).EndInit()
     Me.ResumeLayout(False)
 
   End Sub
@@ -197,7 +205,8 @@ Partial Class FormProgramaciones
   Friend WithEvents BtnCancelar As Button
   Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
   Friend WithEvents Proyecto As DataGridViewTextBoxColumn
-  Friend WithEvents Informe As DataGridViewTextBoxColumn
+  Friend WithEvents Informe As DataGridViewComboBoxColumn
+  Friend WithEvents InformeBindingSource As BindingSource
   Friend WithEvents DataGridViewTextBoxColumn2 As DateTimePickerColumn
   Friend WithEvents DataGridViewCheckBoxColumn1 As DataGridViewCheckBoxColumn
   Friend WithEvents DataGridViewCheckBoxColumn2 As DataGridViewCheckBoxColumn
