@@ -32,9 +32,12 @@
 
   Public Function ObtenerProgramacionesDeUsuario(nombreUsuario As String) As IList(Of Programacion)
     Using db = SupraReportsContext.Crear(SupraReportsContext.DatabaseTypes.MySql)
-      Return db.Programaciones.Include("Informe.Proyecto").
-              Where(Function(x) (x.NombreUsuario = nombreUsuario)).
-              ToList()
+      Return db.Programaciones.
+        Include("Informe.Proyecto").
+        Include("Informe.Consultas.Parametros").
+        AsNoTracking().
+        Where(Function(x) (x.NombreUsuario = nombreUsuario)).
+        ToList()
     End Using
   End Function
 
@@ -87,7 +90,8 @@
     Using excelBuilder = New ExcelBuilder(ficheroSalida)
       Dim consultasHabilitadas = informe.Consultas.Where(Function(x) x.Habilitada).ToList()
       For Each consulta In consultasHabilitadas.AsParallel()
-        Using dao = GeneralDao.Crear(SupraReportsContext.DatabaseTypes.Impala)
+        'Using dao = GeneralDao.Crear(SupraReportsContext.DatabaseTypes.Impala)
+        Using dao = GeneralDao.Crear(SupraReportsContext.DatabaseTypes.MySql)
           Dim sql As String = consulta.ComponerSqlResultado()
           If maximoNumeroFilas > 0 Then
             sql = sql & " LIMIT " & maximoNumeroFilas
@@ -103,10 +107,10 @@
             End If
             Dim finish = Date.Now
             RegistrarLog(String.Format("Consulta: {0}, Fin: {1}, T. ejecución: {2}ms, N. resultados: {3}",
-                                       consulta.Id,
-                                       Date.Now.ToShortTimeString(),
-                                       (finish - start).TotalMilliseconds,
-                                       contents.Rows.Count))
+                                         consulta.Id,
+                                         Date.Now.ToShortTimeString(),
+                                         (finish - start).TotalMilliseconds,
+                                         contents.Rows.Count))
           Catch ex As Exception
             RegistrarLog(String.Format("Error de ejecución. Consulta: {0}, Mensaje: {1}", consulta.Id, ex.Message))
             erroresInforme.Add(ex.Message)
